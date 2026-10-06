@@ -16,7 +16,7 @@ vezes. Este plano leva o fluxo novo do kit aos projetos, em duas frentes, com po
 
 ```
 Agora     F0 (Ettore) · R0 revisão de front (desosp-app) ∥ F1a
-Frente 1  F1a → F1b → F2 → (F3a ∥ F3b) → F3c → F5a → F5b → F6 → F7 → F8 → F9
+Frente 1  F1a → R1 → F1b → F2 → (F3a ∥ F3b) → F3c → F5a → F5b → F6 → F7 → F8 → F9
 Frente 2  (depois do F5b) N1 estudo → F5c porta de leitura → N2 comunicação → N3 organização → N4 produtividade → N5 pesquisa
 No desktop, quando estiver lá: Fd (Drive)
 ```
@@ -174,6 +174,7 @@ Sonnet 5.5 (conferido nesta janela); a armadilha do Sonnet 5 é só `/model sonn
 |---|---|---|---|---|
 | R0 revisão de front | `desosp-app` | Opus 5.5 · medium; subagentes `sonnet` | julgamento com prova; o erro aparece na tela | achados genéricos sem prova → high |
 | F1a privacidade, isolamento, git | `claude-kit` | Opus 5.5 · high → medium | regra de privacidade errada aparece tarde e em todo projeto | contradiz posição escrita dele → xhigh (com motivo) |
+| R1 objetivo, medição, recursos (pedido de 06/10, depois do F1a) | `claude-kit` | Opus 5.5 · high → medium; pesquisa por subagentes `sonnet` | redefine o objetivo das fases seguintes; erro aqui se espalha | contradiz posição escrita dele → xhigh (com motivo) |
 | F1b marketplace | `claude-kit` | Opus 5.5 · medium | reestruturação conferida por comando | skill some ou duplica sem ser notado → high |
 | F2 peças do kit | `claude-kit` | Opus 5.5 · high → medium nos ganchos | instrução errada guia toda sessão futura | perguntas de controle falham duas vezes → xhigh |
 | F3a o laço | `teste-fluxo` | Opus 5.5 · medium; fases `claude-sonnet-5-5` · medium | critérios escritos | critério falha sem causa entendida → high |
@@ -404,6 +405,35 @@ Plano aprovado: decisoes\2026-10-06_plano-fluxo.md — leia "A cadeia", "Como vo
 
 ## Ao fechar
 Portão: ADRs aprovados; varredura sem achado; git status limpo; push feito; hardlink conferido. Grave o ESTADO.md do kit (≤ 1 página). Resumo: os dois ADRs em 5 linhas, o link do repositório, o resultado da varredura e "Sinais de insuficiência do modelo: nenhum" (ou quais, com o exemplo). Confira e ajuste o prompt do F1b neste plano e entregue-o (modelo e /effort na 1ª linha).
+```
+
+### R1 — o objetivo, a medição e a última varredura de recursos (pedido do Ettore ao fechar o F1a, 06/10)
+
+```
+Opus 5.5 · /effort high — esta janela revê o objetivo do fluxo e decide o que as fases seguintes medem e instalam (erro aqui se espalha por todas); a pesquisa vai para subagentes sonnet; depois do grill, digite /effort medium para escrever.
+
+Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: git pull --ff-only; git status limpo; leia docs\ESTADO.md e caixa\INDICE.md. Nenhuma outra janela no kit (o F1b vem depois desta).
+
+## Contexto
+O Ettore, ao fechar o F1a (06/10), nas palavras dele: "meu problema nem é tanto ser office boy de prompt, mas precisar dar atenção integral ao processo. Gostaria de o largar trabalhando por um tempo maior. Prefiro sentar e ser fritado por perguntas e rodar diversas janelas ao mesmo tempo, pois o tempo foi pontual, e não picado de ter que voltar aqui o tempo todo e resolver as coisas — mantendo qualidade, economia de tokens e o padrão. Foi esse o objetivo certo?" Pediu também: avaliar a andrej-karpathy-skills ("teria uso em todo o processo e potencial para economizar bastante; testar por um tempo e aferir"); um modo de aferir de fato, semana a semana, o uso de tokens e as interações dele; e uma última varredura de skills e recursos, com a skill que busca recursos (find-skills).
+Leia: decisoes\2026-10-06_plano-fluxo.md ("A cadeia", "Como você opera", "Decisões da rodada 3", a Ficha, os blocos F2, F3a, F3b, F3c e a "Verificação de ponta a ponta"); docs\2026-10-06_o-que-mudou-e-como-operar.md (Parte 2); decisoes\adr\0001-privacidade.md e 0002-isolamento.md; pesquisas\INDICE.md antes de qualquer pesquisa (a biblioteca já tem o gist "LLM wiki" de Karpathy, que é outra coisa).
+
+## O que fazer
+1. Fatos primeiro (subagentes model: sonnet, em paralelo; cada um devolve fatos com fonte e salva em pesquisas\ no formato do INDICE):
+   a. andrej-karpathy-skills: o repositório certo (autor, licença, data, estrelas), o que contém, como instala (plugin, skill, trecho de CLAUDE.md), quantos tokens fixos custa por sessão, a evidência de economia que alega (medida ou opinião), conflito com as nossas regras (CLAUDE.md pessoal, writing-for-agents, as do Matt) e com o comportamento do Opus 5.5.
+   b. Medição: o que o medir_uso.py (skills\uso-do-claude\medir_uso.py; --sessoes, --desde) e o plugin session-report (já instalado) já medem; o que falta para uma linha por semana com: tokens por sessão (entrada, cache, saída), contexto mediano por chamada, ctx0 por projeto, mensagens dele por fase, "retornos" (mensagem dele depois de mais de 30 min parado) e o maior trecho trabalhando sem ele (a métrica do objetivo real), chamadas no Sonnet 5. Confira o cleanupPeriodDays (o Claude Code apaga transcrições antigas; o padrão era 30 dias): sem elas não há linha de base.
+   c. Varredura final (find-skills e a internet): recursos para o objetivo real — execução longa sem supervisão, perguntas juntadas num só momento, várias janelas em paralelo (worktrees, --bg), aviso no celular quando uma fase precisa dele, observabilidade de tokens (OpenTelemetry do Claude Code, ccusage e parecidos). Só o que NÃO está na Ficha (AGORA, QUANDO, NÃO); cada um com custo, risco, Windows e veredito. Nada instalado.
+2. O objetivo, por grill (skill grilling; uma ou duas rodadas, numeradas, com recomendação; cada pergunta com o problema, as opções e o que muda): o objetivo reescrito ("atenção concentrada: perguntas de uma vez, execução longa sem ele, várias janelas, com qualidade, economia e o padrão") e o confronto com o plano — Q2, Q9, Q10 (parada que bloqueia × pergunta guardada numa fila enquanto a fase segue com o que não depende dela), o limite de duas janelas (× limite por posse de arquivo), o aviso no celular, o /goal nas fases longas, as decisões pré-aprovadas no PROXIMO.md (como a Q21 faz com escrita em dado real). E as decisões da andrej-karpathy-skills (onde e como testar) e da medição.
+3. Linha de base já: rode a medição dos dias que ainda existem e grave os números (só números) em claude-kit\metricas\ (CSV). Se o cleanupPeriodDays estiver baixo, proponha o valor ao Ettore e, com o "sim", grave no ~\.claude\settings.json (backup antes).
+4. Grave: decisoes\2026-10-0X_R1-objetivo-medicao-recursos.md (as decisões e o porquê); as linhas novas do pesquisas\INDICE.md; no plano, só o que o Ettore aprovar (Q2, Q9, Q10, a Ficha, os blocos e prompts do F1b, F2, F3a e F3b — a medição semanal entra no F2, junto do medir_uso.py; a andrej-karpathy-skills, se passar, entra no config\plugins.json do F1b e na disputa do F3b, com o teste por um tempo e a aferição semanal).
+
+## Limites
+- Pesquisa por subagentes; a janela principal só julga e conversa. Nada instalado; nenhum projeto tocado; nada de reestruturar skill.
+- As transcrições das sessões têm dado de paciente: lidas só por script que imprime números, nunca texto.
+- Commit por caminho explícito; push no fim (git log origin/main.. antes).
+
+## Ao fechar
+Portão: as decisões gravadas e aprovadas; a linha de base em metricas\; as pesquisas no INDICE; git status limpo; push. ESTADO.md reescrito. Resumo: o objetivo como ficou, o veredito da andrej-karpathy-skills, a medição (o que mede, quando roda, quanto custa) e "Sinais de insuficiência do modelo". Confira e ajuste o prompt do F1b neste plano e entregue-o (modelo e /effort na 1ª linha).
 ```
 
 ### F1b — o kit como marketplace

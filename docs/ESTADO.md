@@ -3,7 +3,10 @@
 ## Onde estamos
 
 - **Feito:** F1a (privacidade, isolamento, o kit no git).
-- **Próxima:** F1b, o kit como marketplace. O prompt está em `decisoes\2026-10-06_plano-fluxo.md`, bloco "### F1b".
+- **Próxima:** R1, pedida pelo Ettore ao fechar o F1a: o objetivo real (atenção concentrada, execução longa sem
+  ele, várias janelas), a medição semanal de tokens e interações, a andrej-karpathy-skills e uma última varredura de
+  recursos. Depois, o F1b. Os dois prompts estão em `decisoes\2026-10-06_plano-fluxo.md` ("### R1" e "### F1b").
+- **Push:** feito em 06/10 (`origin/main` = `main`); o hardlink conferido depois do push.
 - **Em paralelo:** a R0 (revisão de front) pode estar aberta no `desosp-app`; nada do kit mexe lá.
 
 ## O que existe agora
