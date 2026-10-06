@@ -1,0 +1,9 @@
+#!/bin/sh
+# Envio liberado só para o repositório privado do kit no GitHub (Q6 do plano de 06/10/2026; ADR-0001 D2).
+# Qualquer outro destino é recusado.
+case "$2" in
+  https://github.com/HirugaX/claude-kit.git|https://github.com/HirugaX/claude-kit|git@github.com:HirugaX/claude-kit.git)
+    exit 0 ;;
+esac
+echo "Envio bloqueado: o kit só sobe para github.com/HirugaX/claude-kit (privado). Destino recusado: $2" >&2
+exit 1

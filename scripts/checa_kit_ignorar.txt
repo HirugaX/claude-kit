@@ -1,0 +1,6 @@
+# Exceções do checa_kit.py, conferidas uma a uma (arquivo:linha, arquivo:* ou arquivo:*:tipo). O motivo vai no comentário.
+# 06/10/2026 (F1a): o guia da rodada do censo é documento, não dado de paciente.
+decisoes/2026-10-04_prompts-das-janelas.md:48
+pesquisas/2026-10-04_reorganizacao-registro-e-impacto.md:124
+# 06/10/2026 (F1a): o teste da varredura de segredos usa um token falso, montado em f-string.
+skills/uso-do-claude/organizar-projetos/scripts/tests/test_antes_do_github.py:*:segredo

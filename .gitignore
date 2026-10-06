@@ -1,0 +1,15 @@
+# O que fica fora do repositório do kit (F1a, 06/10/2026; ADR-0001 e ADR-0002).
+# Retratos e material de outro PC, com nomes de arquivo dos projetos:
+_do_desktop/
+*.zip
+# Gerado em cada PC pelo scripts/gerar_guia_skills.py:
+GUIA_DAS_SKILLS.docx
+# Do Windows e do editor:
+desktop.ini
+Thumbs.db
+.vscode/
+~$*
+# Caches:
+__pycache__/
+*.py[cod]
+.pytest_cache/

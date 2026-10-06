@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "secret_protection": {
+    "enabled": true,
+    "deny_paths": [
+      "C:\\CLAUDE-PROJETOS\\desosp-app-dados",
+      "C:\\CLAUDE-PROJETOS\\desosp-app-backups"
+    ]
+  }
+}

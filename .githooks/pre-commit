@@ -1,0 +1,4 @@
+#!/bin/sh
+# Antes de cada registro: recusa se o que vai para o git tiver segredo, CPF, CNS, telefone, caminho de dado ou
+# nome de paciente (ADR-0001). Ligado por: git config core.hooksPath .githooks (o instalar_kit.py liga no clone).
+PYTHONUTF8=1 exec python scripts/checa_kit.py --staged
