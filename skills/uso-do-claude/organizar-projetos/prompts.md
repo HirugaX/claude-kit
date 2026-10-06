@@ -1,0 +1,121 @@
+# Prompts — os modelos das janelas
+
+Tirados dos prompts reais de 05/10 (`claude-kit\decisoes\2026-10-04_prompts-das-janelas.md`). Troque o que está entre
+`<>`. Todo prompt leva: **o modelo e o comando `/effort` na 1ª linha**, com o porquê; a pasta em que a janela abre; o que
+ler; o que fazer, numerado; os limites; e o que o resumo de fechamento traz (com a linha "Sinais de insuficiência do
+modelo"). Nenhum nome de paciente, de funcionário ou de operadora em prompt nenhum.
+
+## A ordem
+
+```
+fase 5 (a mudança)       [janela na mãe] — o usuário roda o "mudanca.py tudo"
+fase 7, em paralelo      [projeto A] ║ [projeto B]      (no máximo duas ao mesmo tempo; só o que não se cruza)
+                         [projeto C] depois de A, se C lê algo de A
+fase 8                   [kit · aplicar as cores] depois do "pronto" de todos
+outro PC                 [outro PC · enviar a cópia] cedo; [outro PC · organizar-projetos] por último
+```
+
+## 1 · projeto · corrigir os caminhos depois da mudança
+
+```
+Opus 5.5 · /effort high — a raiz de dados errada escreve no lugar errado sem dar erro; descobrir na próxima rodada real custa caro.
+
+Janela aberta em <mãe>\<projeto> (até <data> era <caminho velho>). Antes de tudo, confira: esta pasta existe e <caminho velho> é um ARQUIVO (a lápide), não uma pasta. Se não for, pare e avise.
+
+## Contexto
+- Em <data> as pastas foram movidas (não reclonadas) para <mãe>. Cada caminho velho virou uma lápide: programa que ainda use o caminho antigo dá erro na hora.
+- Leia: <kit>\decisoes\<registro da entrevista> e, em <kit>\decisoes\<varredura>, a seção <projeto> (arquivo:linha de cada caminho velho).
+- A memória do Claude foi copiada para a chave nova: confira que carregou e corrija os caminhos velhos dela.
+- Antes da mudança, a suíte deu <N passed, M skipped>. Depois das correções, o mesmo.
+
+## O que fazer
+1. Aceite a confiança da pasta; leia a caixa de entrada e o handoff.
+2. Código e testes, com o caminho derivado da posição do código (o projeto vem de __file__; o vizinho é <mãe>\<outro>; os overrides por variável de ambiente continuam): <lista da varredura>.
+3. Documentos vivos: <lista>. Os históricos (handoff, mensagens, índices, caixas) não se reescrevem.
+4. Para o sistema de cores (a janela do kit aplica; você não aplica): escreva no handoff e no resumo (a) as pastas que o programa cria e apaga sozinho (as passageiras: ficarão sem cor, porque pasta com desktop.ini nunca fica vazia) e (b) todo os.listdir/iterdir/glob('*') sobre pastas que terão desktop.ini, com a confirmação de que ele ali não atrapalha.
+5. Suíte completa com -rs: o mesmo número de passados e pulados, cada pulado explicado. Depois, uma rodada de prova que não escreve em dado real: proponha o modo ao usuário antes de rodar.
+6. Avise os projetos que dependem deste, pelo protocolo de caixas de vocês.
+7. Commit por caminho explícito e push (git log origin/main.. antes, para ver o que vai junto).
+
+## Limites
+- Não aplique cores nem mexa em desktop.ini.
+- Não abra nem varra a pasta de dados de outro projeto (a regra deny do settings já barra).
+- Nome de paciente, de funcionário e da operadora nunca entram no repositório de código nem no resumo; o pseudônimo
+  do paciente segue o ADR-0001 (`claude-kit\decisoes\adr\0001-privacidade.md`).
+
+## Ao fechar
+Resumo curto: o que mudou, a suíte (números), a rodada de prova, as listas do passo 4, o que ficou pendente (como pergunta, com a recomendação) e a linha "Sinais de insuficiência do modelo: nenhum" (ou quais, com o exemplo). Diga "<projeto> pronto".
+```
+
+## 2 · kit · aplicar as cores (depois do "pronto" de todos os projetos)
+
+```
+Opus 5.5 · /effort high — aplica o sistema em todas as pastas dos projetos e liga o gancho de toda sessão; erro em pasta de rodada ou no gancho aparece tarde.
+
+Janela aberta em <mãe>\claude-kit. Só abra depois que as janelas de projeto disseram "pronto" e a prévia dos ícones foi aprovada.
+
+## Contexto
+- O módulo: skills\uso-do-claude\organizar-projetos\ (pastas.md, ORGANIZAR.md fase 8). O mapa: mapa.json (confira as passageiras que as janelas listaram; o que faltar entra antes de aplicar).
+- As suítes antes das cores: <números de cada projeto>.
+
+## O que fazer
+1. Peça ao usuário para fechar as outras janelas do Claude (o gancho é lido ao abrir a sessão, e o settings.json é gravado pelo Claude Code).
+2. python scripts\pastas.py instalar --lapide <cada caminho velho>.
+3. pastas.py aplicar --ver; mostre o resumo (pastas por verbo em cada projeto, as provisórias) e, com o "sim", aplique.
+4. pastas.py vscode; com o "sim", instale o Material Icon Theme e o Peacock e ponha o workbench.iconTheme.
+5. pastas.py legenda.
+6. Teste do gancho numa sessão nova (claude -p, uso-do-claude §9b) e pastas.py ligar-gancho. Numa janela nova: uma pasta nova dentro de um projeto ganha o verbo sem nada impresso; uma na raiz de um projeto gera a pergunta.
+7. pastas.py conferir = 0; git check-ignore -v desktop.ini em cada repositório; as suítes de novo, já com as cores; o usuário olha o Explorador (ícone, dica, coluna Comentários) e o VS Code.
+8. Limpeza (fase 9), com o "sim": o pacote de ícones velho (quando a conferência não achar ini apontando para ele), os protótipos, os retratos da mudança. As lápides saem quando a varredura de cada projeto der zero (arquivo de administrador: entregue o comando).
+
+## Limites
+- Nunca desktop.ini em pasta de rodada nem em pasta passageira; nunca seguir junção.
+- Nome de paciente, de funcionário e da operadora nunca entram em arquivo do kit nem no resumo.
+
+## Ao fechar
+Resumo curto: o que foi aplicado (números por projeto), a conferência, as suítes, o que ficou pendente (como pergunta, com a recomendação) e a linha "Sinais de insuficiência do modelo: nenhum" (ou quais).
+```
+
+## 3 · outro PC · enviar a cópia (cedo; não muda nada lá)
+
+```
+Sonnet 5.5 (escolha-o na lista do /model; o atalho "sonnet" abre o Sonnet 5) · /effort medium — é cópia de arquivos com conferência por hash; o erro aparece na hora.
+
+Janela no <outro PC>, aberta em qualquer pasta que não seja de projeto. Não muda nada neste PC.
+
+## O que fazer
+1. Pergunte ao usuário e anote, em uma linha cada: o que mudou aqui nas skills, no CLAUDE.md pessoal e no settings.json desde a última cópia.
+2. Copie, numa pasta claude-kit-do-<pc>_AAAA-MM-DD: de %USERPROFILE%\.claude\skills\ as skills do kit (não a synced), o %USERPROFILE%\.claude\CLAUDE.md (se existir) e qualquer pasta de kit deste PC. Sem __pycache__.
+3. Na mesma pasta: manifesto.json (caminho relativo → sha256 de cada arquivo) e LEIA-ME.txt com as respostas do passo 1.
+4. Confira que todo arquivo copiado bate com o manifesto.
+
+## Ao fechar
+Resumo curto e a linha "Sinais de insuficiência do modelo: nenhum" (ou quais). Peça ao usuário para pôr a pasta em <mãe>\claude-kit\_do_<pc>\ no PC do kit original.
+```
+
+## 4 · outro PC · organizar-projetos (por último)
+
+```
+Opus 5.5 · /effort high — vai mover projetos com dados de verdade e publicar código no GitHub pela primeira vez; erro silencioso (pasta errada, dado sensível enviado) custa caro e é difícil de desfazer.
+
+Janela no <outro PC>, aberta em <mãe> (crie a pasta antes, vazia, se não existir). Nunca trabalhe de dentro de uma pasta que vai mudar de lugar. O usuário traz uma cópia de <mãe>\claude-kit do PC original (sem a subpasta _do_*).
+
+## Contexto
+- O roteiro é o módulo organizar-projetos da skill uso-do-claude (skills\uso-do-claude\organizar-projetos\ORGANIZAR.md). Siga as fases, cada uma com o "sim" do usuário, e os avisos de aproveitar só o necessário (reaproveitar.md).
+- <o que já se sabe deste PC: projetos, o que está no GitHub, repositório na raiz, ganchos próprios>
+
+## O que fazer
+1. Trazer o kit para <mãe>\claude-kit e conferir arquivo a arquivo (hash) com o do PC original.
+2. Fase 0: python <kit>\skills\uso-do-claude\organizar-projetos\scripts\inventario.py. Mostre o que serve, o que duplicaria e o que fica de fora, antes de instalar qualquer coisa.
+3. Fase 1: ligar as skills (ligar_claude.py --conferir, depois --kit-vence se houver cópia velha); o CLAUDE.md pessoal do kit, com as linhas que só existirem neste PC juntadas com o "sim"; hardlink conferido com fsutil hardlink list. Se o app Claude Desktop esconder skill por junção, volte ao modo cópia e anote no LEIA-ME do kit.
+4. As fases 2 a 9 do ORGANIZAR.md: inventário (subagente, só leitura), entrevista (perguntas.md), plano (planos\<pc>_<data>.json e o mapa no mapa.json), mudança (o comando é do usuário se o modo automático bloquear), GitHub (github.md; sempre privado, depois do antes_do_github.py), os prompts das janelas de cada projeto, as cores (pastas.md), a limpeza. Pillow e git instalados com o "sim".
+5. Se a raiz do C: for um repositório (git -C C:\ status), traga ao usuário como pergunta antes de qualquer outra coisa.
+
+## Limites
+- O original do kit é o do PC original: mudança feita aqui volta para lá pela cópia, sempre comparada.
+- Nunca CLAUDE.md na raiz de <mãe>. Nunca reclonar: mover.
+- Dado sensível nunca vai ao GitHub nem a prompt.
+
+## Ao fechar
+Resumo curto: o que mudou, o que foi ao GitHub (privado), as pendências (como pergunta, com a recomendação), os prompts entregues e a linha "Sinais de insuficiência do modelo: nenhum" (ou quais).
+```

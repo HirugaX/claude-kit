@@ -1,0 +1,36 @@
+{
+ "tamanhos": [
+  16,
+  20,
+  24,
+  32,
+  40,
+  48,
+  64,
+  128,
+  256
+ ],
+ "cores": {
+  "eu-alimento": "#D97722",
+  "eu-forneco-fontes": "#7B5CD6",
+  "eu-leio": "#25824D",
+  "trabalhamos-juntos": "#0F9BA8",
+  "nao-toco": "#2F6FD6",
+  "nao-toco-correio": "#2F6FD6",
+  "projeto-ia": "#105C40",
+  "dado-real": "#D23B3B",
+  "provisoria": "#8C8C8C"
+ },
+ "origem_de_cada": {
+  "eu-alimento": "eu-alimento.ico (o desenho dele), na cor dele",
+  "eu-forneco-fontes": "eu-forneco-fontes.ico + chip, na cor dele",
+  "eu-leio": "eu-leio.ico (o desenho dele), na cor dele",
+  "trabalhamos-juntos": "trabalhamos-juntos-cabeca.ico (o desenho dele), recolorido de #105C40 para #0F9BA8",
+  "nao-toco": "nao-toco.ico + braco-robo, na cor dele",
+  "nao-toco-correio": "nao-toco.ico + braco-robo+selo, na cor dele",
+  "projeto-ia": "trabalhamos-juntos-engrenagem.ico (o desenho dele), na cor dele",
+  "dado-real": "nao-toco.ico + cadeado-circuito, recolorido de #2F6FD6 para #D23B3B",
+  "provisoria": "nao-toco.ico + robo-pergunta, recolorido de #2F6FD6 para #8C8C8C"
+ },
+ "origem": "pacote do Ettore \"Ícones de pastas — versão 3\" (05/10/2026) e, nos desenhos novos, as referências dele (prototipos-icones\\referencia_icones), redesenhadas no mesmo estilo (desenho.py)"
+}

@@ -1,0 +1,230 @@
+{
+ "versao": 1,
+ "_leia": "A tabela única do sistema de cores (pastas.md). Caminhos relativos à mãe (C:\\CLAUDE-PROJETOS) ou ao projeto, com / ; padrões com * ? [ ]. Valores: um verbo, uma marca ou sem-cor (rodada ou passageira: nenhum desktop.ini e não desce). Projeto que não existe neste PC é ignorado: o mesmo mapa serve aos dois PCs.",
+ "verbos": {
+  "eu-alimento": {
+   "nome": "Eu alimento",
+   "cor": "#D97722",
+   "icone": "eu-alimento",
+   "vscode_base": "download",
+   "dica": "você deposita os arquivos de cada rodada; o programa os consome e arquiva."
+  },
+  "eu-forneco-fontes": {
+   "nome": "Eu forneço fontes",
+   "cor": "#7B5CD6",
+   "icone": "eu-forneco-fontes",
+   "vscode_base": "resource",
+   "dica": "documento de referência que você traz; a IA consulta; ninguém altera."
+  },
+  "eu-leio": {
+   "nome": "Eu leio",
+   "cor": "#25824D",
+   "icone": "eu-leio",
+   "vscode_base": "docs",
+   "dica": "o programa ou o Claude produz para você; abra e copie; pode apagar rodada velha."
+  },
+  "trabalhamos-juntos": {
+   "nome": "Trabalhamos juntos",
+   "cor": "#0F9BA8",
+   "icone": "trabalhamos-juntos",
+   "vscode_base": "shared",
+   "dica": "o programa escreve e você também edita à mão."
+  },
+  "nao-toco": {
+   "nome": "Não toco",
+   "cor": "#2F6FD6",
+   "icone": "nao-toco",
+   "vscode_base": "src",
+   "dica": "é do Claude: código, testes, rascunhos e documentos técnicos; não mexa à mão."
+  },
+  "correio": {
+   "nome": "Não toco (correio)",
+   "cor": "#2F6FD6",
+   "icone": "nao-toco-correio",
+   "vscode_base": "mail",
+   "filhas": "nao-toco",
+   "dica": "caixa de mensagens entre as janelas do Claude; não mexa à mão."
+  }
+ },
+ "marcas": {
+  "projeto-ia": {
+   "nome": "Projeto com IA",
+   "cor": "#105C40",
+   "icone": "projeto-ia",
+   "vscode_base": "robot",
+   "filhas": "provisoria",
+   "dica": "aqui a IA trabalha; dentro, siga as cores."
+  },
+  "dado-real": {
+   "nome": "Dado real / sem cópia",
+   "cor": "#D23B3B",
+   "icone": "dado-real",
+   "vscode_base": "secure",
+   "filhas": "nao-toco",
+   "dica": "dado real, sem cópia: só o programa mexe; nada se apaga, se move ou se copia por fora."
+  },
+  "provisoria": {
+   "nome": "Criada pela IA — falta classificar",
+   "cor": "#8C8C8C",
+   "icone": "provisoria",
+   "vscode_base": "temp",
+   "filhas": "sem-cor",
+   "dica": "pasta nova fora do mapa: diga ao Claude qual cor ela recebe."
+  }
+ },
+ "nunca_cor": [
+  ".git",
+  ".vscode",
+  "__pycache__",
+  ".pytest_cache",
+  ".mypy_cache",
+  ".ruff_cache",
+  ".tox",
+  ".ipynb_checkpoints",
+  "node_modules",
+  ".venv",
+  "venv",
+  "*.egg-info",
+  "build",
+  "dist",
+  "htmlcov",
+  "tmp",
+  ".tmp"
+ ],
+ "mae": {
+  "marca": "projeto-ia",
+  "pastas": {
+   "prototipos-icones": "eu-leio",
+   "prototipos-icones/*": "sem-cor"
+  }
+ },
+ "projetos": {
+  "desosp-censo": {
+   "raiz": "projeto-ia",
+   "peacock": "#2E7D32",
+   "pastas": {
+    "desosp": "nao-toco",
+    "tests": "nao-toco",
+    "scripts": "nao-toco",
+    ".claude": "nao-toco",
+    ".claude/worktrees": "sem-cor",
+    "docs": "nao-toco",
+    "docs/para_o_app": "correio",
+    "docs/para_o_kernel": "correio",
+    "docs/para_a_planilha": "correio",
+    "docs/gpt": "eu-leio",
+    "arquivo": "eu-leio",
+    "arquivo/*": "sem-cor",
+    "entrada": "eu-alimento",
+    "entrada/*": "sem-cor",
+    "saida": "trabalhamos-juntos",
+    "saida/[0-9][0-9][0-9][0-9]_*": "sem-cor",
+    "saida/_extracao": "nao-toco",
+    "saida/_revisao_02out": "nao-toco",
+    "fontes": "eu-forneco-fontes",
+    "historico": "dado-real"
+   },
+   "dicas": {
+    "entrada": "deposite aqui os SIST_, BRUTO_, o PDF da UTI, HC_, PEND_ e ADENDO; o programa os consome e arquiva.",
+    "historico": "o programa e você editam; sem backup: nada se apaga nem se move por fora.",
+    "saida": "o programa escreve o censo e você edita a Base Censo à mão."
+   },
+   "_passageiras": "entrada/_ESPERA e as subpastas à mão em entrada (sem cor por entrada/*); saida/DDMM_P (o padrão); arquivo/* (rodadas e _EXECUCAO_N). Fonte: desosp-censo/docs/HANDOFF_SPRINT2.md, 'Para o sistema de cores'."
+  },
+  "desosp-app": {
+   "raiz": "projeto-ia",
+   "peacock": "#1565C0",
+   "pastas": {
+    "app": "nao-toco",
+    "tests": "nao-toco",
+    "scripts": "nao-toco",
+    ".claude": "nao-toco",
+    ".claude/worktrees": "sem-cor",
+    "workspace_dev": "nao-toco",
+    "docs": "nao-toco",
+    "docs/para_o_app": "correio",
+    "docs/para_o_kernel": "correio",
+    "docs/para_a_planilha": "correio",
+    "docs/fontes": "eu-forneco-fontes",
+    "workspace_dev/_PUXANDO_*": "sem-cor",
+    "workspace_dev/*/_PUXANDO_*": "sem-cor",
+    "workspace_dev/*/_PUXADA_ANTERIOR_*": "sem-cor",
+    "workspace_dev/arquivo/*": "sem-cor",
+    "workspace_dev/saida/*": "sem-cor",
+    "workspace_dev/entrada/*": "sem-cor"
+   },
+   "_passageiras": "as do preparo da puxada (_PUXANDO_*, criadas e apagadas pelo puxar.py) e as cópias de rodada da puxada anterior (_PUXADA_ANTERIOR_N, que guardam rodadas), na cópia de trabalho; e, como o app roda o kernel na pasta de dados, saida/DDMM_P e entrada/_ESPERA. Fonte: desosp-app/docs/HANDOFF_APP.md, 'Passo 8 — para o sistema de cores'."
+  },
+  "desosp-app-dados": {
+   "raiz": "dado-real",
+   "pastas": {
+    "arquivo/*": "sem-cor",
+    "saida/*": "sem-cor",
+    "entrada/*": "sem-cor",
+    "_PUXANDO_*": "sem-cor",
+    "*/_PUXANDO_*": "sem-cor",
+    "*/_PUXADA_ANTERIOR_*": "sem-cor"
+   },
+   "dicas": {
+    "": "os dados reais do app (o banco): só o app mexe; não se move, não se copia, não se abre por fora."
+   }
+  },
+  "desosp-app-backups": {
+   "raiz": "dado-real",
+   "dicas": {
+    "": "as cópias do banco do app: só o app escreve aqui; nada se apaga nem se move por fora; nunca vai ao GitHub."
+   }
+  },
+  "desosp-hc": {
+   "raiz": "projeto-ia",
+   "peacock": "#EF6C00",
+   "pastas": {
+    "scripts": "nao-toco",
+    "tests": "nao-toco",
+    ".githooks": "nao-toco",
+    ".claude": "nao-toco",
+    ".claude/worktrees": "sem-cor",
+    "trabalho": "nao-toco",
+    "trabalho/*": "sem-cor",
+    "modelos": "nao-toco",
+    "docs": "nao-toco",
+    "docs/para_a_planilha": "correio",
+    "docs/para_o_app": "correio",
+    "docs/para_o_kernel": "correio",
+    "docs/premiacoes": "eu-forneco-fontes",
+    "entrada": "eu-alimento",
+    "entrada/*": "sem-cor",
+    "saida": "eu-leio",
+    "saida/*": "sem-cor",
+    "planilhas": "eu-leio",
+    "historico": "eu-leio",
+    "historico/_arquivo_tecnico": "nao-toco",
+    "historico/rodadas/*": "sem-cor",
+    "privado": "dado-real"
+   },
+   "_passageiras": "o fechar_rodada esvazia entrada, saida, trabalho e rodada e apaga as subpastas inteiras ('são passageiras, sem cor': scripts/fechar_rodada.py, limpa). Por isso entrada/*, saida/* e trabalho/* sem cor."
+  },
+  "claude-kit": {
+   "raiz": "projeto-ia",
+   "peacock": "#6A1B9A",
+   "pastas": {
+    "skills": "nao-toco",
+    "scripts": "nao-toco",
+    "_do_desktop": "nao-toco",
+    "_obra": "nao-toco",
+    "fontes": "eu-forneco-fontes",
+    "skills/uso-do-claude/fontes": "eu-forneco-fontes",
+    "pesquisas": "eu-leio",
+    "decisoes": "eu-leio",
+    ".githooks": "nao-toco",
+    "caixa": "correio"
+   }
+  },
+  "pesquisa-clinica": {
+   "pastas": {
+    "fontes": "eu-forneco-fontes"
+   },
+   "raiz": "projeto-ia"
+  }
+ }
+}

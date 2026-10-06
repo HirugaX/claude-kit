@@ -1,0 +1,115 @@
+{
+ "_leia": "O plano real da mudança do notebook (04-05/10/2026), já executado. Serve de modelo: copie, troque os caminhos, e o mudanca.py e o varredura.py leem daqui. Só caminhos: nenhum nome de arquivo de dado.",
+ "data": "2026-10-05",
+ "mae": "C:/CLAUDE-PROJETOS",
+ "movimentos": [
+  {
+   "nome": "hc",
+   "de": "C:/planilha-hc",
+   "para": "C:/CLAUDE-PROJETOS/desosp-hc",
+   "repo": true,
+   "insubstituiveis": [
+    "privado"
+   ]
+  },
+  {
+   "nome": "dados",
+   "de": "C:/DESOSP_APP_REAL",
+   "para": "C:/CLAUDE-PROJETOS/desosp-app-dados",
+   "insubstituiveis": [
+    "desosp_app.db",
+    "desosp_app.db-wal",
+    "desosp_app.db-shm",
+    "desosp_app.db-journal",
+    "busca_fts.db",
+    "_backups",
+    "_RAIZ_REAL.json"
+   ]
+  },
+  {
+   "nome": "app",
+   "de": "C:/DESOSP_APP",
+   "para": "C:/CLAUDE-PROJETOS/desosp-app",
+   "repo": true,
+   "insubstituiveis": [
+    "local_nomes.json"
+   ]
+  },
+  {
+   "nome": "kernel",
+   "de": "C:/DESOSP",
+   "para": "C:/CLAUDE-PROJETOS/desosp-censo",
+   "repo": true,
+   "insubstituiveis": [
+    "historico",
+    "fontes",
+    "desosp/local_nomes.json"
+   ]
+  },
+  {
+   "nome": "gpt",
+   "de": "C:/conversation-core",
+   "para": "C:/GPT/conversation-core",
+   "repo": true
+  }
+ ],
+ "lapides_extras": [
+  {
+   "de": "C:/CLAUDE",
+   "para": "C:/CLAUDE-PROJETOS/claude-kit"
+  }
+ ],
+ "processos_extras": [
+  "app\\.iniciar"
+ ],
+ "portas": [
+  8765
+ ],
+ "nao_casar": [
+  "C:/DESOSP ARQUIVO"
+ ],
+ "varrer": [
+  {
+   "nome": "kernel",
+   "raiz": "C:/CLAUDE-PROJETOS/desosp-censo",
+   "pular": [
+    "entrada",
+    "saida",
+    "arquivo",
+    "historico",
+    "fontes"
+   ]
+  },
+  {
+   "nome": "app",
+   "raiz": "C:/CLAUDE-PROJETOS/desosp-app",
+   "pular": [
+    "workspace_dev"
+   ]
+  },
+  {
+   "nome": "hc",
+   "raiz": "C:/CLAUDE-PROJETOS/desosp-hc",
+   "pular": [
+    "entrada",
+    "saida",
+    "planilhas",
+    "privado",
+    "historico",
+    "trabalho"
+   ]
+  },
+  {
+   "nome": "kit",
+   "raiz": "C:/CLAUDE-PROJETOS/claude-kit",
+   "pular": [
+    "pesquisas",
+    "fontes",
+    "decisoes",
+    "_do_desktop",
+    "skills/uso-do-claude/organizar-projetos/planos",
+    "skills/uso-do-claude/organizar-projetos/scripts/tests"
+   ]
+  }
+ ]
+}
