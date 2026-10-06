@@ -217,7 +217,8 @@
     "pesquisas": "eu-leio",
     "decisoes": "eu-leio",
     ".githooks": "nao-toco",
-    "caixa": "correio"
+    "caixa": "correio",
+    "docs": "nao-toco"
    }
   },
   "pesquisa-clinica": {
