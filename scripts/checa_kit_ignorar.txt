@@ -4,3 +4,8 @@ decisoes/2026-10-04_prompts-das-janelas.md:48
 pesquisas/2026-10-04_reorganizacao-registro-e-impacto.md:124
 # 06/10/2026 (F1a): o teste da varredura de segredos usa um token falso, montado em f-string.
 skills/uso-do-claude/organizar-projetos/scripts/tests/test_antes_do_github.py:*:segredo
+# 06/10/2026 (R1): métricas de uso do Claude Code, gravadas pelo scripts/medir_semana.py, que só escreve números, datas
+# ISO e nomes de pasta e de projeto (conferido por regex em todas as células). Só a regra do .csv; nada de paciente.
+metricas/uso-semanal.csv:*:arquivo_dado
+metricas/ctx0-por-projeto.csv:*:arquivo_dado
+metricas/pastas-projetos.csv:*:arquivo_dado
