@@ -89,7 +89,8 @@
   "dist",
   "htmlcov",
   "tmp",
-  ".tmp"
+  ".tmp",
+  ".superpowers"
  ],
  "mae": {
   "marca": "projeto-ia",

@@ -1,92 +1,64 @@
-# Estado do claude-kit — 07/10/2026, fim do F1b
+# Estado do claude-kit — 07/10/2026, fim do F2a
+
+## Objetivo
+
+O fluxo novo do plano (`decisoes\2026-10-06_plano-fluxo.md`): atenção concentrada — o Ettore senta poucas vezes e
+responde de uma vez; entre as sentadas o Claude trabalha sozinho, com a mesma qualidade e economia. O kit leva as peças
+(skills, ganchos, medição) e o laço testado aos projetos.
 
 ## Onde estamos
 
-- **Feito:**
-  - F1a: privacidade, isolamento, o kit no git;
-  - R1: o objetivo, a medição e a última varredura;
-  - F1b: o kit como marketplace.
-- **Próxima:** o F2a (as skills), com o prompt do plano (`decisoes\2026-10-06_plano-fluxo.md`, "### F2a"). Depois vêm
-  o F2b (ganchos, statusline, medição, pastas de teste), o F3a ∥ F3b, o F3c e, por fim, o F5a, quando o app volta.
-- **Em paralelo, quando o Ettore quiser:**
-  - a R0 (revisão do front do app), com o prompt do plano, que ganhou a linha da engenharia;
-  - o desktop instala o kit pela `caixa\NB-002`.
-- **Push:** feito em 07/10, no fim do F1b.
+- **Feito:** F1a (privacidade, isolamento, git); R1 (objetivo, medição); F1b (marketplace); **F2a (as skills), 07/10.**
+- **Próximo passo:** o F2b (ganchos, settings, statusline, medição, pastas de teste), com o prompt do plano ("### F2b",
+  conferido em 07/10). Depois, F3a ∥ F3b, F3c, F5a.
+- **Critério de pronto do F2b:** o portão do prompt (`testar_ganchos.py` verde com os da fila; numa sessão nova o
+  `SessionStart` avisa modelo errado e o `PreModelSwitch` barra o `/model sonnet`; `medir_semana.py` reproduz 29/09).
+- **Em paralelo, quando o Ettore quiser:** a R0 (front do app); o desktop instala pela `caixa\NB-003` (substitui a NB-002).
+- **Push:** feito em 07/10, no fim do F2a.
 
-## Decisões do F1b (grill de 07/10)
+## O que o F2a deixou
 
-| tema | decisão |
-|---|---|
-| grupos | `nucleo` e `kit` (nossos); `planejamento` e `engenharia` (terceiros). A tabela skill → grupo está no `LEIA-ME.md` e no guia |
-| escopo | `nucleo` e `planejamento` no escopo de usuário. A `engenharia` **nunca** fica no escopo de usuário: cada projeto de código a liga na sua fase (R0 por `--scope local`; F5a, F6, F7, F8 e N pelo `instalar_kit.py --trecho codigo`). Até lá, o projeto fica sem ela |
-| `organizar-projetos` | entrou no `nucleo` dentro da `uso-do-claude`, como estava. O F2a o quebra em 3 skills só `/` (`organizar-projetos`, `cores-das-pastas`, `icones`) no plugin `kit`, ligado só no kit e na janela da raiz |
-| F2 | dividido em F2a (skills, Opus high) e F2b (ganchos etc., Opus medium) |
-| desktop | instala já (NB-002); o F2a em diante chega por `git pull`; os projetos de lá esperam o F8 |
-| janela da raiz `C:\CLAUDE-PROJETOS` | posto de manutenção: cores e ícones das pastas (os ícones novos se juntam e se desenham em lote, depois) e a sessão do balanço da medição (F2b) |
-| cores | `metricas\` = eu-leio; `plugins\`, `.claude-plugin\`, `.claude\` e `config\` = nao-toco |
+- **Grupos:** `nucleo` 6 (usuário) · `planejamento` 12 (usuário) · `kit` 3, só `/` (no kit e na raiz) · `engenharia` 14
+  e `sdd` 4 (por projeto de código; teste). O kit e a janela da raiz ligam o `kit`; o `instalar_kit.py` grava a raiz.
+- **`uso-do-claude`** virou núcleo (123 linhas, 9,7 KB por disparo; eram 298 e 22,3 KB) + `modelo-e-esforco`,
+  `fechar-janela` (com `modelos\`: ESTADO, PROXIMO, PERGUNTAS, ADR, GLOSSARY), `pesquisa`, `orquestrar`. Consulta:
+  `reference.md` e `testar-instrucao.md`. **Custo fixo** (`claude -p "/context"`, pasta de rascunho): descrições do
+  `nucleo` ~470 → ~290 tokens; skills 6,4 mil → 6,2 mil (total 31,4 mil, arredondado igual).
+- **Módulo das pastas** em `plugins\nucleo\pastas\` (scripts, testes, mapa, quadros dos ícones, planos); o gancho do
+  `nucleo` o chama por `${CLAUDE_PLUGIN_ROOT}/pastas/...`; o `ligar-gancho` não grava mais em settings. Suíte: 150
+  verdes; `pastas.py conferir` = 0; o gancho disparou numa sessão nova.
+- **`config\fluxo.json`** com `lancar_bg: false` (o F3c liga). `scripts\medir_uso.py` (movido).
+  `scripts\perguntas_nucleo.txt`: 11 de 11 batem (Sonnet 5.5, US$ 1,16 as 12 sessões).
+- **`.gitattributes`:** scripts bash dos plugins sempre em LF (o `task-brief` do SDD quebra com CRLF).
 
-## O que existe agora
+## Surpresas
 
-- **Marketplace local:**
-  - `.claude-plugin\marketplace.json` lista `nucleo` (2 skills), `planejamento` (12) e `engenharia` (14);
-  - as skills moram em `plugins\<grupo>\skills\` (a pasta `skills\` saiu);
-  - cada plugin de terceiros tem o seu `origem.json`.
-- **Nada carrega de cópia:** em `~\.claude\skills` não sobrou junção do kit, e `plugins\cache` não tem cópia do kit; o
-  Claude Code lê os plugins direto da pasta.
-- **O gancho das cores** é do plugin `nucleo` (`plugins\nucleo\hooks\hooks.json`, `${CLAUDE_PLUGIN_ROOT}`). Saiu do
-  `~\.claude\settings.json`. O `local.json` das cores aponta para o módulo novo.
-- **CLAUDE.md pessoal:** o `~\.claude\CLAUDE.md` é só a linha `@C:/CLAUDE-PROJETOS/claude-kit/CLAUDE.md`, um import.
-  Testado numa sessão nova: as regras carregaram. Acabaram o hardlink e o `fsutil`, e a memória sobre o hardlink saiu.
-- **`config\plugins.json`:** os marketplaces, os grupos, os plugins de fora e o escopo de cada um. O session-report saiu
-  do escopo de usuário (Q40).
-- **`scripts\instalar_kit.py`** (substitui o `ligar_claude.py`):
-  - instala e confere;
-  - `--verificar` acusa junção sobrando, nome repetido, grupo no escopo errado, gancho em dobro, `CLAUDE.md` na raiz e
-    um CLAUDE.md pessoal que não seja o import;
-  - `--trecho TIPO` dá o `enabledPlugins` de cada tipo de projeto;
-  - sem o CLI no PATH, lista os comandos `/plugin` a colar no painel;
-  - não troca um CLAUDE.md pessoal diferente do kit sem `--claude-md-kit-vence`;
-  - 9 testes.
-- **`scripts\atualizar_terceiros.py`:** baixa numa pasta de preparo, compara e, com `--aplicar`, troca a pasta e o
-  `origem.json`. Testado com 2 skills, nas duas iguais.
-- **Documentos:** `LEIA-ME.md` reescrito e `COMO_OPERAR.md` novo (só a parte "até o F3").
-- **O guia** (`GUIA_DAS_SKILLS.docx`, fora do git) abre com a operação, agrupa as skills do kit pelo plugin e traz a
-  tabela de que grupo cada pasta liga. Regenerado: 68 de 68, sem descrição faltando.
-- **O guia antigo do Claude Docs** ganhou no topo um aviso que aponta para o `.docx` (Q28).
-- **Backups de 07/10 em `~\.claude\backups`:**
-  - `settings.json.2026-10-07_antes-do-F1b`;
-  - `skills-juncoes-2026-10-07.txt`;
-  - `CLAUDE.md.2026-10-07_hardlink-antes-do-import`;
-  - `claude-pastas-local.json.2026-10-07_antes-do-F1b`.
+- **Descrição de skill com `: ` sem aspas some** (o YAML quebra e a skill não carrega, sem aviso). As do `nucleo` estão
+  entre aspas; confira com `claude -p "/context"` ou a 1ª linha do `stream-json`.
+- **Quebrar uma skill em cinco aumenta as descrições fixas**, se não forem enxutas: a 1ª versão foi para ~590 tokens.
+- **A pergunta 9 falhou** até o CLAUDE.md pessoal apontar a rodada de contingências: regra só dentro da skill não chega
+  à sessão que responde pelo CLAUDE.md.
+- **Heredoc do Git Bash come barras invertidas**: `\n` de `plugins\nucleo` virou quebra de linha no plano (consertado e
+  conferido). Editar por arquivo `.py` ou pela ferramenta Edit.
+- **Pasta com o diretório do shell dentro não se move** no Windows (`Permission denied`).
+- **Esforço do subagente:** a documentação não diz se herda; a ferramenta Agent (desta versão) e o `agent()` do
+  Workflow aceitam `effort`. A `orquestrar` manda fixá-lo em todo despacho.
 
-## Riscos e pendências
+## Decisões
 
-- **Remote Control:** ligou sozinho no painel do VS Code. Em 07/10, o `PushNotification` respondeu "Mobile push
-  requested". A `--bg` fica para o F3a.
-- **Engenharia fora dos projetos:** `desosp-app`, `desosp-censo` e `desosp-hc` estão sem `tdd`, `diagnosing-bugs`,
-  `web-design-guidelines` etc. até as fases deles, por decisão do Ettore. A R0 liga só no app, com `--scope local`.
-- **`organizar-projetos` ainda cita o velho:** o `ORGANIZAR.md`, o `reaproveitar.md`, o `prompts.md` e o
-  `inventario.py` falam de `ligar_claude.py`, junções e hardlink. O `pastas.py ligar-gancho` gravaria um 2º gancho no
-  settings. **Não usar até o F2a**, que os atualiza.
-- **`/reload-plugins` no painel:** não foi testado, porque não roda fora do painel. A edição já vale numa sessão nova
-  (testado).
-- **Achado: o `cc-plugin-telemetry`.**
-  - É um mod embutido do Claude Code que manda registros de uso à Anthropic. Pelo README do mod, nenhum texto livre vai
-    junto.
-  - Desligar com `DISABLE_TELEMETRY` também desliga o `Monitor`. Com `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`, cai
-    ainda o Remote Control.
-  - Decisão do Ettore, para depois; nada mudou.
-- **Nome repetido fora do kit:** `deep-research` existe embutido e como sincronizada do claude.ai.
-- **Herdadas da R1:**
-  - o esforço `max` nos subagentes (o F2a confere);
-  - os bugs da `--bg` no Windows (o F3a);
-  - o conector do Drive desligado;
-  - as 6 lápides do `C:`;
-  - o `gh` não instalado.
+- O módulo das pastas inteiro no `nucleo` (todos os scripts importam o `regras.py`); as skills do `kit` só com texto.
+- `sdd` de escopo de projeto (tipos `codigo` e `teste`), nunca no usuário.
+- O CLAUDE.md pessoal aponta as peças do núcleo e a rodada de contingências (§3 e §7 da `uso-do-claude`).
+- No prompt do F2b entrou um gancho a mais: `PreToolUse` em `Agent` lembra o `effort` quando falta (não bloqueia).
+
+## Riscos
+
+- **Engenharia e sdd fora dos projetos** até as fases deles (decisão do Ettore). A R0 liga só no app, `--scope local`.
+- **`cc-plugin-telemetry`:** decisão do Ettore, para depois (desligar tira o `Monitor` e o Remote Control).
+- Herdados: os bugs da `--bg` no Windows (F3a); o conector do Drive desligado; as 6 lápides do `C:`; o `gh` ausente;
+  `deep-research` com nome repetido (embutida e do claude.ai).
 
 ## Como retomar
 
-1. `git pull --ff-only`, depois `python scripts\instalar_kit.py --verificar` (0 achados).
-2. Ler este arquivo e o `caixa\INDICE.md`.
-3. Abrir o F2a com o prompt do plano.
-4. Antes de commit: `python scripts\checa_kit.py --tudo` (o gancho roda o `--staged`).
+1. `git pull --ff-only`; `python scripts\instalar_kit.py --verificar` (0 achados); ler este arquivo e o `caixa\INDICE.md`.
+2. Abrir o F2b com o prompt do plano. Antes de commit: `python scripts\checa_kit.py --tudo`.

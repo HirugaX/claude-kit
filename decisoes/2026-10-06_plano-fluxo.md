@@ -334,6 +334,15 @@ statusline, a medição e o balanço (a sessão do balanço roda na janela da ra
 - Portão: `testar_ganchos.py` verde (com os ganchos da fila); `perguntas_controle.py` (~10 perguntas) bate; núcleo ≤ 150
   linhas; custo fixo menor (número do `/context`); o `medir_semana.py` reproduz a linha de 29/09 do
   `metricas\uso-semanal.csv` e gera a planilha; as duas pastas de teste criadas; guia regenerado.
+- **F2a feito em 07/10** (detalhes em `docs\ESTADO.md`):
+  - `nucleo` com 6 skills: `uso-do-claude` (núcleo, 123 linhas, 9,7 KB por disparo; eram 298 e 22,3 KB),
+    `modelo-e-esforco`, `fechar-janela` (com os modelos), `pesquisa`, `orquestrar`, `recursos-do-projeto` (94 linhas);
+    as descrições fixas caíram de ~470 para ~290 tokens (`/context`: skills 6,4 mil → 6,2 mil);
+  - plugin `kit` (3 skills só `/`), ligado no kit e na janela da raiz; o módulo das pastas em `plugins\nucleo\pastas\`;
+  - plugin `sdd` (terceiros, escopo de projeto: código e teste); `config\fluxo.json` com `lancar_bg: false`;
+  - esforço dos subagentes: a documentação não diz se herda; a `orquestrar` fixa `model` e `effort` em todo despacho
+    (a ferramenta Agent e o `agent()` do Workflow aceitam `effort`);
+  - `scripts\perguntas_nucleo.txt`: 11 de 11 batem (a 9 só depois de o CLAUDE.md apontar a rodada de contingências).
 
 **F3a — o laço (`teste-fluxo`, dado sintético).** Critérios: aprovar plano limpando o contexto (painel e terminal);
 fase 1 → `ESTADO.md` + `PROXIMO.md` → fase 2 em Sonnet 5.5 lançada de dois jeitos — por `--bg` e por sessão interativa
@@ -564,7 +573,7 @@ Plano: decisoes\2026-10-06_plano-fluxo.md (bloco F1b, Ficha, "Como você opera")
 Portão: instalar_kit.py --verificar passa; ligar e desligar engenharia numa pasta de rascunho muda a lista; /grill-me curto funciona; nenhuma junção sobrando dos grupos migrados; o gancho das cores dispara; guia regenerado; scripts\checa_kit.py --tudo sem achado. docs\ESTADO.md do kit reescrito; se o desktop tiver de fazer algo (o instalar_kit.py), uma mensagem NB nova na caixa\. Resumo com "Sinais de insuficiência do modelo". Confira e ajuste o prompt do F2 neste plano e entregue-o.
 ```
 
-### F2a — as skills do kit
+### F2a — as skills do kit — feito em 07/10
 
 ```
 Opus 5.5 · /effort high — as skills do núcleo guiam toda sessão futura e o erro nelas é silencioso; suba para /effort xhigh (com motivo escrito) se as perguntas de controle falharem duas vezes.
@@ -605,16 +614,17 @@ Opus 5.5 · /effort medium — ganchos e medição se conferem por teste com JSO
 Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: F2a fechado; git pull --ff-only; instalar_kit.py --verificar com 0 achados; leia docs\ESTADO.md e o caixa\INDICE.md. Nenhuma outra janela aberta (o item 2 mexe no ~\.claude\settings.json).
 
 ## Contexto
-Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F2 e F2b, Ficha — itens 4, 7, 8, 9 e 10 —, "Como você opera"). Registro decisoes\2026-10-06_entrevista-fluxo.md: §5 (Q3, Q9, Q10, Q12, Q21, Q35) e §6.2. Pesquisas: 2026-10-05_sessoes-memoria-plugins-claude-code.md (ganchos); 2026-10-05_fluxo-atual-dos-projetos.md (lições 1-2); 2026-10-06_medicao-semanal-de-uso.md; 2026-10-06_varredura-final-atencao-concentrada.md; 2026-10-04_organizacao-com-claude-code.md:92 (gancho de plugin no Windows: ${CLAUDE_PLUGIN_ROOT} chega com /; a forma-shell roda no Git Bash). R1: decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (seções 2, 5 e 6; Q39-Q42). As regras que os ganchos aplicam já estão nas skills (F2a). Ao parar para o "sim": PushNotification com "claude-kit · F2b · precisa de você".
+Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F2 e F2b, Ficha — itens 4, 7, 8, 9 e 10 —, "Como você opera"). Registro decisoes\2026-10-06_entrevista-fluxo.md: §5 (Q3, Q9, Q10, Q12, Q21, Q35) e §6.2. Pesquisas: 2026-10-05_sessoes-memoria-plugins-claude-code.md (ganchos); 2026-10-05_fluxo-atual-dos-projetos.md (lições 1-2); 2026-10-06_medicao-semanal-de-uso.md; 2026-10-06_varredura-final-atencao-concentrada.md; 2026-10-04_organizacao-com-claude-code.md:92 (gancho de plugin no Windows: ${CLAUDE_PLUGIN_ROOT} chega com /; a forma-shell roda no Git Bash). R1: decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (seções 2, 5 e 6; Q39-Q42). As regras que os ganchos aplicam já estão nas skills (F2a, 07/10): a fila e o papel de cada gancho na orquestrar §4; o portão, o PROXIMO.md e o aviso na fechar-janela; os modelos em plugins\nucleo\skills\fechar-janela\modelos\; o config\fluxo.json (lancar_bg). Os scripts dos ganchos novos numa pasta própria do nucleo (ex.: plugins\nucleo\ganchos\), ao lado de plugins\nucleo\pastas\ (o módulo das cores). O claude está no PATH (2.1.291): gancho se prova também numa sessão nova por claude -p, e o que a sessão enxerga (plugins, skills, comandos) sai na 1ª linha do --output-format stream-json --verbose. No Git Bash, o heredoc come barras invertidas: edite por arquivo .py ou pela ferramenta Edit. Ao parar para o "sim": PushNotification com "claude-kit · F2b · precisa de você".
 
 ## O que fazer
 1. Ganchos no plugin nucleo (hooks\hooks.json, ao lado do gancho das cores; base: C:\CLAUDE-PROJETOS\desosp-app\.claude\hooks\abertura.py, só leitura), cada um testado por JSON (scripts\testar_ganchos.py), em duas camadas.
    - Sempre, em todo projeto: PreModelSwitch (barra o Sonnet 5, deixa o 5.5); SessionStart só com o aviso de modelo e esforço errados e o git pull --ff-only do kit (no máximo uma vez por hora; avisa se divergiu; depois do pull, o instalar_kit.py --verificar, e uma linha só se houver achado).
    - Só onde existir docs\ESTADO.md: o resto do SessionStart (estado curto, caixa, git de outra janela; no clear, injeta o PROXIMO.md); Stop (portão: fase dada como pronta sem ESTADO.md reescrito → bloqueia, até 8 vezes seguidas; aceita fechar com perguntas abertas se o ESTADO.md e o PERGUNTAS.md estiverem gravados); PreToolUse (Write/Edit em pasta de dado fora da lista aprovada → bloqueia); a fila (Q35, Q36, Q44): PermissionRequest (na execução largada, nega com mensagem e enfileira) e PreToolUse em AskUserQuestion (grava a pergunta no PERGUNTAS.md e responde "adiada": só adiar, nunca escolher).
+   - Sempre, também: PreToolUse em Agent — despacho sem effort recebe additionalContext que lembra a tabela de papéis da orquestrar §2 (não bloqueia). É o controle da regra do esforço por papel (1.197 chamadas do Sonnet 5.5 em max na semana de 29/09).
    - Nos projetos ainda não migrados, os ganchos antigos deles continuam.
 2. Settings, com backup e só com a outra janela fechada: statusline (modelo, esforço, % do contexto, e o % de 5 h e o semanal — rate_limits — gravados num arquivo local que o medir_semana.py lê); showClearContextOnPlanAccept: true; limpeza das permissões com caminho que não existe mais (o allow do ~\.claude\settings.json tem regras de C:\DESOSP e de um scratchpad velho).
 3. Medição (Q39, Q42): complete o scripts\medir_semana.py (só números): a planilha metricas\uso.xlsx (openpyxl; uma aba com as semanas e outra com os gráficos da régua e a linha da meta; metricas/*.xlsx no .gitignore); o metricas\BALANCO.md (o prompt fixo do balanço: ler o CSV, comparar com as metas, gravar metricas\balancos\AAAA-MM-DD.md e pôr cada ajuste proposto na fila do kit); no gancho de abertura do nucleo, a linha semanal roda em segundo plano se a última tem mais de 7 dias (sem imprimir nada), e o balanço vencido (15 dias) vira uma linha só com números que manda abrir a janela da raiz (C:\CLAUDE-PROJETOS: é lá que roda a sessão do balanço, decisão de 07/10). Lançar a sessão do balanço sozinha fica para o F3c.
-4. Crie C:\CLAUDE-PROJETOS\teste-fluxo\ e teste-ferramentas\ vazias, com git init e um LEIA-ME de uma linha (o gancho das cores vai perguntar a cor: sem-cor). Nas duas, o .claude\settings.json pelo instalar_kit.py --trecho teste (engenharia e session-report), com um gancho que barra o analyze-sessions sem --dir, e o HTML do session-report no .gitignore (Q40).
+4. Crie C:\CLAUDE-PROJETOS\teste-fluxo\ e teste-ferramentas\ vazias, com git init e um LEIA-ME de uma linha (o gancho das cores vai perguntar a cor: sem-cor). Nas duas, o .claude\settings.json pelo instalar_kit.py --trecho teste (engenharia, sdd e session-report), com um gancho que barra o analyze-sessions sem --dir, e o HTML do session-report no .gitignore (Q40).
 5. Regenere o guia.
 
 ## Limites
@@ -622,7 +632,7 @@ Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F2 e F2b, Ficha — itens 4, 7
 - Commit por assunto, caminho explícito; push no fim com o portão verde.
 
 ## Ao fechar
-Portão: testar_ganchos.py verde (com os da fila); numa sessão nova, o SessionStart avisa modelo errado e o PreModelSwitch barra o /model sonnet; a statusline aparece no terminal e o % chega ao arquivo; o medir_semana.py reproduz a linha de 29/09 do metricas\uso-semanal.csv e gera a planilha; as duas pastas de teste criadas; instalar_kit.py --verificar com 0 achados; guia regenerado; scripts\checa_kit.py --tudo sem achado. docs\ESTADO.md do kit. Resumo com "Sinais de insuficiência do modelo". Confira e ajuste os prompts do F3a e do F3b neste plano e entregue os dois (rodam em paralelo).
+Portão: testar_ganchos.py verde (com os da fila); numa sessão nova, o SessionStart avisa modelo errado e o PreModelSwitch barra o /model sonnet; a statusline aparece no terminal e o % chega ao arquivo; o medir_semana.py reproduz a linha de 29/09 do metricas\uso-semanal.csv e gera a planilha; as duas pastas de teste criadas; instalar_kit.py --verificar com 0 achados; guia regenerado; scripts\checa_kit.py --tudo sem achado; se algum texto de skill mudou, scripts\perguntas_nucleo.txt com 11 de 11 (perguntas_controle.py). docs\ESTADO.md do kit; se o desktop tiver de rodar o instalar_kit.py de novo, uma NB nova na caixa\. Resumo com "Sinais de insuficiência do modelo". Confira e ajuste os prompts do F3a e do F3b neste plano e entregue os dois (rodam em paralelo).
 ```
 
 ### F3a — o laço
