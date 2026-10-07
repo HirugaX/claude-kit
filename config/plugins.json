@@ -1,0 +1,45 @@
+{
+  "_leia": "Os plugins de cada PC e onde cada um liga. O scripts/instalar_kit.py lê este arquivo; mude aqui e rode de novo. Escopo 'usuario' = ~/.claude/settings.json (todo projeto); 'projeto' = <projeto>/.claude/settings.json (versionado), ligado na fase de cada projeto. Decisões: F1b (07/10/2026), Q40, ADR-0001 D4.",
+  "marketplaces": {
+    "claude-kit": {
+      "fonte": "pasta",
+      "caminho": "C:\\CLAUDE-PROJETOS\\claude-kit",
+      "nota": "o próprio kit; os plugins carregam da pasta (a edição vale na sessão seguinte ou com /reload-plugins)"
+    },
+    "claude-plugins-official": {"fonte": "github", "repo": "anthropics/claude-plugins-official"},
+    "cc-marketplace": {"fonte": "github", "repo": "kenryu42/cc-marketplace"}
+  },
+  "grupos": {
+    "nucleo": {"escopo": "usuario", "onde": "todo projeto"},
+    "planejamento": {"escopo": "usuario", "onde": "todo projeto"},
+    "engenharia": {
+      "escopo": "projeto",
+      "onde": "projetos de código; cada um liga na sua fase (R0 com --scope local e F5a no desosp-app, F6 no desosp-censo, F7 no desosp-hc, F8 no desktop, N1-N5 quando for código). Nunca no escopo de usuário.",
+      "ligado_em": ["claude-kit"]
+    },
+    "kit": {
+      "escopo": "projeto",
+      "onde": "claude-kit e a janela da raiz (C:\\CLAUDE-PROJETOS\\.claude\\settings.json, que não vaza para os projetos)",
+      "desde": "F2a"
+    }
+  },
+  "de_fora": {
+    "cc-safety-net@cc-marketplace": {"escopo": "usuario", "nota": "a política de cada PC é do Ettore: o instalar_kit.py imprime o comando"},
+    "claude-md-management@claude-plugins-official": {"escopo": "usuario"},
+    "frontend-design@claude-plugins-official": {"escopo": "usuario", "ate": "F5a", "depois": "projeto desosp-app"},
+    "session-report@claude-plugins-official": {
+      "escopo": "projeto",
+      "ligado_em": ["teste-fluxo", "teste-ferramentas"],
+      "nota": "sempre com --dir (Q40): sem ele lê as transcrições de todos os projetos. Desligado no escopo de usuário."
+    },
+    "notion@claude-plugins-official": {"escopo": "projeto", "ligado_em_prefixo": "pessoal-", "nota": "ADR-0001 D4"}
+  },
+  "tipos_de_projeto": {
+    "codigo": {"enabledPlugins": {"engenharia@claude-kit": true}, "nota": "desosp-: conectores pela ADR-0001 D4 (todos negados menos o Drive)"},
+    "pesquisa-estudo": {"enabledPlugins": {}, "outros": {"disableClaudeAiConnectors": true}},
+    "pessoal": {"enabledPlugins": {"notion@claude-plugins-official": true}},
+    "kit": {"enabledPlugins": {"engenharia@claude-kit": true, "kit@claude-kit": true}},
+    "raiz": {"enabledPlugins": {"kit@claude-kit": true}},
+    "teste": {"enabledPlugins": {"engenharia@claude-kit": true, "session-report@claude-plugins-official": true}}
+  }
+}
