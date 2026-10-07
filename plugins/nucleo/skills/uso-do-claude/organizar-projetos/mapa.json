@@ -208,12 +208,11 @@
    "raiz": "projeto-ia",
    "peacock": "#6A1B9A",
    "pastas": {
-    "skills": "nao-toco",
     "scripts": "nao-toco",
     "_do_desktop": "nao-toco",
     "_obra": "nao-toco",
     "fontes": "eu-forneco-fontes",
-    "skills/uso-do-claude/fontes": "eu-forneco-fontes",
+    "plugins/nucleo/skills/uso-do-claude/fontes": "eu-forneco-fontes",
     "pesquisas": "eu-leio",
     "decisoes": "eu-leio",
     ".githooks": "nao-toco",

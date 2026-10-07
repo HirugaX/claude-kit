@@ -1,0 +1,17 @@
+{
+  "description": "O gancho das cores das pastas: pinta a pasta que acabou de nascer e pede a cor da provisória. Roda em todo projeto onde o nucleo está ligado.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/skills/uso-do-claude/organizar-projetos/scripts/gancho.py\" || true",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

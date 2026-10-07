@@ -55,7 +55,7 @@ Opus 5.5 · /effort high — aplica o sistema em todas as pastas dos projetos e 
 Janela aberta em <mãe>\claude-kit. Só abra depois que as janelas de projeto disseram "pronto" e a prévia dos ícones foi aprovada.
 
 ## Contexto
-- O módulo: skills\uso-do-claude\organizar-projetos\ (pastas.md, ORGANIZAR.md fase 8). O mapa: mapa.json (confira as passageiras que as janelas listaram; o que faltar entra antes de aplicar).
+- O módulo: plugins\nucleo\skills\uso-do-claude\organizar-projetos\ (pastas.md, ORGANIZAR.md fase 8). O mapa: mapa.json (confira as passageiras que as janelas listaram; o que faltar entra antes de aplicar).
 - As suítes antes das cores: <números de cada projeto>.
 
 ## O que fazer
@@ -101,12 +101,12 @@ Opus 5.5 · /effort high — vai mover projetos com dados de verdade e publicar 
 Janela no <outro PC>, aberta em <mãe> (crie a pasta antes, vazia, se não existir). Nunca trabalhe de dentro de uma pasta que vai mudar de lugar. O usuário traz uma cópia de <mãe>\claude-kit do PC original (sem a subpasta _do_*).
 
 ## Contexto
-- O roteiro é o módulo organizar-projetos da skill uso-do-claude (skills\uso-do-claude\organizar-projetos\ORGANIZAR.md). Siga as fases, cada uma com o "sim" do usuário, e os avisos de aproveitar só o necessário (reaproveitar.md).
+- O roteiro é o módulo organizar-projetos da skill uso-do-claude (plugins\nucleo\skills\uso-do-claude\organizar-projetos\ORGANIZAR.md). Siga as fases, cada uma com o "sim" do usuário, e os avisos de aproveitar só o necessário (reaproveitar.md).
 - <o que já se sabe deste PC: projetos, o que está no GitHub, repositório na raiz, ganchos próprios>
 
 ## O que fazer
 1. Trazer o kit para <mãe>\claude-kit e conferir arquivo a arquivo (hash) com o do PC original.
-2. Fase 0: python <kit>\skills\uso-do-claude\organizar-projetos\scripts\inventario.py. Mostre o que serve, o que duplicaria e o que fica de fora, antes de instalar qualquer coisa.
+2. Fase 0: python <kit>\plugins\nucleo\skills\uso-do-claude\organizar-projetos\scripts\inventario.py. Mostre o que serve, o que duplicaria e o que fica de fora, antes de instalar qualquer coisa.
 3. Fase 1: ligar as skills (ligar_claude.py --conferir, depois --kit-vence se houver cópia velha); o CLAUDE.md pessoal do kit, com as linhas que só existirem neste PC juntadas com o "sim"; hardlink conferido com fsutil hardlink list. Se o app Claude Desktop esconder skill por junção, volte ao modo cópia e anote no LEIA-ME do kit.
 4. As fases 2 a 9 do ORGANIZAR.md: inventário (subagente, só leitura), entrevista (perguntas.md), plano (planos\<pc>_<data>.json e o mapa no mapa.json), mudança (o comando é do usuário se o modo automático bloquear), GitHub (github.md; sempre privado, depois do antes_do_github.py), os prompts das janelas de cada projeto, as cores (pastas.md), a limpeza. Pillow e git instalados com o "sim".
 5. Se a raiz do C: for um repositório (git -C C:\ status), traga ao usuário como pergunta antes de qualquer outra coisa.

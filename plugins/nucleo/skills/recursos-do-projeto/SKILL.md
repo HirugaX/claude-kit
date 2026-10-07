@@ -6,7 +6,7 @@ description: Depois do /grill-me (ou de qualquer entrevista de planejamento) de 
 # Recursos do projeto — o que entra, quando, e o que fica de fora
 
 Base: a pesquisa de 04/10/2026 (`C:\CLAUDE-PROJETOS\claude-kit\fontes\claude-efficiency-report.md`), conferida na documentação
-oficial no mesmo dia (`C:\CLAUDE-PROJETOS\claude-kit\skills\uso-do-claude\reference.md` §2b). Os cartões de cada recurso estão em
+oficial no mesmo dia (`C:\CLAUDE-PROJETOS\claude-kit\plugins\nucleo\skills\uso-do-claude\reference.md` §2b). Os cartões de cada recurso estão em
 [catalogo.md](catalogo.md). Modelo e esforço **não** se decidem aqui: são da skill `uso-do-claude`. Se a data
 acima tiver mais de 60 dias, reconfira os fatos marcados como "da documentação" antes de afirmá-los.
 
@@ -36,7 +36,7 @@ de ler uma pesquisa de ferramentas é instalar todas.
 2. **Inventário — projeto existente.** Fato do ambiente é trabalho seu, nunca pergunta ao usuário: tamanho do
    `CLAUDE.md` (linhas), `.claude/rules`, skills e ganchos do projeto, quantos testes e quanto demoram,
    marcadores, lint, teste de navegador, plugins e MCPs ligados, tamanho do handoff e dos documentos lidos
-   ao abrir, e o custo de abrir a janela (`python C:\CLAUDE-PROJETOS\claude-kit\skills\uso-do-claude\medir_uso.py --sessoes`,
+   ao abrir, e o custo de abrir a janela (`python C:\CLAUDE-PROJETOS\claude-kit\plugins\nucleo\skills\uso-do-claude\medir_uso.py --sessoes`,
    coluna `ctx0`). Repositório grande: subagente Explore (`model: haiku` para localizar, `sonnet` para
    resumir) — ele não carrega o `CLAUDE.md`.
 3. **As perguntas que faltam.** Só as da §4 que mudam a escolha e que nem a entrevista nem o inventário
