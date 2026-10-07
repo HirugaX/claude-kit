@@ -22,10 +22,12 @@
 - Todo resumo de fim de janela traz a linha "Sinais de insuficiência do modelo: nenhum" — ou
   quais, com o exemplo (skill `uso-do-claude` §2b). Havendo, o prompt da próxima janela sobe o
   degrau para aquele tipo de tarefa: esforço primeiro, Fable só depois de o Opus falhar.
-- Tudo do Claude Code mora em `C:\CLAUDE-PROJETOS\claude-kit` (skills, scripts, pesquisas, decisões,
-  este arquivo); os projetos, em `C:\CLAUDE-PROJETOS\`. Skill nova instalada ou atualizada com
-  `npx skills`: rodar `python C:\CLAUDE-PROJETOS\claude-kit\scripts\ligar_claude.py` (se avisar que a
-  pasta difere da do kit: `--pasta-vence` para atualização do npx, `--kit-vence` para cópia velha).
+- Tudo do Claude Code mora em `C:\CLAUDE-PROJETOS\claude-kit` (as skills em `plugins\<grupo>\skills\`,
+  scripts, pesquisas, decisões, este arquivo, que o `~\.claude\CLAUDE.md` importa); os projetos, em
+  `C:\CLAUDE-PROJETOS\`. Depois de `git pull` do kit: `python C:\CLAUDE-PROJETOS\claude-kit\scripts\instalar_kit.py
+  --verificar` (sem o `--verificar`, conserta). Skill de terceiros nova ou atualizada: `scripts\atualizar_terceiros.py`,
+  nunca `npx skills add` direto (ele grava em `~\.claude\skills` e repete o nome). Nunca um `CLAUDE.md` na raiz
+  `C:\CLAUDE-PROJETOS\`: ele carregaria em todos os projetos.
 - Antes de pesquisar (internet ou varredura grande), procure em
   `C:\CLAUDE-PROJETOS\claude-kit\pesquisas\INDICE.md`; depois de pesquisar, salve lá, no formato do
   índice (skill `uso-do-claude` §5). Nunca dado de paciente nem trecho de documento da operadora.

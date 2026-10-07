@@ -11,8 +11,12 @@ novo (e, se aparecer skill em "Sem descrição curada", acrescente-a ao dicioná
     python C:\CLAUDE-PROJETOS\claude-kit\scripts\gerar_guia_skills.py --saida C:\algum\outro.docx
 
 O gerador LÊ o que está instalado de verdade, para o guia nunca mentir:
-  - as skills do kit (claude-kit\skills\*\SKILL.md) e se estão ligadas ao Claude Code;
-  - os plugins ligados (enabledPlugins do settings.json) e as skills e comandos deles, no cache;
+  - as skills do kit, por grupo (claude-kit\plugins\<grupo>\skills\*\SKILL.md, pelo
+    .claude-plugin\marketplace.json), e a conferência do instalar_kit.py --verificar;
+  - os plugins de fora ligados (enabledPlugins do settings.json) e as skills e comandos deles, no cache;
+  - que grupo cada projeto liga (enabledPlugins do usuário, de cada <projeto>\.claude\settings*.json e
+    da raiz), para a tabela projeto × grupo;
+  - a operação (COMO_OPERAR.md), que vira a 1ª parte do guia;
   - as skills sincronizadas do claude.ai (~\.claude\skills\synced\*\manifest.json);
   - as skills e os comandos dos projetos (<projeto>\.claude\skills e \.claude\commands): só o nome
     e a descrição. NUNCA abre as pastas de dados (PROIBIDAS, abaixo);
@@ -88,7 +92,19 @@ AVISOS: list[str] = []          # tudo o que o gerador achou fora do esperado (v
 # Chave: o nome da skill; nas de projeto, 'pasta:nome' (ex.: 'desosp-hc:rodada').
 # ----------------------------------------------------------------------
 GRUPOS = [
-    ('pensar', 'Pensar e decidir (a família do grill, de Matt Pocock)',
+    # os grupos do kit (plugins de claude-kit\plugins): a skill do kit cai no grupo do plugin dela
+    ('nucleo', 'Grupo nucleo — as nossas, em todo projeto',
+     'Como usar o Claude Code (modelo, esforço, janelas, contexto, pesquisa) e que recursos um projeto '
+     'usa. Ligado no escopo de usuário: vale em toda janela de todo projeto.'),
+    ('planejamento', 'Grupo planejamento — entrevistar, decidir, registrar (terceiros), em todo projeto',
+     'A família do grill (Matt Pocock) e o que vem junto: perguntas, glossário e decisões, aula, '
+     'retrospectiva, escrever para agentes, o /goal. Ligado no escopo de usuário.'),
+    ('engenharia', 'Grupo engenharia — do plano ao código (terceiros), só nos projetos de código',
+     'Especificação, tarefas, implementação, testes, diagnóstico e interface. Cada projeto de código liga '
+     'este grupo no seu `.claude\\settings.json`, na fase dele; fora dali estas skills não aparecem.'),
+    ('kit', 'Grupo kit — as nossas, só no kit e na janela da raiz',
+     'Organizar os projetos de um PC, as cores e os ícones das pastas. Só com `/`.'),
+    ('pensar','Pensar e decidir (a família do grill, de Matt Pocock)',
      'Antes de construir, decidir. A família do grill faz perguntas, uma de cada vez, até não '
      'sobrar decisão escondida.'),
     ('codigo', 'Do plano ao código',
@@ -410,6 +426,29 @@ _c('prompt-master', 'documentos',
    'Só quando você pede um prompt para outra ferramenta. Decisão sua: ligar ou desligar.',
    '“Escreva um prompt para gerar a imagem de um troféu.”',
    s='decidir')
+_c('deep-research', 'documentos',
+   'Pesquisa em várias fontes, com subagentes, e entrega um relatório com as fontes citadas.',
+   'Pergunta que pede comparar opções, revisar literatura ou entender um assunto a fundo. Antes, '
+   'procure na biblioteca `claude-kit\\pesquisas\\INDICE.md`; depois, salve lá.',
+   '“Pesquise o que há de evidência sobre alta precoce em pediatria e me dê um relatório.”',
+   s='decidir')
+_c('built-in-browser', 'documentos',
+   'O navegador de dentro do app Claude Desktop: abre páginas, lê e clica, com os seus logins.',
+   'Só no app Desktop, quando a tarefa precisa de um site. No VS Code e no terminal não existe.',
+   '“Abra a página do sistema e confira se o relatório de hoje saiu.”',
+   s='decidir')
+_c('chrome-browser', 'documentos',
+   'O Claude no seu Chrome, pela extensão: usa a aba e os logins de verdade.',
+   'Quando a tarefa precisa do seu Chrome e você quer acompanhar. Nunca em sistema com dado de '
+   'paciente (ADR-0001).',
+   '“No Chrome, baixe o PDF da norma que está aberta na aba.”',
+   s='decidir')
+_c('computer-use', 'documentos',
+   'O Claude usa programas do computador: tira foto da tela, clica e digita, pelo app Desktop.',
+   'Tarefa num programa sem outro jeito de automatizar. Nunca com dado de paciente na tela '
+   '(ADR-0001).',
+   '“Abra o Bloco de Notas e cole esta lista.”',
+   s='decidir')
 _c('find-skills', 'documentos',
    'Ajuda a achar e instalar skills novas quando você pergunta “tem skill para…?”.',
    'Quando você quer ampliar o que o Claude faz. Decisão sua: ligar ou desligar.',
@@ -473,6 +512,7 @@ class Item:
     como: str              # so_barra | auto | so_claude | comando
     descricao: str         # lida do disco ('' nas embutidas)
     projeto: str = ''
+    grupo: str = ''        # nas do kit: o plugin (nucleo, planejamento, engenharia, kit)
 
 
 def _conferir_caminho(caminho: Path) -> None:
@@ -573,51 +613,76 @@ def _json(caminho: Path, avisar: bool = True) -> dict:
         return {}
 
 
+def grupos_do_kit() -> list[tuple[str, Path]]:
+    """(grupo, pasta do plugin), na ordem do .claude-plugin\\marketplace.json."""
+    mkt = _json(KIT / '.claude-plugin' / 'marketplace.json')
+    return [(p['name'], (KIT / p['source']).resolve()) for p in mkt.get('plugins', [])]
+
+
 def ler_kit() -> list[Item]:
     itens = []
-    base = KIT / 'skills'
-    for d in sorted(base.iterdir(), key=lambda x: x.name.lower()):
-        if not d.is_dir() or d.name.startswith(('.', '_')):
+    for grupo, pasta in grupos_do_kit():
+        base = pasta / 'skills'
+        if not base.is_dir():
             continue
-        f = d / 'SKILL.md'
-        if not f.is_file():
-            AVISOS.append(f'pasta do kit sem SKILL.md: skills\\{d.name}')
-            continue
-        lido = _ler_md(f)
-        if lido is None:
-            continue
-        fm, _ = lido
-        nome = fm.get('name') or d.name
-        itens.append(Item(nome, nome, 'kit', 'Kit (pessoal)', 'skill', _como(fm, False),
-                          fm.get('description', '')))
+        for d in sorted(base.iterdir(), key=lambda x: x.name.lower()):
+            if not d.is_dir() or d.name.startswith(('.', '_')):
+                continue
+            f = d / 'SKILL.md'
+            if not f.is_file():
+                AVISOS.append(f'pasta do kit sem SKILL.md: plugins\\{grupo}\\skills\\{d.name}')
+                continue
+            lido = _ler_md(f)
+            if lido is None:
+                continue
+            fm, _ = lido
+            nome = fm.get('name') or d.name
+            itens.append(Item(nome, nome, 'kit', f'Kit · {grupo}', 'skill', _como(fm, False),
+                              fm.get('description', ''), grupo=grupo))
     return itens
 
 
 def conferir_ligacoes() -> tuple[int, int]:
-    """O Claude Code só enxerga skill pessoal em ~\\.claude\\skills (junção para o kit)."""
-    base = CLAUDE_HOME / 'skills'
-    ligadas: dict[str, Path] = {}
-    if base.is_dir():
-        for d in base.iterdir():
-            if d.name == 'synced' or d.name.startswith(('.', '_')) or not d.is_dir():
-                continue
-            if (d / 'SKILL.md').is_file():
-                ligadas[d.name] = Path(os.path.realpath(d))
-    pastas_kit = {d.name for d in (KIT / 'skills').iterdir()
-                  if d.is_dir() and not d.name.startswith(('.', '_')) and (d / 'SKILL.md').is_file()}
-    faltando = extras = 0
-    for nome in sorted(pastas_kit):
-        alvo = ligadas.get(nome)
-        if alvo is None:
-            AVISOS.append(f'skill do kit NÃO ligada ao Claude Code: {nome} (rode ligar_claude.py)')
-            faltando += 1
-        elif alvo != Path(os.path.realpath(KIT / 'skills' / nome)):
-            AVISOS.append(f'skill {nome} liga a outro lugar que não o kit: {alvo}')
-            faltando += 1
-    for nome in sorted(set(ligadas) - pastas_kit):
-        AVISOS.append(f'skill pessoal fora do kit, ativa no Claude Code: {nome} (rode ligar_claude.py)')
-        extras += 1
-    return len(pastas_kit) - faltando, faltando + extras
+    """O que o instalar_kit.py --verificar acha (junção sobrando, nome repetido, grupo no escopo errado...)."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('instalar_kit', KIT / 'scripts' / 'instalar_kit.py')
+    ik = importlib.util.module_from_spec(spec)
+    sys.modules['instalar_kit'] = ik
+    spec.loader.exec_module(ik)
+    achados = ik.verificar(ik.Ambiente())
+    for a in achados:
+        AVISOS.append(f'instalar_kit.py --verificar: {a}')
+    total = sum(len(s) for s in ik.plugins_do_kit(ik.Ambiente()).values())
+    return total, len(achados)
+
+
+def ler_ligacoes() -> tuple[list[str], list[list[str]]]:
+    """A tabela projeto × grupo: o que vale em cada pasta (usuário < projeto < local, nos dois sentidos)."""
+    usuario = _json(CLAUDE_HOME / 'settings.json', avisar=False).get('enabledPlugins') or {}
+    grupos = [g for g, _ in grupos_do_kit()]
+
+    def efetivo(pasta: Path) -> dict[str, bool]:
+        ef = {k: bool(v) for k, v in usuario.items()}
+        for nome in ('settings.json', 'settings.local.json'):
+            f = pasta / '.claude' / nome
+            _conferir_caminho(f)
+            ef.update({k: bool(v) for k, v in (_json(f, avisar=False).get('enabledPlugins') or {}).items()})
+        return ef
+
+    pastas = [('raiz (C:\\CLAUDE-PROJETOS)', RAIZ_PROJETOS)]
+    for d in sorted(RAIZ_PROJETOS.iterdir(), key=lambda x: x.name.lower()):
+        n = d.name.lower()
+        if (not d.is_dir() or n.startswith(('.', '_')) or n in {p.lower() for p in PROIBIDAS}
+                or n.endswith(('-dados', '-backups'))):
+            continue
+        pastas.append((d.name, d))
+    linhas = []
+    for nome, pasta in pastas:
+        ef = efetivo(pasta)
+        linha = [nome] + ['sim' if ef.get(f'{g}@claude-kit') else '—' for g in grupos]
+        outros = [k.split('@')[0] for k in sorted(ef) if ef[k] and not k.endswith('@claude-kit')]
+        linhas.append(linha + [', '.join(outros) or '—'])
+    return ['Pasta'] + grupos + ['Plugins de fora'], linhas
 
 
 def _pasta_plugin(nome: str, mkt: str) -> Path | None:
@@ -641,6 +706,8 @@ def ler_plugins() -> tuple[list[Item], list[dict]]:
     itens, resumo = [], []
     for chave in ligados:
         nome, _, mkt = chave.partition('@')
+        if mkt == 'claude-kit':          # os grupos do kit vêm do ler_kit, direto da pasta
+            continue
         pasta = _pasta_plugin(nome, mkt)
         reg = dict(plugin=nome, mkt=mkt, versao='?', skills=0, comandos=0, achado=pasta is not None)
         if pasta is None:
@@ -1402,16 +1469,24 @@ def tabela_sem_curadoria(itens):
     espaco()
 
 
+def grupo_de(item: Item) -> str | None:
+    """Skill do kit: o grupo do plugin dela. As outras: o grupo do CURADO."""
+    cur = CURADO.get(item.chave)
+    if cur is None:
+        return None
+    return item.grupo if item.origem == 'kit' and item.grupo else cur['g']
+
+
 def agrupar(inv: Inventario):
     ordem = {c: n for n, c in enumerate(CURADO)}
     por_grupo: dict[str, list[tuple[Item, dict]]] = {g[0]: [] for g in GRUPOS}
     sem: list[Item] = []
     for item in inv.itens:
-        cur = CURADO.get(item.chave)
-        if cur is None or cur['g'] not in por_grupo:
+        g = grupo_de(item)
+        if g is None or g not in por_grupo:
             sem.append(item)
         else:
-            por_grupo[cur['g']].append((item, cur))
+            por_grupo[g].append((item, CURADO[item.chave]))
     for g in por_grupo.values():
         g.sort(key=lambda par: ordem[par[0].chave])
     return por_grupo, sem
@@ -1439,9 +1514,10 @@ def capa(inv: Inventario, agora: dt.datetime) -> None:
     n_sb = sum(1 for i in kit if i.como == 'so_barra')
     nomes_plug = ', '.join(f"{r['plugin']}" for r in inv.plugins) or '—'
     tabela(['Origem', 'Itens', 'Detalhe', 'Onde está'], [
-        ['Kit (pessoais)', str(len(kit)),
-         f'{n_sb} só `/` · {len(kit) - n_sb} que o Claude chama sozinho',
-         f'`{KIT / "skills"}`'],
+        ['Kit (grupos)', str(len(kit)),
+         f'{n_sb} só `/` · {len(kit) - n_sb} que o Claude chama sozinho · '
+         + ', '.join(f'{g} ({sum(1 for i in kit if i.grupo == g)})' for g, _ in grupos_do_kit()),
+         f'`{KIT / "plugins"}\\<grupo>\\skills`'],
         ['Plugins ligados', str(len(plug)),
          f'{plural(len(inv.plugins), "plugin", "plugins")} ({nomes_plug}): '
          f'{plural(sum(1 for i in plug if i.tipo == "skill"), "skill", "skills")} e '
@@ -1462,10 +1538,79 @@ def capa(inv: Inventario, agora: dt.datetime) -> None:
     ], [3.4, 1.2, 5.0, 7.4], tam=9, juntar=True)
 
     h2('Neste guia')
+    par = doc.add_paragraph(style='List Bullet')
+    _run(par, 'Antes de tudo: ', negrito=True, cor=AZUL)
+    _link(par, TITULO_OPERACAO, 'operacao')
     for n in range(1, 8):
         par = doc.add_paragraph(style='List Bullet')
         _run(par, f'{n}. ', negrito=True, cor=AZUL)
         _link(par, TITULOS[n], f'sec{n}')
+
+
+OPERACAO = KIT / 'COMO_OPERAR.md'
+TITULO_OPERACAO = 'Como você opera (até o F3)'
+
+
+def parte_operacao() -> None:
+    """A 1ª parte do guia: o COMO_OPERAR.md do kit, em Word (títulos ##, listas, numeradas, tabelas)."""
+    par = doc.add_heading(TITULO_OPERACAO, level=1)
+    par.paragraph_format.page_break_before = True
+    _marcar(par, 'operacao')
+    if not OPERACAO.is_file():
+        AVISOS.append(f'{OPERACAO.name} não existe: a parte da operação ficou vazia')
+        return
+    linhas = OPERACAO.read_text(encoding='utf-8').splitlines()
+    texto: list[str] = []
+    marcas: list[str] = []
+
+    def soltar():
+        if texto:
+            p(' '.join(t.strip() for t in texto))
+            texto.clear()
+        if marcas:
+            itens_lista(marcas[:])
+            marcas.clear()
+
+    i = 0
+    while i < len(linhas):
+        l = linhas[i]
+        if l.startswith('# '):
+            i += 1
+            continue
+        if l.startswith('## '):
+            soltar()
+            h2(l[3:].strip())
+        elif l.startswith('|'):
+            soltar()
+            bloco = []
+            while i < len(linhas) and linhas[i].startswith('|'):
+                bloco.append([c.strip() for c in linhas[i].strip().strip('|').split('|')])
+                i += 1
+            cab, corpo = bloco[0], [r for r in bloco[1:] if not set(''.join(r)) <= set('-: ')]
+            w = LARGURA / len(cab)
+            tabela(cab, corpo, [w * 0.8] + [(LARGURA - w * 0.8) / (len(cab) - 1)] * (len(cab) - 1)
+                   if len(cab) > 1 else [LARGURA], tam=9.5, destaque=False)
+            continue
+        elif re.match(r'^\d+\. ', l):
+            soltar()
+            n, resto = l.split('. ', 1)
+            p(f'**{n}.** {resto.strip()}')
+        elif re.match(r'^\s*- ', l):
+            if texto:
+                p(' '.join(t.strip() for t in texto))
+                texto.clear()
+            marcas.append(l.split('- ', 1)[1].strip())
+        elif not l.strip():
+            soltar()
+        elif marcas and l.startswith('  ') and not l.startswith('   ' + ' '):
+            marcas[-1] += ' ' + l.strip()
+        else:
+            if marcas:
+                itens_lista(marcas[:])
+                marcas.clear()
+            texto.append(l)
+        i += 1
+    soltar()
 
 
 def sec1(inv: Inventario) -> None:
@@ -1781,6 +1926,16 @@ def _como_entra(itens: list[Item]) -> str:
 
 def sec5(inv: Inventario) -> None:
     h1(5, nova_pagina=True)
+    h2('Que grupo cada pasta liga hoje (lido dos settings, não deste texto)')
+    p('“sim” = o grupo aparece numa janela aberta naquela pasta. Vale o escopo de usuário '
+      '(`~\\.claude\\settings.json`), e o `.claude\\settings.json` (e o `.local`) da pasta vence. '
+      'O grupo engenharia só liga num projeto de código, na fase dele; até lá, o projeto fica sem ele.',
+      cor=CINZA, tam=9)
+    cab, linhas = ler_ligacoes()
+    largura_g = 2.0
+    tabela(cab, linhas, [4.4] + [largura_g] * (len(cab) - 2) + [LARGURA - 4.4 - largura_g * (len(cab) - 2)],
+           tam=9, destaque=False)
+    h2('Em que momento chamar cada skill (proposta)')
     citadas = {c for _, linhas in PROPOSTA for _, chaves, _ in linhas for c in chaves
                if not c.startswith('@')}
     faltam = sorted(c.split(':')[-1] for c in citadas if c not in INV)
@@ -1867,12 +2022,15 @@ def sec6() -> None:
 
 def sec7(inv: Inventario) -> None:
     h1(7)
-    h2('Instalou ou atualizou uma skill (as do kit)')
-    codigo(['npx skills update -g',
-            rf'python {KIT / "scripts" / "ligar_claude.py"}'])
-    p(r'O `npx` grava as skills na pasta do Claude Code; o `ligar_claude.py` traz o que é novo para '
-      'o kit e deixa a ligação no lugar. Se ele avisar que a pasta difere da do kit: '
-      '`--pasta-vence` (é atualização do npx) ou `--kit-vence` (é cópia velha).')
+    h2('As skills do kit: conferir, atualizar, acrescentar')
+    codigo([rf'python {KIT / "scripts" / "instalar_kit.py"} --verificar',
+            rf'python {KIT / "scripts" / "atualizar_terceiros.py"} --todas',
+            rf'python {KIT / "scripts" / "atualizar_terceiros.py"} <skill> --aplicar'])
+    p('As skills moram nos plugins do kit (`claude-kit\\plugins\\<grupo>\\skills`) e carregam de lá. '
+      'O `instalar_kit.py --verificar` acusa junção antiga, nome repetido e grupo no escopo errado (sem '
+      'o `--verificar`, conserta). As de terceiros se atualizam pelo `atualizar_terceiros.py`, que '
+      'baixa numa pasta de preparo, compara e, com `--aplicar`, troca a pasta e o `origem.json`. '
+      'Nunca `npx skills add` direto: ele grava em `~\\.claude\\skills` e repete o nome.')
     h2('Plugins')
     marketplaces = sorted({r['mkt'] for r in inv.plugins})
     cmds = [f'claude plugin marketplace update {m}' for m in marketplaces]
@@ -1914,9 +2072,10 @@ def conferencias(inv: Inventario):
         linhas.append([titulo, ('OK: ' if ok else 'ATENÇÃO: ') + texto])
 
     kit = inv.de('kit')
-    add('Skills do kit ligadas ao Claude Code', inv.kit_soltas == 0,
-        f'{len(kit)} skills no kit, todas ligadas em `{CLAUDE_HOME / "skills"}`.'
-        if inv.kit_soltas == 0 else f'{inv.kit_soltas} sem ligação certa (rode o `ligar_claude.py`).')
+    add('O kit instalado neste PC (`instalar_kit.py --verificar`)', inv.kit_soltas == 0,
+        f'{len(kit)} skills em {len(grupos_do_kit())} grupos; 0 achados.'
+        if inv.kit_soltas == 0 else f'{inv.kit_soltas} achado(s): rode `instalar_kit.py` (sem o '
+        '`--verificar`, ele conserta); a lista está em “Outros avisos”.')
     nao_achados = [r['plugin'] for r in inv.plugins if not r['achado']]
     add('Plugins ligados achados no cache', not nao_achados,
         f'{len(inv.plugins)} plugins ligados, todos achados.' if not nao_achados
@@ -1937,8 +2096,7 @@ def conferencias(inv: Inventario):
     add('Skills citadas nas seções 4 e 5 e nos textos', not FALTANDO,
         f'{len(CITADAS)} citadas, todas instaladas.' if not FALTANDO
         else 'não instaladas: ' + ', '.join(sorted(FALTANDO)))
-    esperado = len([i for i in inv.itens if i.chave in CURADO
-                    and CURADO[i.chave]['g'] in {g[0] for g in GRUPOS}])
+    esperado = len([i for i in inv.itens if grupo_de(i) in {g[0] for g in GRUPOS}])
     add('Linhas no catálogo × skills instaladas',
         CONTAGEM['catalogo'] == esperado and CONTAGEM['catalogo'] + CONTAGEM['sem_curadoria']
         == len(inv.itens),
@@ -1963,6 +2121,7 @@ def construir(inv: Inventario, agora: dt.datetime) -> None:
     CONTAGEM.update(catalogo=0, sem_curadoria=0)
     _estilos(f'{agora:%d/%m/%Y}')
     capa(inv, agora)
+    parte_operacao()
     sec1(inv)
     sec2(inv)
     sec3(inv)
@@ -1991,7 +2150,7 @@ def conferir_docx(arquivo: Path, inv: Inventario) -> bool:
     """Abre o .docx gravado e confere: cada skill instalada aparece uma vez, os títulos na ordem."""
     d = Document(arquivo)
     titulos = [par.text for par in d.paragraphs if par.style.name == 'Heading 1']
-    esperados = [f'{n}. {TITULOS[n]}' for n in range(1, 8)]
+    esperados = [TITULO_OPERACAO] + [f'{n}. {TITULOS[n]}' for n in range(1, 8)]
     linhas = []
     for t in d.tables:
         cab = [c.text.strip() for c in t.rows[0].cells]
