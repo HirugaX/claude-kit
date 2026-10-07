@@ -1,0 +1,3 @@
+# Scripts bash dos plugins de terceiros: sempre LF (com CRLF o Git Bash falha no fim de cada linha). F2a, 07/10/2026.
+plugins/*/skills/*/scripts/* text eol=lf
+*.sh text eol=lf
