@@ -42,7 +42,7 @@ F2a → F2b → F3a ∥ F3b (em paralelo, cada uma na sua pasta de teste) → F3
 | o porquê das decisões | `docs\adr\` do projeto; no kit, `decisoes\` |
 | que skills existem, para que servem, quem liga | `claude-kit\GUIA_DAS_SKILLS.docx` (gere com `python scripts\gerar_guia_skills.py`); as skills moram em `claude-kit\plugins\<grupo>\skills\` |
 | se o kit está bem instalado | `python C:\CLAUDE-PROJETOS\claude-kit\scripts\instalar_kit.py --verificar` (rode depois de todo `git pull` do kit) |
-| o custo de abrir uma janela | `python C:\CLAUDE-PROJETOS\claude-kit\plugins\nucleo\skills\uso-do-claude\medir_uso.py --sessoes` (o F2a o move para `scripts\`) |
+| o custo de abrir uma janela | `python C:\CLAUDE-PROJETOS\claude-kit\scripts\medir_uso.py --sessoes` |
 | a semana em números | `claude-kit\metricas\uso-semanal.csv` (`scripts\medir_semana.py`); a planilha e o balanço chegam no F2b |
 
 **Manutenção:** a janela aberta na raiz `C:\CLAUDE-PROJETOS` cuida das cores e dos ícones das pastas e da medição

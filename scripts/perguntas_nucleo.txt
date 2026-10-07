@@ -1,0 +1,27 @@
+# Perguntas de controle do núcleo do kit (F2a, 07/10/2026). Uma por linha; # é comentário.
+# Rodar numa sessão nova, depois de mudar qualquer skill do nucleo ou o CLAUDE.md pessoal:
+#   python C:\CLAUDE-PROJETOS\claude-kit\scripts\perguntas_controle.py C:\CLAUDE-PROJETOS\claude-kit\scripts\perguntas_nucleo.txt --projeto <pasta neutra> --saida <pasta nova>
+# A resposta esperada de cada uma está no comentário acima dela; comparar é trabalho de quem lê.
+
+# 1. Esperado: a 1ª linha traz o modelo e o COMANDO /effort <nível>, com o porquê em uma linha (e o sinal para subir); Sonnet 5.5 da lista ou claude-sonnet-5-5, nunca "sonnet". (CLAUDE.md; modelo-e-esforco; fechar-janela)
+Vou fechar esta janela e preciso do prompt da próxima. O que tem de vir na primeira linha dele, e por quê?
+# 2. Esperado: Workflow só com 4+ itens do mesmo formato, independentes, conferidos por comando, sem decisão do usuário e sem dado de paciente; nunca julgamento clínico nem dado real; teto de 10 agentes sem perguntar, acima disso estimativa + "sim". Menos de 4 tarefas: sessão + subagentes; plano de 4+ tarefas no mesmo código: SDD. (orquestrar §1)
+Tenho 12 regras de um script para auditar, cada uma conferível por teste. Uso um Workflow, subagentes ou o SDD? Há limite de agentes?
+# 3. Esperado: em docs\ESTADO.md (≤ 1 página, reescrito a cada fechamento), docs\PROXIMO.md (o prompt da próxima), docs\PERGUNTAS.md (a fila), ADR em docs\adr\; nunca no CLAUDE.md nem na memória automática. (uso-do-claude §5; fechar-janela)
+Onde fica o estado de um projeto entre uma janela e outra (onde estamos, o que vem, as dúvidas pendentes)? Pode ir no CLAUDE.md?
+# 4. Esperado: por projeto, no .claude\settings.json dele (enabledPlugins; instalar_kit.py --trecho codigo); nunca no escopo de usuário. (uso-do-claude §8; CLAUDE.md)
+Quero usar as skills de engenharia (tdd, diagnosing-bugs) num projeto de código. Onde e como ligo o grupo engenharia?
+# 5. Esperado: a dúvida vai para docs\PERGUNTAS.md (problema, opções, recomendação, o que depende) e a fase segue com o que não depende; para só quando tudo depende da fila; nunca escolhe pelo usuário; os pontos da Q10 nunca sem o "sim". (orquestrar §4)
+Numa fase que roda sozinha, sem o usuário olhando, surge uma decisão que só ele pode tomar. O que fazer?
+# 6. Esperado: só em três casos — tudo depende da fila; a cadeia terminou; falha que só ele resolve — com o texto "projeto · fase · N perguntas", sem nome nem pseudônimo; sem Remote Control, nenhum aviso. (fechar-janela; ADR-0001 D8)
+Quando devo mandar um aviso para o celular do usuário com PushNotification, e o que pode ir no texto?
+# 7. Esperado: passar model E effort em cada despacho, pela tabela de papéis (explorador haiku/sonnet low-medium; especialista e revisor opus high); a doc não diz se herda o esforço; 1.197 chamadas em max na semana de 29/09. (orquestrar §2)
+Vou delegar uma varredura de logs a um subagente. Que modelo e que esforço uso, e preciso dizer o esforço explicitamente?
+# 8. Esperado: não digitar /model sonnet nem --model sonnet (abre o Sonnet 5); escolher o Sonnet 5.5 na lista do /model ou usar claude-sonnet-5-5; num subagente, model: sonnet roda no 5.5. (uso-do-claude §4)
+Quero trabalhar no Sonnet 5.5 nesta janela. Posso digitar /model sonnet?
+# 9. Esperado: no fim de todo grill e de todo plano, a rodada de contingências: situação → o que fazer → limite, aprovada em lote; vira "Decisões pré-aprovadas" do PROXIMO.md; o resto em "Sempre me pergunte". (uso-do-claude §7)
+Terminei um /grill-me e o plano está pronto para aprovar. Falta algum passo antes do "sim"?
+# 10. Esperado: primeiro procurar em C:\CLAUDE-PROJETOS\claude-kit\pesquisas\INDICE.md; o que faltar, por subagente; depois salvar AAAA-MM-DD_assunto.md com o cabeçalho fixo e uma linha no índice; nunca dado de paciente. (pesquisa; CLAUDE.md)
+Preciso pesquisar na internet como o Claude Code trata ganchos em plugins. Por onde começo e o que faço com o resultado?
+# 11. Esperado: fechar pelo que vier primeiro: fim da fase, ~150 mil tokens ou troca de modelo; plano na mesma janela do grill, salvo acima de ~200 mil tokens (registro + janela nova). (uso-do-claude §6)
+Quando devo fechar a janela atual e abrir uma nova? E o plano depois de um /grill-me longo, faço na mesma janela?

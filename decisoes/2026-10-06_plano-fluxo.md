@@ -70,8 +70,7 @@ janela = um projeto.
 
 **Onde olhar:** o estado de cada projeto em `docs\ESTADO.md` (uma página); o que vem em `docs\PROXIMO.md`; o porquê em
 `docs\adr\` (no kit, `decisoes\`); no terminal, a statusline (modelo, esforço, % do contexto); o custo em
-`python C:\CLAUDE-PROJETOS\claude-kit\plugins\nucleo\skills\uso-do-claude\medir_uso.py --sessoes` (o F2a o move para
-`scripts\`); a semana em `claude-kit\metricas\uso-semanal.csv` (`scripts\medir_semana.py`; a planilha `metricas\uso.xlsx`
+`python C:\CLAUDE-PROJETOS\claude-kit\scripts\medir_uso.py --sessoes` (movido no F2a); a semana em `claude-kit\metricas\uso-semanal.csv` (`scripts\medir_semana.py`; a planilha `metricas\uso.xlsx`
 e os balanços em `metricas\balancos\`, a partir do F2b); as perguntas pendentes no `docs\PERGUNTAS.md` de cada projeto (a partir do
 F2b); as skills na seção "Skills deste projeto" do CLAUDE.md e no `claude-kit\GUIA_DAS_SKILLS.docx`.
 

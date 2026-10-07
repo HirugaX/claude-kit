@@ -12,7 +12,7 @@ Evidência: **Doc** = documentação oficial conferida em 04/10/2026 · **A** = 
 | **Handoff curto + histórico à parte** | a janela nova sabe onde está lendo só o handoff (estado, fila, decisões abertas, o próximo prompt); o histórico é lido por busca | C/D (Anthropic Engineering: arquivo de progresso + contexto novo funciona melhor que compactar) |
 | **Testes desde o primeiro commit**, o comando do laço rápido no `CLAUDE.md` | toda regra nova nasce com o teste; nas críticas, a mutação conferida (o teste cai quando a regra quebra) | prática do DESOSP; Doc (verificação é o que mais rende no esforço alto) |
 | **Gancho de abertura** (`SessionStart`) | o resumo do que a janela precisa saber (git, caixa, fase, esforço e modelo) entra sem ninguém lembrar e sem ler arquivo inteiro | Doc (ganchos); modelo pronto: `C:\CLAUDE-PROJETOS\desosp-app\.claude\hooks\abertura.py` |
-| **Modelo e esforço por tipo de tarefa** | cada fase com modelo e esforço escritos, e o `/effort` explícito na 1ª linha do prompt | skill `uso-do-claude` §3 |
+| **Modelo e esforço por tipo de tarefa** | cada fase com modelo e esforço escritos, e o `/effort` explícito na 1ª linha do prompt | skill `modelo-e-esforco` |
 | **Leitura volumosa por subagente** | busca, varredura, log e documentação longa voltam como conclusão, não como arquivo | Doc (o Explore não carrega o `CLAUDE.md`; modelo por parâmetro) |
 
 ## 2. Os condicionais — gatilho → recurso
@@ -26,7 +26,7 @@ Evidência: **Doc** = documentação oficial conferida em 04/10/2026 · **A** = 
 | decisão com alternativas reais e consequência longa | registro de decisão curto (`docs/adr/`) | burocracia se usado para detalhe |
 | vários repositórios que conversam | caixa de entrada em arquivo, lida ao abrir (o modelo DESOSP: `docs/para_o_<projeto>/`, um arquivo por envio) | mensagem entre sessões custa o contexto inteiro de quem recebe; arquivo não |
 | outro agente (Codex, Cursor) no mesmo repositório | `AGENTS.md` com a parte portátil; `CLAUDE.md` só com o específico do Claude | a mesma regra nos dois diverge |
-| sessão longa sem supervisão | objetivo verificável, `/goal`, política de falha, commit por checkpoint | skill `uso-do-claude` §8 |
+| sessão longa sem supervisão | objetivo verificável, `/goal`, política de falha, commit por checkpoint | skill `orquestrar` §4 |
 | janelas em paralelo no mesmo repositório | `worktree`, ou arquivos disjuntos e commit por caminho | o gancho de abertura mostra arquivo modificado de outra janela |
 
 ### 2.2 Verificação determinística — o comando no lugar do raciocínio
@@ -128,4 +128,4 @@ Firebase só como escolha deliberada: muda o modelo da arquitetura, não só a h
 | Context7 sem conferir a fonte primária em coisa crítica | conteúdo da comunidade, backend fechado |
 | instalar o que a pesquisa listou | a pergunta é qual problema deste projeto cada um resolve |
 | ferramenta que manda o dado para fora (SaaS de erro, MCP de terceiro) em projeto com dado de saúde | sigilo |
-| lembrete em texto onde cabe controle (permissão, gancho, teste) | texto é orientação; o controle é o que vale (skill `uso-do-claude` §11) |
+| lembrete em texto onde cabe controle (permissão, gancho, teste) | texto é orientação; o controle é o que vale (skill `uso-do-claude` §9) |

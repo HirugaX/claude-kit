@@ -1,6 +1,7 @@
 # Referência — fontes, medições e correções (03/10/2026)
 
-Material de apoio da skill `uso-do-claude`. Ler quando precisar justificar uma regra, conferir
+Material de apoio da skill `uso-do-claude` e das peças dela (`modelo-e-esforco`, `fechar-janela`, `pesquisa`,
+`orquestrar`); as seções citadas como §N nos textos antigos são as da `uso-do-claude` de antes do F2a (07/10). Ler quando precisar justificar uma regra, conferir
 se um fato ainda vale, ou recalibrar com dados novos.
 
 ## 1. Fatos verificados na documentação oficial em 03/10/2026
@@ -93,7 +94,7 @@ contexto também no `-p` (US$ 0,17).
 
 ## 3. O uso medido (registros locais, só números)
 
-Pesquisa original: `fontes/claude-uso-modelos.md` (nesta pasta). Medido com `medir_uso.py` (nesta pasta) em 03/10/2026. Rodar de novo para atualizar.
+Pesquisa original: `fontes/claude-uso-modelos.md` (nesta pasta). Medido com `medir_uso.py` (hoje em `claude-kit\scripts\`) em 03/10/2026. Rodar de novo para atualizar.
 
 | Projeto | Chamadas | Contexto médio | Parte fixa | Chamadas ≥ 400k | Custo de abrir a janela | US$ (equiv. API) |
 |---|---:|---:|---:|---:|---:|---:|

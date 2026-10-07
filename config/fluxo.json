@@ -1,0 +1,6 @@
+{
+  "_leia": "O encadeamento das fases (Q9; plano, Ficha item 5). A skill fechar-janela lê este arquivo: com lancar_bg true, a janela que fecha lança a próxima por claude --bg; com false, o usuário cola o docs/PROXIMO.md. Fica false até o F3c ligar, depois de o laço passar no F3a (teste-fluxo).",
+  "lancar_bg": false,
+  "desde": "F2a (07/10/2026)",
+  "quem_liga": "F3c"
+}
