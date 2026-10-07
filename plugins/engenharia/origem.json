@@ -1,0 +1,131 @@
+{
+  "_leia": "De onde veio cada skill deste plugin. Atualize com scripts/atualizar_terceiros.py, nunca à mão. \"hash_da_pasta\" é o hash git da pasta da skill no repositório (do ~/.agents/.skill-lock.json); \"commit\" fica null até a 1ª atualização pelo script.",
+  "skills": {
+    "to-spec": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/to-spec",
+      "hash_da_pasta": "136b9651747cfccbfbb7c50a6b0dfb757e7547d2",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "to-tickets": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/to-tickets",
+      "hash_da_pasta": "b32c94e5a51c24ee9c41fcb7fe9ea9fff9af6369",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "wayfinder": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/wayfinder",
+      "hash_da_pasta": "8ec0462658381bd1606d3f9db14ffc67df6a2a43",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "setup-matt-pocock-skills": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/setup-matt-pocock-skills",
+      "hash_da_pasta": "b1568cde855a189b16e5d7dd8a0fa4c3f156bc2e",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "implement": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/implement",
+      "hash_da_pasta": "f07d230f645fc9ac390cf13a450bbff12ad791a3",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "implement-spec": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/implement-spec",
+      "hash_da_pasta": "0cfefc751d0cb64f0c948ffcb17e13b94e778f08",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "tdd": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/tdd",
+      "hash_da_pasta": "bf1bf5ffcd63aa8abce830f2955a853c121fb463",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "diagnosing-bugs": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/diagnosing-bugs",
+      "hash_da_pasta": "de4236cf34757c4e9ea7afe78d46c023213ff254",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "codebase-design": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/codebase-design",
+      "hash_da_pasta": "07ba1cd60efc12d0d3a083005c1d9651cf15e39a",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "improve-codebase-architecture": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/improve-codebase-architecture",
+      "hash_da_pasta": "39bd9cc130f7dfcc4e3ea0b3613f6ebed0d0ad2b",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "prototype": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/prototype",
+      "hash_da_pasta": "e41d92e171f074a2b6887d8f6faca4a15c83d1ca",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "property-based-testing": {
+      "repositorio": "trailofbits/skills",
+      "url": "https://github.com/trailofbits/skills.git",
+      "caminho": "plugins/property-based-testing/skills/property-based-testing",
+      "hash_da_pasta": "cf5e77d684180c80a2f3aa228c53d04b1fa1ba77",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "spec-to-code-compliance": {
+      "repositorio": "trailofbits/skills",
+      "url": "https://github.com/trailofbits/skills.git",
+      "caminho": "plugins/spec-to-code-compliance/skills/spec-to-code-compliance",
+      "hash_da_pasta": "dae3639bb866b7069cdc310a7df5ea44f0f9ad2d",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "web-design-guidelines": {
+      "repositorio": "vercel-labs/agent-skills",
+      "url": "https://github.com/vercel-labs/agent-skills.git",
+      "caminho": "skills/web-design-guidelines",
+      "hash_da_pasta": "3116f3e62dbd02b44a598b1aa690d2a8938e8f89",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    }
+  }
+}

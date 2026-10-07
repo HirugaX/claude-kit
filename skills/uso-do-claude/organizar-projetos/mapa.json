@@ -221,7 +221,8 @@
     "docs": "nao-toco",
     "metricas": "eu-leio",
     "plugins": "nao-toco",
-    ".claude-plugin": "nao-toco"
+    ".claude-plugin": "nao-toco",
+    ".claude": "nao-toco"
    }
   },
   "pesquisa-clinica": {
