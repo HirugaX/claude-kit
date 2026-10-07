@@ -218,7 +218,10 @@
     "decisoes": "eu-leio",
     ".githooks": "nao-toco",
     "caixa": "correio",
-    "docs": "nao-toco"
+    "docs": "nao-toco",
+    "metricas": "eu-leio",
+    "plugins": "nao-toco",
+    ".claude-plugin": "nao-toco"
    }
   },
   "pesquisa-clinica": {
