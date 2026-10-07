@@ -23,7 +23,7 @@ tempo ("Verificação de ponta a ponta"; registro em `decisoes\2026-10-06_R1-obj
 
 ```
 Agora     F0 (Ettore) · R0 revisão de front (desosp-app) ∥ F1a
-Frente 1  F1a → R1 → F1b → F2 → (F3a ∥ F3b) → F3c → F5a → F5b → (F6 ∥ F7) → F8 → F9
+Frente 1  F1a → R1 → F1b → F2a → F2b → (F3a ∥ F3b) → F3c → F5a → F5b → (F6 ∥ F7) → F8 → F9
 Frente 2  (depois do F5b) N1 estudo → F5c porta de leitura → N2 comunicação → N3 organização → N4 produtividade → N5 pesquisa
 No desktop, quando estiver lá: Fd (Drive)
 ```
@@ -70,10 +70,10 @@ janela = um projeto.
 
 **Onde olhar:** o estado de cada projeto em `docs\ESTADO.md` (uma página); o que vem em `docs\PROXIMO.md`; o porquê em
 `docs\adr\` (no kit, `decisoes\`); no terminal, a statusline (modelo, esforço, % do contexto); o custo em
-`python C:\CLAUDE-PROJETOS\claude-kit\skills\uso-do-claude\medir_uso.py --sessoes` (o F2 o move para `scripts\`); a
-semana em `claude-kit\metricas\uso-semanal.csv` (`scripts\medir_semana.py`; a planilha `metricas\uso.xlsx` e os balanços
-em `metricas\balancos\`, a partir do F2); as perguntas pendentes no `docs\PERGUNTAS.md` de cada projeto (a partir do
-F2); as skills na seção "Skills deste projeto" do CLAUDE.md e no `claude-kit\GUIA_DAS_SKILLS.docx`.
+`python C:\CLAUDE-PROJETOS\claude-kit\plugins\nucleo\skills\uso-do-claude\medir_uso.py --sessoes` (o F2a o move para
+`scripts\`); a semana em `claude-kit\metricas\uso-semanal.csv` (`scripts\medir_semana.py`; a planilha `metricas\uso.xlsx`
+e os balanços em `metricas\balancos\`, a partir do F2b); as perguntas pendentes no `docs\PERGUNTAS.md` de cada projeto (a partir do
+F2b); as skills na seção "Skills deste projeto" do CLAUDE.md e no `claude-kit\GUIA_DAS_SKILLS.docx`.
 
 **O que continua sendo seu:** o `/effort` como comando; `max`, `xhigh`, Fable e ultracode só com motivo escrito; nunca
 `/omc-setup`; mover ou apagar pasta de projeto e mexer na raiz do `C:` (o modo automático bloqueia); aplicar a política
@@ -137,7 +137,7 @@ Base: a entrevista de 05-06/10 e a rodada 3; o inventário das pesquisas de 05-0
 | recurso | por quê | como saber que funcionou | custo |
 |---|---|---|---|
 | 1. Kit como marketplace local, plugins por grupo; `config\plugins.json` com os plugins de fora (safety-net, claude-md-management, session-report — só nas pastas de teste, com `--dir` —, frontend-design, notion) e o escopo de cada | Q17, Q14, Q6, 6.1, Q40 | `instalar_kit.py --verificar`; numa pasta de rascunho, `engenharia` desligado some da lista e ligado aparece; `/grill-me` curto funciona | F1b; menos descrições onde o grupo está desligado |
-| 2. `uso-do-claude` quebrada no plugin `nucleo`: núcleo ≤ 150 linhas + `modelo-e-esforco`, `fechar-janela`, `pesquisa`, `orquestrar`; `organizar-projetos` só `/` no plugin `kit` | Q4, Q5; §4 (22 KB a cada disparo) | `wc -l` ≤ 150; `perguntas_controle.py` bate; tokens por disparo antes × depois | F2 |
+| 2. `uso-do-claude` quebrada no plugin `nucleo`: núcleo ≤ 150 linhas + `modelo-e-esforco`, `fechar-janela`, `pesquisa`, `orquestrar`; `organizar-projetos` quebrada em 3 skills só `/` (`organizar-projetos`, `cores-das-pastas`, `icones`) no plugin `kit`, ligado no kit e na janela da raiz (07/10); o gancho das cores fica no `nucleo` | Q4, Q5; §4 (22 KB a cada disparo); F1b (07/10) | `wc -l` ≤ 150; `perguntas_controle.py` bate; tokens por disparo antes × depois | F2a |
 | 3. Estado em arquivo: `docs\ESTADO.md` (≤ 1 página, reescrito), `docs\PROXIMO.md` (com "Escritas em dado real aprovadas"), `docs\adr\`, `GLOSSARY.md`. Desenho embasado (Q3): arquivo de progresso + `git log` (harness de longa duração da Anthropic), ExecPlan da OpenAI (Progress, Surprises, Decision Log, Outcomes; "recomeçar só com ele"), `STATE.md` do GSD, ADR + glossário do Matt Pocock (`domain-modeling`) | Q3, Q21 | no F3a uma sessão nova recomeça só com eles; no F5a o `ctx0` do app cai | ≤ 1 página por abertura |
 | 4. Ganchos no `nucleo`, em duas camadas: **sempre** (todo projeto: `PreModelSwitch` barra o Sonnet 5; SessionStart avisa modelo e esforço errados e faz `git pull --ff-only` do kit, avisando se divergiu); **só onde existe `docs\ESTADO.md`** (o resto do SessionStart; portão `Stop`, até 8 bloqueios seguidos, que aceita fechar com a fila gravada; guarda de escrita em pasta de dado; a fila: `PermissionRequest` nega e enfileira na execução largada, `PreToolUse` em `AskUserQuestion` grava em `PERGUNTAS.md` e responde "adiada" — só adiar, nunca escolher) | Q3, Q9, Q10, Q12, Q21, Q35; lições 1-2 de `pesquisas\2026-10-05_fluxo-atual-dos-projetos.md` | `testar_ganchos.py` (JSON) verde; no F3a barram fechar sem estado, Write fora da lista e `/model sonnet`, e a fase segue com as decisões plantadas na fila | ~0 token; milissegundos por evento |
 | 5. Encadeamento por `claude --bg` ou por sessão interativa numa aba nova (com Remote Control e a espera do limite de uso) — o F3a compara e o F3c escolhe; desligado em `config\fluxo.json` até o F3c ligar; reserva `/clear` + gancho + `showClearContextOnPlanAccept` | Q9, Q2, Q37 | no F3a a fase 2 começa sozinha; retornos e maior trecho sem ele medidos | um processo novo por fase |
@@ -199,8 +199,8 @@ Base: a entrevista de 05-06/10 e a rodada 3; o inventário das pesquisas de 05-0
 **Regras para escrever**
 
 - CLAUDE.md pessoal: a privacidade do ADR-0001 e o ponteiro do ADR-0002 (F1a); `instalar_kit.py` e
-  `atualizar_terceiros.py` no lugar do `ligar_claude.py` (F1b). É hardlink: gravar no próprio arquivo e conferir com
-  `fsutil hardlink list`. A exceção da Q15 (plano em janela nova acima de ~200 mil tokens) vai no núcleo da skill (F2).
+  `atualizar_terceiros.py` no lugar do `ligar_claude.py` (F1b). Desde 07/10 o `~\.claude\CLAUDE.md` é só o import
+  `@C:/CLAUDE-PROJETOS/claude-kit/CLAUDE.md`: edita-se o do kit, sem hardlink nem `fsutil`. A exceção da Q15 (plano em janela nova acima de ~200 mil tokens) vai no núcleo da skill (F2a).
 - CLAUDE.md de cada projeto (< 200 linhas): sem estado; "Skills deste projeto" (≤ 10 linhas); comandos e invariantes.
 - `.claude\settings.json` de cada projeto (versionado): `enabledPlugins` dos grupos dele; `deny` das pastas de dado
   (ADR-0001 D6); conectores pela D4 do ADR-0001 (`desosp-`: todos negados menos o Drive; `pesquisa-` e `estudo-`:
@@ -230,7 +230,8 @@ Sonnet 5.5 (conferido nesta janela); a armadilha do Sonnet 5 é só `/model sonn
 | F1a privacidade, isolamento, git | `claude-kit` | Opus 5.5 · high → medium | regra de privacidade errada aparece tarde e em todo projeto | contradiz posição escrita dele → xhigh (com motivo) |
 | R1 objetivo, medição, recursos (pedido de 06/10, depois do F1a) | `claude-kit` | Opus 5.5 · high → medium; pesquisa por subagentes `sonnet` | redefine o objetivo das fases seguintes; erro aqui se espalha | contradiz posição escrita dele → xhigh (com motivo) |
 | F1b marketplace | `claude-kit` | Opus 5.5 · medium | reestruturação conferida por comando | skill some ou duplica sem ser notado → high |
-| F2 peças do kit | `claude-kit` | Opus 5.5 · high → medium nos ganchos | instrução errada guia toda sessão futura | perguntas de controle falham duas vezes → xhigh |
+| F2a skills do kit | `claude-kit` | Opus 5.5 · high | instrução errada guia toda sessão futura | perguntas de controle falham duas vezes → xhigh |
+| F2b ganchos, medição, pastas de teste | `claude-kit` | Opus 5.5 · medium | conferido por teste com JSON | teste de gancho falha sem causa entendida → high |
 | F3a o laço | `teste-fluxo` | Opus 5.5 · medium; fases `claude-sonnet-5-5` · medium | critérios escritos | critério falha sem causa entendida → high |
 | F3b ferramentas | `teste-ferramentas` | Opus 5.5 · medium; executores Sonnet 5.5 · medium; revisor cego subagente `opus` | medição | números incoerentes entre execuções → high |
 | F3c ajustes | `claude-kit` | Opus 5.5 · medium | aplicar resultados medidos | ajuste quebra critério que passava → high |
@@ -289,8 +290,21 @@ prova. As correções que o Ettore escolher (no F5a) viram o F5b.
   o registra só nas pastas de teste (Q40). O resto como está (Q46).
 - Portão: `instalar_kit.py --verificar`; ligar e desligar `engenharia` muda a lista; `/grill-me` curto; nenhuma junção
   sobrando; o gancho das cores dispara; guia regenerado.
+- **Feito em 07/10** (decisões do grill de 07/10 em `docs\ESTADO.md`):
+  - os grupos `nucleo` (2), `planejamento` (12) e `engenharia` (14);
+  - a `engenharia` **nunca** no escopo de usuário: cada projeto de código a liga na sua fase, e até lá fica sem ela;
+  - o gancho das cores virou gancho do plugin `nucleo` (`hooks\hooks.json`);
+  - o CLAUDE.md pessoal virou import (`@C:/CLAUDE-PROJETOS/claude-kit/CLAUDE.md`), sem hardlink;
+  - o plugin `kit` nasce no F2a.
 
-**F2 — as peças do kit.**
+**F2 — as peças do kit — dividido em F2a e F2b em 07/10** (o F2 tinha 13 itens e ganhou a quebra do
+`organizar-projetos`; o próprio prompt já trocava de esforço no meio). **F2a — as skills** (Opus high): a quebra da
+`uso-do-claude` e do `organizar-projetos` (3 skills só `/` no plugin `kit`: `organizar-projetos`, `cores-das-pastas`,
+`icones`; os scripts das cores ficam onde o gancho do `nucleo` os acha), a `recursos-do-projeto` enxuta, o SDD, os
+modelos, o texto da fila, do aviso, das janelas e do esforço dos subagentes nas skills, as perguntas de controle e o
+guia. **F2b — ganchos, settings, medição, pastas de teste** (Opus medium): os ganchos (inclusive os da fila), a
+statusline, a medição e o balanço (a sessão do balanço roda na janela da raiz, decisão de 07/10) e as pastas
+`teste-fluxo` e `teste-ferramentas`. O conteúdo de cada item segue abaixo.
 - Quebra da `uso-do-claude` (núcleo ≤ 150 linhas + `modelo-e-esforco`, `fechar-janela`, `pesquisa`, `orquestrar`; o
   `reference.md` fica como consulta; o `medir_uso.py` vai para `scripts\` e as referências mudam). O núcleo traz os
   pontos de checagem de recursos novos (Q14) e a exceção da Q15. O `fechar-janela` cobre `ESTADO.md` reescrito,
@@ -439,12 +453,12 @@ Cada janela confere e ajusta o prompt seguinte antes de entregá-lo (lição 7 d
 `pesquisas\2026-10-05_fluxo-atual-dos-projetos.md`). Depois do F3c, se o laço passar, o prompt vai no `docs\PROXIMO.md`
 e a fase é lançada por `--bg`.
 
-### R0 — revisão de front (entregue em 06/10; a 1ª linha de "Limites" foi acrescentada depois)
+### R0 — revisão de front (entregue em 06/10; a 1ª linha de "Limites" foi acrescentada depois; em 07/10, a linha da engenharia no "Antes")
 
 ```
 Opus 5.5 · /effort medium — revisão de tela é julgamento com prova, e o erro aparece na própria tela (barato de descobrir); suba para /effort high se os achados vierem genéricos, sem arquivo:linha e sem prova.
 
-Janela aberta em C:\CLAUDE-PROJETOS\desosp-app (só este projeto). Antes: git status sem arquivo de outra janela; nenhuma outra janela de implementação aberta no app.
+Janela aberta em C:\CLAUDE-PROJETOS\desosp-app (só este projeto). Antes: git status sem arquivo de outra janela; nenhuma outra janela de implementação aberta no app. Desde o F1b (07/10) a engenharia (web-design-guidelines, prototype, tdd...) só liga por projeto: se /web-design-guidelines não aparecer ao digitar /, rode uma vez, neste projeto, claude plugin enable engenharia@claude-kit --scope local e abra uma janela nova (grava em .claude\settings.local.json, que não entra no commit; o F5a passa a ligação para o settings versionado).
 
 ## Contexto
 O Ettore pediu uma revisão do front do app com as skills instaladas hoje. É SÓ LEITURA: sai um relatório priorizado; nenhuma correção sem o "sim" dele. As correções que ele aprovar viram a 1ª fase do app no fluxo novo (plano em C:\CLAUDE-PROJETOS\claude-kit\decisoes\2026-10-06_plano-fluxo.md, depois de aprovado).
@@ -523,7 +537,7 @@ Leia: decisoes\2026-10-06_plano-fluxo.md ("A cadeia", "Como você opera", "Decis
 Portão: as decisões gravadas e aprovadas; a linha de base em metricas\; as pesquisas no INDICE; git status limpo; push. ESTADO.md reescrito. Resumo: o objetivo como ficou, o veredito da andrej-karpathy-skills, a medição (o que mede, quando roda, quanto custa) e "Sinais de insuficiência do modelo". Confira e ajuste o prompt do F1b neste plano e entregue-o (modelo e /effort na 1ª linha).
 ```
 
-### F1b — o kit como marketplace
+### F1b — o kit como marketplace — feito em 07/10
 
 ```
 Opus 5.5 · /effort medium — reestruturação conferida por comando a cada passo; suba para /effort high se uma skill sumir ou duplicar sem você notar.
@@ -551,37 +565,65 @@ Plano: decisoes\2026-10-06_plano-fluxo.md (bloco F1b, Ficha, "Como você opera")
 Portão: instalar_kit.py --verificar passa; ligar e desligar engenharia numa pasta de rascunho muda a lista; /grill-me curto funciona; nenhuma junção sobrando dos grupos migrados; o gancho das cores dispara; guia regenerado; scripts\checa_kit.py --tudo sem achado. docs\ESTADO.md do kit reescrito; se o desktop tiver de fazer algo (o instalar_kit.py), uma mensagem NB nova na caixa\. Resumo com "Sinais de insuficiência do modelo". Confira e ajuste o prompt do F2 neste plano e entregue-o.
 ```
 
-### F2 — as peças do kit
+### F2a — as skills do kit
 
 ```
-Opus 5.5 · /effort high — as skills do núcleo guiam toda sessão futura e o erro nelas é silencioso; nos ganchos e na statusline, digite /effort medium (conferidos por teste com JSON).
+Opus 5.5 · /effort high — as skills do núcleo guiam toda sessão futura e o erro nelas é silencioso; suba para /effort xhigh (com motivo escrito) se as perguntas de controle falharem duas vezes.
 
-Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: F1b fechado; instalar_kit.py --verificar passa; a janela das cores fechada.
+Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: git pull --ff-only; git status limpo; python scripts\instalar_kit.py --verificar com 0 achados; leia docs\ESTADO.md e o caixa\INDICE.md. Confira que as regras pessoais carregaram pelo import (o ~\.claude\CLAUDE.md é só a linha @C:/CLAUDE-PROJETOS/claude-kit/CLAUDE.md): sem abrir arquivo, você sabe o pseudônimo de exemplo das regras? Se não souber, pare e avise.
 
 ## Contexto
-Plano: decisoes\2026-10-06_plano-fluxo.md (bloco F2, Ficha, "Como você opera"). Do registro decisoes\2026-10-06_entrevista-fluxo.md, leia §5 (Q3, Q4, Q5, Q9, Q10, Q13, Q14, Q15) e §6.2, §6.4 e §6.5. Pesquisas: 2026-10-06_continuar-em-contexto-limpo-sem-copiar-prompt.md; 2026-10-06_ferramentas-pedidas-e-orquestradores.md (SDD, regra do Workflow); 2026-10-05_sessoes-memoria-plugins-claude-code.md (ganchos); 2026-10-05_fluxo-atual-dos-projetos.md (as lições). R1: decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (seções 2, 5 e 6) e as pesquisas 2026-10-06_medicao-semanal-de-uso.md e 2026-10-06_varredura-final-atencao-concentrada.md; ADR-0001 D8. Ao escrever skill, use a skill writing-for-agents.
+Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F2 e F2a, Ficha, "Como você opera"). Do registro decisoes\2026-10-06_entrevista-fluxo.md, leia §5 (Q3, Q4, Q5, Q9, Q10, Q13, Q14, Q15, Q18, Q20) e §6.2, §6.4 e §6.5. Pesquisas: 2026-10-06_continuar-em-contexto-limpo-sem-copiar-prompt.md; 2026-10-06_ferramentas-pedidas-e-orquestradores.md (SDD, regra do Workflow); 2026-10-05_fluxo-atual-dos-projetos.md (as lições). R1: decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (seções 2, 5 e 6); ADR-0001 D8. F1b (07/10): docs\ESTADO.md — o kit é marketplace; as skills moram em plugins\<grupo>\skills; a engenharia liga só por projeto; o gancho das cores está em plugins\nucleo\hooks\hooks.json; config\plugins.json já prevê o grupo kit. Ao escrever skill, use a skill writing-for-agents. Q46: ao parar para o "sim", PushNotification com "claude-kit · F2a · precisa de você" (nada além; ADR-0001 D8).
 
 ## O que fazer
-1. Quebrar a uso-do-claude no plugin nucleo: núcleo ≤ 150 linhas (princípio, escada, sinais de insuficiência, armadilhas — inclusive: subagente com model: sonnet roda no 5.5; o Sonnet 5 vem só de /model sonnet e --model sonnet —, contexto, uma janela, pontos de checagem de recursos da Q14, exceção da Q15) + modelo-e-esforco + fechar-janela (ESTADO.md reescrito, PROXIMO.md, caixa, resumo com "Sinais", fechar por fim de fase ou ~150 mil ou troca de modelo, push pela Q10; lançar a próxima por claude --bg só se config\fluxo.json disser lancar_bg: true — fica false até o F3c) + pesquisa (biblioteca → subagente → salvar) + orquestrar (roteamento da Q18, os 3 papéis, modelo por papel, paradas da Q10, teto 10 e acima disso estimativa + "sim", cache de subagente). Só disparam sozinhas as que precisam; o resto só /. O reference.md fica como consulta; o medir_uso.py vai para scripts\ e as referências mudam (recursos-do-projeto, CLAUDE.md pessoal, COMO_OPERAR.md). Meça antes e depois (tamanho, /context).
-2. recursos-do-projeto enxuta (Q20): SKILL ≤ ~100 linhas + catálogo sob demanda; passo opcional de descoberta com o claude-code-setup (forma final depois do F3b).
-3. SDD: as 4 skills (subagent-driven-development, requesting-code-review, using-git-worktrees, finishing-a-development-branch) num plugin de terceiros, com origem.json; na orquestrar, a nota de uso (cabeçalhos "Task N", modelo fixo por despacho, o ESTADO.md continua dono do estado, o livro-razão .superpowers\ é descartável).
-4. Modelos: ESTADO.md (≤ 1 página: objetivo, progresso, surpresas, decisões → ADR, próximo passo, critério de pronto), PROXIMO.md (1ª linha com modelo e /effort; contexto; o que fazer; limites; "Escritas em dado real aprovadas"; ao fechar), ADR, GLOSSARY.
-5. Ganchos no plugin nucleo (base: C:\CLAUDE-PROJETOS\desosp-app\.claude\hooks\abertura.py), cada um testado por JSON (scripts\testar_ganchos.py), em duas camadas. Sempre, em todo projeto: PreModelSwitch (barra o Sonnet 5, deixa o 5.5); SessionStart só com o aviso de modelo e esforço errados e o git pull --ff-only do kit (no máximo uma vez por hora; avisa se divergiu). Só onde existir docs\ESTADO.md: o resto do SessionStart (estado curto, caixa, git de outra janela; no clear, injeta o PROXIMO.md); Stop (portão: fase dada como pronta sem ESTADO.md reescrito → bloqueia, até 8 vezes seguidas); PreToolUse (Write/Edit em pasta de dado fora da lista aprovada → bloqueia). Nos projetos ainda não migrados, os ganchos antigos deles continuam.
-6. Settings, com backup e só com a outra janela fechada: statusline (modelo, esforço, % do contexto), showClearContextOnPlanAccept: true, limpeza das 4 permissões com caminho que não existe mais.
-7. perguntas_controle.py com ~10 perguntas (ex.: a 1ª linha do prompt; quando usar Workflow; onde mora o estado) numa sessão nova: as respostas batem com as regras. Regenere o guia.
-8. Crie C:\CLAUDE-PROJETOS\teste-fluxo\ e teste-ferramentas\ vazias, com git init e um LEIA-ME de uma linha (o gancho das cores vai perguntar a cor: sem-cor). Nas duas, ligue o session-report no .claude\settings.json, com um gancho que barra o analyze-sessions sem --dir, e ponha o HTML dele no .gitignore (Q40).
-9. Medição (Q39, Q42): complete o scripts\medir_semana.py (protótipo da R1; só números): a planilha metricas\uso.xlsx (openpyxl; uma aba com as semanas e outra com os gráficos da régua e a linha da meta; metricas/*.xlsx no .gitignore); o metricas\BALANCO.md (o prompt fixo do balanço: ler o CSV, comparar com as metas, gravar metricas\balancos\AAAA-MM-DD.md e pôr cada ajuste proposto na fila do kit); no gancho de abertura do nucleo, a linha semanal roda em segundo plano se a última tem mais de 7 dias (sem imprimir nada) e o balanço vencido (15 dias) vira uma linha só com números (lançar a sessão do balanço sozinho fica para o F3c); a statusline anota o % de 5 h e o semanal (rate_limits) num arquivo local que o medir_semana.py lê.
-10. Fila e execução largada (Q35, Q36, Q44): o modelo de docs\PERGUNTAS.md (problema, opções, recomendação, o que depende); o protocolo no fechar-janela e no orquestrar (a dúvida vai para a fila; segue com o que não depende; para só quando tudo depende; os pontos da Q10 nunca sem o "sim"); os ganchos PermissionRequest (na execução largada, nega com mensagem e enfileira) e PreToolUse em AskUserQuestion (grava a pergunta e responde "adiada": só adiar, nunca escolher), testados por JSON; o Stop aceita fechar com perguntas abertas se o ESTADO.md e o PERGUNTAS.md estiverem gravados; o modelo de PROXIMO.md ganha "Decisões pré-aprovadas", "Sempre me pergunte" e a linha /goal "portão ou fila"; a rodada de contingências no fim de todo grill e plano entra na nossa skill (não mexa na grilling).
-11. Aviso (Q43, Q48; ADR-0001 D8): no fechar-janela e no orquestrar, o PushNotification só nos três casos (tudo depende da fila; a cadeia terminou; falha que só ele resolve), com o texto "projeto · fase · N perguntas"; onde o Remote Control não estiver ligado, nenhum aviso.
-12. Janelas e sonda (Q37, Q45), na orquestrar: tantas janelas quanto houver trabalho independente, um escritor por projeto ou worktree (até 3), o % de 5 h da statusline antes de abrir outra; a sonda grava em arquivo e as janelas leem; o aviso de "pronto" por SendMessage só no mesmo domínio e só se o F3a mostrar ganho.
-13. Esforço dos subagentes: na semana de 29/09, 1.197 chamadas do Sonnet 5.5 rodaram em max, quase todas em subagentes; confira na documentação se o subagente herda o esforço da janela e, se der, fixe o esforço por papel na orquestrar.
+1. Quebrar a uso-do-claude no plugin nucleo: núcleo ≤ 150 linhas (princípio, escada, sinais de insuficiência, armadilhas — inclusive: subagente com model: sonnet roda no 5.5; o Sonnet 5 vem só de /model sonnet e --model sonnet —, contexto, uma janela, pontos de checagem de recursos da Q14, exceção da Q15) + modelo-e-esforco + fechar-janela (ESTADO.md reescrito, PROXIMO.md, caixa, resumo com "Sinais", fechar por fim de fase ou ~150 mil ou troca de modelo, push pela Q10; lançar a próxima por claude --bg só se config\fluxo.json disser lancar_bg: true — fica false até o F3c) + pesquisa (biblioteca → subagente → salvar) + orquestrar (roteamento da Q18, os 3 papéis, modelo por papel, paradas da Q10, teto 10 e acima disso estimativa + "sim", cache de subagente). Só disparam sozinhas as que precisam; o resto só /. O reference.md fica como consulta; o medir_uso.py vai para scripts\ e as referências mudam (recursos-do-projeto, COMO_OPERAR.md, o plano). Meça antes e depois (tamanho, /context).
+2. Quebrar o organizar-projetos (hoje plugins\nucleo\skills\uso-do-claude\organizar-projetos\) em 3 skills só / num plugin novo, kit (no .claude-plugin\marketplace.json): organizar-projetos (pasta-mãe, GitHub, a fase 0 de reaproveitar, projeto novo — a pasta nasce na janela da raiz), cores-das-pastas (pastas.md, legenda, mapa, VS Code) e icones (os ícones; os pedidos de ícone novo se juntam e se desenham em lote; C:\CLAUDE-PROJETOS\prototipos-icones). Os scripts das cores (pastas.py, gancho.py, regras.py, mapa.json, testes) ficam onde o gancho do nucleo os acha, porque o gancho continua em todo projeto: escolha o lugar e conserte o hooks.json, o local.json (pelo instalar_kit.py) e o mapa. O pastas.py ligar-gancho deixa de gravar no settings.json (o gancho é do plugin); o inventario.py passa a olhar plugins\, não skills\. Ligue o kit no claude-kit\.claude\settings.json e rode o instalar_kit.py (ele grava o C:\CLAUDE-PROJETOS\.claude\settings.json da janela da raiz; cor dessa pasta: nao-toco). Confira: no kit e na raiz, /organizar-projetos aparece; numa pasta de rascunho, não; o gancho ainda dispara (pasta de teste); pastas.py conferir com 0 problemas; a suíte das cores verde.
+3. recursos-do-projeto enxuta (Q20): SKILL ≤ ~100 linhas + catálogo sob demanda; passo opcional de descoberta com o claude-code-setup (forma final depois do F3b).
+4. SDD: as 4 skills (subagent-driven-development, requesting-code-review, using-git-worktrees, finishing-a-development-branch) num plugin de terceiros próprio, trazidas pelo atualizar_terceiros.py (--repo, --grupo), com origem.json; na orquestrar, a nota de uso (cabeçalhos "Task N", modelo fixo por despacho, o ESTADO.md continua dono do estado, o livro-razão .superpowers\ é descartável).
+5. Modelos: ESTADO.md (≤ 1 página: objetivo, progresso, surpresas, decisões → ADR, próximo passo, critério de pronto); PROXIMO.md (1ª linha com modelo e /effort; contexto; o que fazer; limites; "Escritas em dado real aprovadas"; "Decisões pré-aprovadas"; "Sempre me pergunte"; a linha /goal "portão ou fila"; ao fechar); docs\PERGUNTAS.md (problema, opções, recomendação, o que depende); ADR; GLOSSARY.
+6. O texto das regras nas skills (os ganchos que as aplicam são do F2b):
+   - a fila e a execução largada (Q35, Q36, Q44), no fechar-janela e no orquestrar: a dúvida vai para a fila; segue com o que não depende; para só quando tudo depende; os pontos da Q10 nunca sem o "sim";
+   - a rodada de contingências no fim de todo grill e plano, na nossa skill (não mexa na grilling);
+   - o aviso (Q43, Q48; ADR-0001 D8): PushNotification só nos três casos (tudo depende da fila; a cadeia terminou; falha que só ele resolve), com o texto "projeto · fase · N perguntas"; sem Remote Control, nenhum aviso;
+   - janelas e sonda (Q37, Q45), na orquestrar: tantas janelas quanto houver trabalho independente, um escritor por projeto ou worktree (até 3), o % de 5 h antes de abrir outra; a sonda grava em arquivo e as janelas leem; o "pronto" por SendMessage só no mesmo domínio e só se o F3a mostrar ganho;
+   - esforço dos subagentes: na semana de 29/09, 1.197 chamadas do Sonnet 5.5 rodaram em max, quase todas em subagentes; confira na documentação se o subagente herda o esforço da janela e, se der, fixe o esforço por papel na orquestrar.
+7. perguntas_controle.py com ~10 perguntas (ex.: a 1ª linha do prompt; quando usar Workflow; onde mora o estado; onde ligar a engenharia) numa sessão nova: as respostas batem com as regras. Regenere o guia (CURADO das skills novas e do grupo kit).
 
 ## Limites
 - Nada em projeto (desosp-*, pesquisa-*): os projetos entram nas fases deles.
-- Commit por assunto, caminho explícito.
+- Ganchos, statusline, settings e medição são do F2b; aqui, só o texto das regras.
+- Commit por assunto, caminho explícito; push no fim com o portão verde.
 
 ## Ao fechar
-Portão: testar_ganchos.py verde (com os ganchos da fila); perguntas_controle.py bate; núcleo ≤ 150 linhas; /context com o custo fixo menor (o número); o medir_semana.py reproduz a linha de 29/09 do metricas\uso-semanal.csv e gera a planilha; as duas pastas de teste criadas; guia regenerado. ESTADO.md do kit. Resumo com "Sinais de insuficiência do modelo". Confira e ajuste os prompts do F3a e do F3b neste plano e entregue os dois (rodam em paralelo).
+Portão: núcleo ≤ 150 linhas; perguntas_controle.py bate; /context com o custo fixo menor (o número, antes × depois); o kit com as 3 skills, ligado só no kit e na raiz; instalar_kit.py --verificar com 0 achados; o gancho das cores dispara; guia regenerado; scripts\checa_kit.py --tudo sem achado. docs\ESTADO.md do kit reescrito; se o desktop tiver de rodar o instalar_kit.py de novo, uma mensagem NB nova na caixa\. Resumo com "Sinais de insuficiência do modelo". Confira e ajuste o prompt do F2b neste plano e entregue-o.
+```
+
+### F2b — ganchos, settings, medição e pastas de teste
+
+```
+Opus 5.5 · /effort medium — ganchos e medição se conferem por teste com JSON e por número; suba para /effort high se um teste de gancho falhar sem causa entendida.
+
+Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: F2a fechado; git pull --ff-only; instalar_kit.py --verificar com 0 achados; leia docs\ESTADO.md e o caixa\INDICE.md. Nenhuma outra janela aberta (o item 2 mexe no ~\.claude\settings.json).
+
+## Contexto
+Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F2 e F2b, Ficha — itens 4, 7, 8, 9 e 10 —, "Como você opera"). Registro decisoes\2026-10-06_entrevista-fluxo.md: §5 (Q3, Q9, Q10, Q12, Q21, Q35) e §6.2. Pesquisas: 2026-10-05_sessoes-memoria-plugins-claude-code.md (ganchos); 2026-10-05_fluxo-atual-dos-projetos.md (lições 1-2); 2026-10-06_medicao-semanal-de-uso.md; 2026-10-06_varredura-final-atencao-concentrada.md; 2026-10-04_organizacao-com-claude-code.md:92 (gancho de plugin no Windows: ${CLAUDE_PLUGIN_ROOT} chega com /; a forma-shell roda no Git Bash). R1: decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (seções 2, 5 e 6; Q39-Q42). As regras que os ganchos aplicam já estão nas skills (F2a). Ao parar para o "sim": PushNotification com "claude-kit · F2b · precisa de você".
+
+## O que fazer
+1. Ganchos no plugin nucleo (hooks\hooks.json, ao lado do gancho das cores; base: C:\CLAUDE-PROJETOS\desosp-app\.claude\hooks\abertura.py, só leitura), cada um testado por JSON (scripts\testar_ganchos.py), em duas camadas.
+   - Sempre, em todo projeto: PreModelSwitch (barra o Sonnet 5, deixa o 5.5); SessionStart só com o aviso de modelo e esforço errados e o git pull --ff-only do kit (no máximo uma vez por hora; avisa se divergiu; depois do pull, o instalar_kit.py --verificar, e uma linha só se houver achado).
+   - Só onde existir docs\ESTADO.md: o resto do SessionStart (estado curto, caixa, git de outra janela; no clear, injeta o PROXIMO.md); Stop (portão: fase dada como pronta sem ESTADO.md reescrito → bloqueia, até 8 vezes seguidas; aceita fechar com perguntas abertas se o ESTADO.md e o PERGUNTAS.md estiverem gravados); PreToolUse (Write/Edit em pasta de dado fora da lista aprovada → bloqueia); a fila (Q35, Q36, Q44): PermissionRequest (na execução largada, nega com mensagem e enfileira) e PreToolUse em AskUserQuestion (grava a pergunta no PERGUNTAS.md e responde "adiada": só adiar, nunca escolher).
+   - Nos projetos ainda não migrados, os ganchos antigos deles continuam.
+2. Settings, com backup e só com a outra janela fechada: statusline (modelo, esforço, % do contexto, e o % de 5 h e o semanal — rate_limits — gravados num arquivo local que o medir_semana.py lê); showClearContextOnPlanAccept: true; limpeza das permissões com caminho que não existe mais (o allow do ~\.claude\settings.json tem regras de C:\DESOSP e de um scratchpad velho).
+3. Medição (Q39, Q42): complete o scripts\medir_semana.py (só números): a planilha metricas\uso.xlsx (openpyxl; uma aba com as semanas e outra com os gráficos da régua e a linha da meta; metricas/*.xlsx no .gitignore); o metricas\BALANCO.md (o prompt fixo do balanço: ler o CSV, comparar com as metas, gravar metricas\balancos\AAAA-MM-DD.md e pôr cada ajuste proposto na fila do kit); no gancho de abertura do nucleo, a linha semanal roda em segundo plano se a última tem mais de 7 dias (sem imprimir nada), e o balanço vencido (15 dias) vira uma linha só com números que manda abrir a janela da raiz (C:\CLAUDE-PROJETOS: é lá que roda a sessão do balanço, decisão de 07/10). Lançar a sessão do balanço sozinha fica para o F3c.
+4. Crie C:\CLAUDE-PROJETOS\teste-fluxo\ e teste-ferramentas\ vazias, com git init e um LEIA-ME de uma linha (o gancho das cores vai perguntar a cor: sem-cor). Nas duas, o .claude\settings.json pelo instalar_kit.py --trecho teste (engenharia e session-report), com um gancho que barra o analyze-sessions sem --dir, e o HTML do session-report no .gitignore (Q40).
+5. Regenere o guia.
+
+## Limites
+- Nada em projeto (desosp-*, pesquisa-*), salvo ler o abertura.py do app como base.
+- Commit por assunto, caminho explícito; push no fim com o portão verde.
+
+## Ao fechar
+Portão: testar_ganchos.py verde (com os da fila); numa sessão nova, o SessionStart avisa modelo errado e o PreModelSwitch barra o /model sonnet; a statusline aparece no terminal e o % chega ao arquivo; o medir_semana.py reproduz a linha de 29/09 do metricas\uso-semanal.csv e gera a planilha; as duas pastas de teste criadas; instalar_kit.py --verificar com 0 achados; guia regenerado; scripts\checa_kit.py --tudo sem achado. docs\ESTADO.md do kit. Resumo com "Sinais de insuficiência do modelo". Confira e ajuste os prompts do F3a e do F3b neste plano e entregue os dois (rodam em paralelo).
 ```
 
 ### F3a — o laço
@@ -589,7 +631,7 @@ Portão: testar_ganchos.py verde (com os ganchos da fila); perguntas_controle.py
 ```
 Opus 5.5 · /effort medium — esta janela orquestra e confere critérios escritos; as fases que ela lança rodam em Sonnet 5.5 · medium (claude-sonnet-5-5); suba para high se um critério falhar sem causa entendida.
 
-Janela aberta em C:\CLAUDE-PROJETOS\teste-fluxo\ (criada no F2). Crie a irmã teste-fluxo-dados\ para o teste do gancho. Em paralelo roda o F3b em teste-ferramentas\: não mexa lá.
+Janela aberta em C:\CLAUDE-PROJETOS\teste-fluxo\ (criada no F2b). Crie a irmã teste-fluxo-dados\ para o teste do gancho. Em paralelo roda o F3b em teste-ferramentas\: não mexa lá.
 
 ## Contexto
 Plano: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco F3a, "Como você opera"). Do registro claude-kit\decisoes\2026-10-06_entrevista-fluxo.md, leia Q9 (§5), §6.3 (celular) e §6.5 (peças). Linha de base: claude-kit\metricas\uso-semanal.csv (R1: retornos, sentadas, maior trecho sem ele, tokens) e claude-kit\pesquisas\2026-10-05_fluxo-atual-dos-projetos.md (~7 passos manuais por janela). R1: claude-kit\decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (Q35, Q37, Q43-Q45).
@@ -624,7 +666,7 @@ Portão: RESULTADO.md com prova por critério; retornos e maior trecho sem ele m
 ```
 Opus 5.5 · /effort medium — esta janela organiza e mede; executores fixados em Sonnet 5.5 · medium para comparar igual; o revisor cego é um subagente opus; suba para high se os números não fecharem entre execuções.
 
-Janela aberta em C:\CLAUDE-PROJETOS\teste-ferramentas\ (criada no F2), de preferência no terminal (o Headroom quebra a extensão do VS Code). Em paralelo roda o F3a: não mexa em teste-fluxo\.
+Janela aberta em C:\CLAUDE-PROJETOS\teste-ferramentas\ (criada no F2b), de preferência no terminal (o Headroom quebra a extensão do VS Code). Em paralelo roda o F3a: não mexa em teste-fluxo\.
 
 ## Contexto
 Plano: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco F3b). Do registro claude-kit\decisoes\2026-10-06_entrevista-fluxo.md, leia §12.7. Q18, Q19, Q20 (tabela do plano). Pesquisa: claude-kit\pesquisas\2026-10-06_ferramentas-pedidas-e-orquestradores.md (custos, riscos, flags). R1: Q38 e Q40 (claude-kit\decisoes\2026-10-06_R1-objetivo-medicao-recursos.md) e claude-kit\pesquisas\2026-10-06_andrej-karpathy-skills.md. Nunca /omc-setup.
@@ -683,7 +725,7 @@ Plano: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco F5a, Ficha, "Como vo
 
 ## O que fazer
 1. Proteção de dado primeiro: as tarefas do app (F5a) nas tabelas "Tarefas por fase" do ADR-0001 e do ADR-0002 — o deny interno da D6 (confira a lista no lugar antes de aplicar), os conectores da D4 (os nomes exatos no /mcp), o pre-commit de nomes da D2, o CLAUDE.md pela D1; nenhum subagente nas pastas de dado. A política do safety-net: imprima o comando para o Ettore.
-2. docs\ESTADO.md (≤ 1 página) a partir do HANDOFF_APP.md (busca por palavra; o handoff vai congelado para docs\historico\); CLAUDE.md < 200 linhas (o estado sai; regra de um tipo de arquivo vai para .claude\rules com paths:; "Skills deste projeto" ≤ 10 linhas); enabledPlugins (nucleo, planejamento, engenharia, frontend-design); o abertura.py sai e o gancho do nucleo entra (confira que nada do abertura.py se perde); docs\adr\ + GLOSSARY.md (domain-modeling); a memória do app só com preferência e correção.
+2. docs\ESTADO.md (≤ 1 página) a partir do HANDOFF_APP.md (busca por palavra; o handoff vai congelado para docs\historico\); CLAUDE.md < 200 linhas (o estado sai; regra de um tipo de arquivo vai para .claude\rules com paths:; "Skills deste projeto" ≤ 10 linhas); enabledPlugins pelo instalar_kit.py --trecho codigo (liga a engenharia; nucleo e planejamento vêm do escopo de usuário; o frontend-design sai do escopo de usuário e passa a ser só deste projeto, pelo config\plugins.json; tire a linha que a R0 pôs no .claude\settings.local.json); o abertura.py sai e o gancho do nucleo entra (confira que nada do abertura.py se perde); docs\adr\ + GLOSSARY.md (domain-modeling); a memória do app só com preferência e correção.
 3. claude-code-setup só leitura (claude --plugin-dir <clone>\plugins\claude-code-setup numa sessão curta, aqui): compare com docs\RECURSOS_CLAUDE_DESOSP.md e explique ao Ettore cada sugestão de Context7, Playwright MCP e GitHub MCP.
 4. Pergunte ao Ettore o que a IA faz dentro do app (app\ia\, o ponto de extensão da PROPOSTA §7) e se a porta de leitura para a comunicação é a 1ª coisa; registre num ADR do app.
 5. Com o Ettore, escolha as correções da R0 que entram no F5b e escreva o docs\PROXIMO.md (tarefas "Task N"; "Escritas em dado real aprovadas": nenhuma).
@@ -743,7 +785,7 @@ Plano: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco F6, Ficha); ADR-0001
 
 ## O que fazer
 1. Proteção de dado primeiro: as tarefas do censo (F6) nas tabelas "Tarefas por fase" do ADR-0001 e do ADR-0002 — deny e .ignore do bruto pela D6 (confira a lista no lugar; os scripts da rodada continuam lendo; a saida\ fica aberta), os conectores da D4, o pre-commit de nomes, o pseudônimo nas saídas que o Claude lê, o CLAUDE.md pela D1.
-2. O mesmo do F5a: ESTADO.md a partir do HANDOFF_SPRINT2.md (congelado em docs\historico\), CLAUDE.md < 200, "Skills deste projeto", enabledPlugins, gancho do nucleo, docs\adr\ + GLOSSARY.md, MEMORY.md só com preferência e correção (a linha de 7,4 mil caracteres sai).
+2. O mesmo do F5a: ESTADO.md a partir do HANDOFF_SPRINT2.md (congelado em docs\historico\), CLAUDE.md < 200, "Skills deste projeto", enabledPlugins (instalar_kit.py --trecho codigo: liga a engenharia), gancho do nucleo, docs\adr\ + GLOSSARY.md, MEMORY.md só com preferência e correção (a linha de 7,4 mil caracteres sai).
 3. Desenvolvimento separado da operação: a skill rodada vira rotina com aprovação permanente dos comandos dela (Q21), escrita no modelo de PROXIMO.md da rodada.
 4. Auditoria das 27 regras e das 8 que carregam juntas no data_merge.py, por Workflow (só regras e código, nunca dado; até 10 agentes), cada achado com prova; você consolida.
 5. Cartographer (cópia sem os passos 7 e 8) × improve-codebase-architecture: qual mapa ajuda e quanto custa.
@@ -765,7 +807,7 @@ Janela no painel aberta em C:\CLAUDE-PROJETOS\desosp-hc. Antes: nenhuma rodada H
 
 ## O que fazer
 1. Proteção de dado primeiro: as tarefas do HC (F7) nas tabelas "Tarefas por fase" do ADR-0001 e do ADR-0002 — deny e .ignore do bruto pela D6 (planilhas\, historico\, privado\, entrada\; rodada\, trabalho\ e saida\ ficam abertas; confira no lugar), os conectores da D4, o número do pseudônimo (o RA, se existir), a memória "console sem linha de paciente" pela D1.
-2. O mesmo do F5a: ESTADO.md a partir do docs\12_PROXIMA_RODADA.md e da seção "Estado atual" do CLAUDE.md; CLAUDE.md < 200; enabledPlugins; o gancho do nucleo no lugar do caixa_pendente; docs\adr\ + GLOSSARY.md.
+2. O mesmo do F5a: ESTADO.md a partir do docs\12_PROXIMA_RODADA.md e da seção "Estado atual" do CLAUDE.md; CLAUDE.md < 200; enabledPlugins (instalar_kit.py --trecho codigo: liga a engenharia); o gancho do nucleo no lugar do caixa_pendente; docs\adr\ + GLOSSARY.md.
 3. Os 12 comandos: viram skills? (Workflow candidato, 12 itens iguais, só código); /fechar-rodada, /consolidar e /nova-versao só por / (disable-model-invocation: true).
 4. O lugar do dado: mostre ao Ettore e ele decide.
 
@@ -786,7 +828,7 @@ No DESKTOP. Janela aberta em C:\CLAUDE-PROJETOS\claude-kit (depois do git clone 
 ## O que fazer
 1. instalar_kit.py (marketplace, plugins, --verificar); o Ettore roda o comando da política do safety-net que o instalador imprime.
 2. organizar-projetos (/, plugin kit): pasta-mãe CLAUDE-PROJETOS e ícones, se ainda faltar.
-3. Para cada projeto do desktop (DASH, Folha/RH, Acolhimento), escreva o prompt da janela dele (uma janela por projeto, não esta): domínio e prefixo (ADR-0002); GitHub privado com varredura; CLAUDE.md < 200, ESTADO.md, enabledPlugins; prompts 10-12 de fontes\Claude_Workbench_Prompts como checklist; Context7 no DASH; fechar-janela do DASH unificada com a do kit; o Apps Script que grava na raiz do Drive passa a gravar em IA\<projeto>.
+3. Para cada projeto do desktop (DASH, Folha/RH, Acolhimento), escreva o prompt da janela dele (uma janela por projeto, não esta): domínio e prefixo (ADR-0002); GitHub privado com varredura; CLAUDE.md < 200, ESTADO.md, enabledPlugins (instalar_kit.py --trecho <tipo>; os de código ligam a engenharia); prompts 10-12 de fontes\Claude_Workbench_Prompts como checklist; Context7 no DASH; fechar-janela do DASH unificada com a do kit; o Apps Script que grava na raiz do Drive passa a gravar em IA\<projeto>.
 
 ## Limites
 - Nada de projeto do desktop nesta janela (cada um na sua).
@@ -842,7 +884,7 @@ Portão: tabela aprovada; raiz sem arquivo de IA solto; IA\00-entrada\LEIA-ME.md
 ```
 Opus 5.5 · /effort high — planejar um projeto novo: erro de plano só aparece depois e custa caro; suba para xhigh se o plano sair raso ou ignorar restrição citada.
 
-Crie C:\CLAUDE-PROJETOS\<projeto>\ (estudo-residencia | desosp-comunicacao | pessoal-organizacao | pessoal-produtividade | pesquisa-clinica) e abra a janela nela. Modo plano desligado até o fim do grill.
+A pasta nasce na janela da raiz (C:\CLAUDE-PROJETOS), com /organizar-projetos (plugin kit, a partir do F2a): C:\CLAUDE-PROJETOS\<projeto>\ (estudo-residencia | desosp-comunicacao | pessoal-organizacao | pessoal-produtividade | pesquisa-clinica), as cores e o git; depois abra a janela nela. Modo plano desligado até o fim do grill.
 
 ## Contexto
 Plano do fluxo: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco "Frente 2", item <N>); claude-kit\decisoes\adr\0001-privacidade.md e 0002-isolamento.md. Base do projeto: <N1: claude-kit\pesquisas\2026-10-06_estudo-anki-e-produtividade.md | N2: §12.1 do registro claude-kit\decisoes\2026-10-06_entrevista-fluxo.md | N3 e N4: §12.2 e §12.5 do registro + claude-kit\pesquisas\2026-10-04_notion-filtros-e-visoes.md | N5: claude-kit\pesquisas\2026-10-06_espaco-de-pesquisa-clinica.md>.
@@ -851,7 +893,7 @@ Plano do fluxo: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco "Frente 2",
 1. /grill-me do projeto (skill grilling; perguntas no formato do CLAUDE.md pessoal).
 2. Confirmado o entendimento: recursos-do-projeto (a ficha).
 3. Plano do projeto com fases, portões, modelo e esforço; espere o "sim".
-4. Montagem inicial: CLAUDE.md < 200, ESTADO.md, enabledPlugins, disableClaudeAiConnectors (menos nos pessoal-* que usam conector); se houver dado, <projeto>-dados\ com deny e a política do safety-net (o Ettore aplica o comando); git, varredura e GitHub privado.
+4. Montagem inicial: CLAUDE.md < 200, ESTADO.md, enabledPlugins (instalar_kit.py --trecho <tipo>: codigo, pesquisa-estudo ou pessoal), disableClaudeAiConnectors (menos nos pessoal-* que usam conector); se houver dado, <projeto>-dados\ com deny e a política do safety-net (o Ettore aplica o comando); git, varredura e GitHub privado.
 
 ## Limites
 - Nunca dado de paciente (N2: só por marcadores; o acervo só em cópias com marcadores).
