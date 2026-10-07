@@ -3,6 +3,7 @@
 > Janela do plano (notebook, Opus 5.5 · high). Base: `claude-kit\decisoes\2026-10-06_entrevista-fluxo.md` (Q1-Q15 na
 > §5, §6, §12) + a rodada 3 desta janela (Q16-Q33). **Aprovado pelo Ettore em 06/10/2026** (aprovação do modo
 > plano). As pesquisas desta janela: as três linhas de 06/10 no fim do `pesquisas\INDICE.md`.
+> **R1 (06/10):** objetivo revisto e plano ajustado (Q34-Q48) — `decisoes\2026-10-06_R1-objetivo-medicao-recursos.md`.
 
 ## Contexto
 
@@ -12,16 +13,24 @@ registro): o custo dominante é o tamanho da conversa (mediana de 199 a 317 mil 
 ~7 passos manuais por janela; estado que só cresce (handoffs de 575 e 376 KB); o mesmo método implementado três
 vezes. Este plano leva o fluxo novo do kit aos projetos, em duas frentes, com portões conferidos por comando.
 
+**Objetivo revisto na R1 (Q34):** atenção concentrada. O Ettore senta poucas vezes, quando escolhe, e responde de uma vez
+o que precisa dele (grill, plano, fila de perguntas); entre uma sentada e outra o Claude trabalha sozinho por horas, em
+fases curtas encadeadas e em tantas janelas quanto o trabalho independente permitir, e só o chama quando nada mais anda
+sem ele — com a mesma qualidade, economia e padrão. A régua: retornos, sentadas, maior trecho sem ele e janelas ao mesmo
+tempo ("Verificação de ponta a ponta"; registro em `decisoes\2026-10-06_R1-objetivo-medicao-recursos.md`).
+
 ## A cadeia
 
 ```
 Agora     F0 (Ettore) · R0 revisão de front (desosp-app) ∥ F1a
-Frente 1  F1a → R1 → F1b → F2 → (F3a ∥ F3b) → F3c → F5a → F5b → F6 → F7 → F8 → F9
+Frente 1  F1a → R1 → F1b → F2 → (F3a ∥ F3b) → F3c → F5a → F5b → (F6 ∥ F7) → F8 → F9
 Frente 2  (depois do F5b) N1 estudo → F5c porta de leitura → N2 comunicação → N3 organização → N4 produtividade → N5 pesquisa
 No desktop, quando estiver lá: Fd (Drive)
 ```
 
-No máximo duas janelas de projeto ao mesmo tempo; o app tem prioridade. Uma janela = um projeto.
+Janelas ao mesmo tempo: tantas quanto houver trabalho independente, com um escritor por projeto (ou por worktree, até 3
+no mesmo projeto), desde que o total de tokens fique igual ou menor que em série (Q37, R1); o app tem prioridade. Uma
+janela = um projeto.
 
 ## Como você opera daqui em diante
 
@@ -34,28 +43,37 @@ No máximo duas janelas de projeto ao mesmo tempo; o app tem prioridade. Uma jan
 3. Cole o prompt. O Claude trabalha e para nos pontos da Q10: escrita em dado real não aprovada antes; rodada real ou
    reprocesso não aprovados; migração de banco ou de esquema; regra clínica nova; leitura de fonte nova; subir para
    Fable, `xhigh`, `max` ou ultracode (descer, se mantém a qualidade, não pergunta); o mesmo erro depois de duas
-   tentativas diferentes; decisão que não está no `ESTADO.md` nem num ADR.
+   tentativas diferentes; decisão que não está no `ESTADO.md` nem num ADR. Com o Remote Control ligado sozinho (R1;
+   ADR-0001 D8), dá para responder pelo app do celular.
 4. Responda no chat com a letra e a nuance ("a, mas sem X").
 5. Ao fechar, a janela entrega o resumo (com "Sinais de insuficiência do modelo") e o prompt da próxima, já conferido.
-   Copie, feche, abra a próxima. Paralelo só onde o plano diz: R0 ∥ F1a agora; F3a ∥ F3b depois.
+   Copie, feche, abra a próxima. Paralelo só onde o plano diz: R0 ∥ F1a agora; F3a ∥ F3b; depois do F5b, F6 ∥ F7 ∥ N1.
 
 **Depois do F3, se o laço passar (o F3c liga), você não carrega mais prompt:**
 
 1. A janela que termina grava `docs\ESTADO.md` (onde estamos) e `docs\PROXIMO.md` (o prompt da próxima) e lança a fase
-   seguinte sozinha: `claude --bg --name <fase> --model <modelo> --effort <nível> "Leia docs/PROXIMO.md e siga"`.
+   seguinte sozinha: `claude --bg --name <fase> --model <modelo> --effort <nível> "Leia docs/PROXIMO.md e siga"` (ou
+   numa aba interativa do terminal, com Remote Control, se o F3a mostrar melhor — Q9, R1).
 2. Você acompanha no terminal: `claude agents` (o que está rodando), `claude attach <nome>` (entrar), `claude logs
-   <nome>` (ver sem entrar). Quando uma fase precisa de você, ela para em "Needs input".
-3. Você entra só nos pontos de parada e para aprovar plano novo — com "Yes, clear context and…": o planejamento sai do
-   contexto e fica só o plano.
+   <nome>` (ver sem entrar). Uma dúvida que é sua vai para o `docs\PERGUNTAS.md` do projeto, e a fase segue com o que
+   não depende dela (Q35); ela só para quando tudo o que sobra depende da fila — aí grava o `ESTADO.md` e avisa.
+3. Você entra nas sentadas que escolher: responde a fila de uma vez (na janela do projeto ou pelo app) e aprova plano
+   novo, que termina com a rodada de contingências — as "Decisões pré-aprovadas" do `PROXIMO.md` (Q36) — com "Yes,
+   clear context and…": o planejamento sai do contexto e fica só o plano.
 4. Reserva, no painel do VS Code: se o lançamento automático falhar, `/clear` e depois "siga" — o gancho injeta o
    `PROXIMO.md`.
-5. Celular: só se o experimento do F3a passar — uma janela pequena no terminal, ligada ao Remote Control, que lança as
-   fases; nunca uma janela de trabalho grande.
+5. Celular: o Remote Control liga sozinho em toda sessão interativa (R1; ADR-0001 D8). A fase avisa pelo
+   `PushNotification` em três casos — parou porque tudo depende da fila; a cadeia terminou; falha que só você resolve —
+   e você responde pelo app. Onde o Remote Control não ligar sozinho, não há aviso (o F3a confere o painel e a `--bg`).
+6. Toda fase de execução começa com o `/goal` "portão ou fila" que vem pronto no `PROXIMO.md` (Q44). A cada 15 dias, o
+   balanço das métricas aparece numa linha ao abrir uma janela, com as propostas na fila do kit (Q42).
 
 **Onde olhar:** o estado de cada projeto em `docs\ESTADO.md` (uma página); o que vem em `docs\PROXIMO.md`; o porquê em
 `docs\adr\` (no kit, `decisoes\`); no terminal, a statusline (modelo, esforço, % do contexto); o custo em
-`python C:\CLAUDE-PROJETOS\claude-kit\skills\uso-do-claude\medir_uso.py --sessoes` (o F2 o move para `scripts\`); as
-skills na seção "Skills deste projeto" do CLAUDE.md e no `claude-kit\GUIA_DAS_SKILLS.docx`.
+`python C:\CLAUDE-PROJETOS\claude-kit\skills\uso-do-claude\medir_uso.py --sessoes` (o F2 o move para `scripts\`); a
+semana em `claude-kit\metricas\uso-semanal.csv` (`scripts\medir_semana.py`; a planilha `metricas\uso.xlsx` e os balanços
+em `metricas\balancos\`, a partir do F2); as perguntas pendentes no `docs\PERGUNTAS.md` de cada projeto (a partir do
+F2); as skills na seção "Skills deste projeto" do CLAUDE.md e no `claude-kit\GUIA_DAS_SKILLS.docx`.
 
 **O que continua sendo seu:** o `/effort` como comando; `max`, `xhigh`, Fable e ultracode só com motivo escrito; nunca
 `/omc-setup`; mover ou apagar pasta de projeto e mexer na raiz do `C:` (o modo automático bloqueia); aplicar a política
@@ -89,21 +107,46 @@ Q1-Q15 continuam como no registro (§5). A rodada 3:
 | pedido | "Ensine como operar daqui em diante" → a seção acima; vira o `COMO_OPERAR.md` e a 1ª parte do guia em Word. |
 | pedido | Mermaid nos documentos que o Claude lê → **não aplicado**: não reduz tokens (+33% a +62% de caracteres na regra real) e não há ganho de acerto comprovado para o Claude (ver Ficha, NÃO). |
 
+## Decisões da R1 (06/10)
+
+O registro completo, com o porquê e as nuances do Ettore: `decisoes\2026-10-06_R1-objetivo-medicao-recursos.md`.
+
+| # | decisão |
+|---|---|
+| Q34 | Objetivo: atenção concentrada (ver Contexto). Régua: retornos, sentadas, maior trecho sem ele, janelas ao mesmo tempo; os gestos por fase passam a medida secundária. |
+| Q35 | Fila: a dúvida vai para `docs\PERGUNTAS.md` e a fase segue com o que não depende dela; só para quando tudo depende da fila. Os pontos da Q10 continuam "nunca sem o sim", sem travar o resto. Vale a partir do F2, com os ganchos. |
+| Q36 | `PROXIMO.md` com "Decisões pré-aprovadas" e "Sempre me pergunte"; rodada de contingências no fim de todo grill e plano (a Q21 generalizada). |
+| Q37 | Janelas pela posse de arquivo e pelo total de tokens (iguais ou menores que em série, com a mesma qualidade); F6 ∥ F7 depois do F5b. |
+| Q38 | andrej-karpathy-skills: 4º executor do F3b, com critério fixado antes (≥ 20% menos tokens ou menos mudanças fora do pedido, mesmos testes verdes, sem parar mais). |
+| Q39 | Medição semanal automática (`scripts\medir_semana.py` → `metricas\uso-semanal.csv`); metas na "Verificação de ponta a ponta". |
+| Q40 | session-report só nas pastas de teste, sempre com `--dir`, com um gancho que barra o comando sem ele. |
+| Q41 | `cleanupPeriodDays: 90` até o F9 (gravado na R1). |
+| Q42 | Planilha `metricas\uso.xlsx` e balanço automático a cada 15 dias, com as propostas na fila do kit. |
+| Q43 · Q48 | Aviso só pelo Remote Control (ligado sozinho em todo projeto, inclusive nos `desosp-`) + `PushNotification`; onde ele não ligar, nenhum aviso (ADR-0001 D8). |
+| Q44 | `/goal` "portão ou fila" em toda fase de execução. |
+| Q45 | Sonda por arquivo + aviso de "pronto" ao vivo no mesmo domínio, só se o F3a mostrar ganho de tempo ou de tokens. |
+| Q46 | F1b e F2 como neste plano, com as paradas; o modelo novo só vale com os controles (F2, F3). |
+| Q47 | Frente 2 sem mudança. |
+
 ## Ficha de recursos — o fluxo novo (`recursos-do-projeto` §5)
 
 Base: a entrevista de 05-06/10 e a rodada 3; o inventário das pesquisas de 05-06/10 e desta janela.
 
-**AGORA (7)**
+**AGORA (11)**
 
 | recurso | por quê | como saber que funcionou | custo |
 |---|---|---|---|
-| 1. Kit como marketplace local, plugins por grupo; `config\plugins.json` com os plugins de fora (safety-net, claude-md-management, session-report, frontend-design, notion) e o escopo de cada | Q17, Q14, Q6, 6.1 | `instalar_kit.py --verificar`; numa pasta de rascunho, `engenharia` desligado some da lista e ligado aparece; `/grill-me` curto funciona | F1b; menos descrições onde o grupo está desligado |
+| 1. Kit como marketplace local, plugins por grupo; `config\plugins.json` com os plugins de fora (safety-net, claude-md-management, session-report — só nas pastas de teste, com `--dir` —, frontend-design, notion) e o escopo de cada | Q17, Q14, Q6, 6.1, Q40 | `instalar_kit.py --verificar`; numa pasta de rascunho, `engenharia` desligado some da lista e ligado aparece; `/grill-me` curto funciona | F1b; menos descrições onde o grupo está desligado |
 | 2. `uso-do-claude` quebrada no plugin `nucleo`: núcleo ≤ 150 linhas + `modelo-e-esforco`, `fechar-janela`, `pesquisa`, `orquestrar`; `organizar-projetos` só `/` no plugin `kit` | Q4, Q5; §4 (22 KB a cada disparo) | `wc -l` ≤ 150; `perguntas_controle.py` bate; tokens por disparo antes × depois | F2 |
 | 3. Estado em arquivo: `docs\ESTADO.md` (≤ 1 página, reescrito), `docs\PROXIMO.md` (com "Escritas em dado real aprovadas"), `docs\adr\`, `GLOSSARY.md`. Desenho embasado (Q3): arquivo de progresso + `git log` (harness de longa duração da Anthropic), ExecPlan da OpenAI (Progress, Surprises, Decision Log, Outcomes; "recomeçar só com ele"), `STATE.md` do GSD, ADR + glossário do Matt Pocock (`domain-modeling`) | Q3, Q21 | no F3a uma sessão nova recomeça só com eles; no F5a o `ctx0` do app cai | ≤ 1 página por abertura |
-| 4. Ganchos no `nucleo`, em duas camadas: **sempre** (todo projeto: `PreModelSwitch` barra o Sonnet 5; SessionStart avisa modelo e esforço errados e faz `git pull --ff-only` do kit, avisando se divergiu); **só onde existe `docs\ESTADO.md`** (o resto do SessionStart; portão `Stop`, até 8 bloqueios seguidos; guarda de escrita em pasta de dado) | Q3, Q9, Q10, Q12, Q21; lições 1-2 de `pesquisas\2026-10-05_fluxo-atual-dos-projetos.md` | `testar_ganchos.py` (JSON) verde; no F3a barram fechar sem estado, Write fora da lista e `/model sonnet` | ~0 token; milissegundos por evento |
-| 5. Encadeamento por `claude --bg` (desligado em `config\fluxo.json` até o F3c ligar) + reserva `/clear` + gancho + `showClearContextOnPlanAccept` | Q9, Q2 | no F3a a fase 2 começa sozinha; ≤ 2 gestos humanos por fase | um processo novo por fase |
+| 4. Ganchos no `nucleo`, em duas camadas: **sempre** (todo projeto: `PreModelSwitch` barra o Sonnet 5; SessionStart avisa modelo e esforço errados e faz `git pull --ff-only` do kit, avisando se divergiu); **só onde existe `docs\ESTADO.md`** (o resto do SessionStart; portão `Stop`, até 8 bloqueios seguidos, que aceita fechar com a fila gravada; guarda de escrita em pasta de dado; a fila: `PermissionRequest` nega e enfileira na execução largada, `PreToolUse` em `AskUserQuestion` grava em `PERGUNTAS.md` e responde "adiada" — só adiar, nunca escolher) | Q3, Q9, Q10, Q12, Q21, Q35; lições 1-2 de `pesquisas\2026-10-05_fluxo-atual-dos-projetos.md` | `testar_ganchos.py` (JSON) verde; no F3a barram fechar sem estado, Write fora da lista e `/model sonnet`, e a fase segue com as decisões plantadas na fila | ~0 token; milissegundos por evento |
+| 5. Encadeamento por `claude --bg` ou por sessão interativa numa aba nova (com Remote Control e a espera do limite de uso) — o F3a compara e o F3c escolhe; desligado em `config\fluxo.json` até o F3c ligar; reserva `/clear` + gancho + `showClearContextOnPlanAccept` | Q9, Q2, Q37 | no F3a a fase 2 começa sozinha; retornos e maior trecho sem ele medidos | um processo novo por fase |
 | 6. SDD dentro da `orquestrar` | Q5, Q13, Q18 | disputa do F3b com números | ~8 mil tokens por uso + contexto novo por tarefa |
-| 7. Statusline no terminal (modelo, esforço, % do contexto) | Q1; lição 2 (`/effort` grava) | aparece no terminal | 0 token |
+| 7. Statusline no terminal (modelo, esforço, % do contexto, % de 5 h e semanal) | Q1; lição 2 (`/effort` grava); Q39 | aparece no terminal; o % chega ao arquivo que o `medir_semana.py` lê | 0 token |
+| 8. Medição semanal: `scripts\medir_semana.py` (protótipo da R1) → `metricas\uso-semanal.csv` (só números); planilha `metricas\uso.xlsx` (fora do git); gancho semanal sem imprimir; balanço a cada 15 dias (`metricas\BALANCO.md` → `metricas\balancos\`, propostas na fila do kit) | Q39, Q42 | a linha de 29/09 reproduzida; a planilha gerada; o 1º balanço com propostas | ~2 s e 0 token por semana; o balanço, algumas dezenas de milhares de tokens a cada 15 dias |
+| 9. `/goal` "portão ou fila" em toda fase de execução, com a linha pronta no `PROXIMO.md` | Q44 | no F3a a fase não para antes do portão nem da fila | o avaliador custa pouco (documentação) |
+| 10. Remote Control ligado sozinho (`remoteControlAtStartup: true`, gravado na R1) + `PushNotification` nos três casos, com texto só de projeto, fase e contagem | Q43, Q48; ADR-0001 D8 | no F1b: ligou no painel?; no F3a o aviso chega e se responde pelo app | 0 token |
+| 11. `PROXIMO.md` com "Decisões pré-aprovadas" e "Sempre me pergunte"; rodada de contingências no fim de todo grill e plano | Q36, Q21 | no F3a a decisão pré-aprovada não para a fase | algumas linhas por fase |
 
 **QUANDO**
 
@@ -117,15 +160,19 @@ Base: a entrevista de 05-06/10 e a rodada 3; o inventário das pesquisas de 05-0
 | `chief-of-staff` (Matt) | só como lente, numa sessão supervisionada (já instalada, só `/`) |
 | `implement-spec` (Matt) | só tickets independentes, até 3 implementadores, 1 ticket de teste antes, sem push (já instalada, só `/`) |
 | Workflow e `/effort ultracode` | 4+ itens do mesmo formato, conferidos por comando, sem dado de paciente, teto 10; ultracode só com motivo escrito |
-| `/goal` | fase longa com condição demonstrável pela saída |
 | Estilos de saída `learning` / `explanatory` | quando o Ettore quiser aprender o código de um projeto (12.5: vibe coder aprendendo) |
-| Remote Control como orquestrador | se o experimento do F3a passar |
+| Janela coordenadora pequena (lança fases e sondas e repassa tudo; o desenho do §6.3 do registro) | acima de 3 ou 4 janelas ao mesmo tempo (Q45) |
 | Context7 | DASH (F8), bibliotecas que mudam rápido |
 | Playwright MCP | só numa janela de depuração do app |
 | GitHub MCP ou `gh` | quando houver issues, PRs ou nuvem |
 | Plugin do Notion e conectores do claude.ai | ADR-0001 D4: nos `pessoal-*`, ligados; nos `desosp-`, todos negados pelo nome menos o Google Drive; em `pesquisa-` e `estudo-`, `disableClaudeAiConnectors: true` (+ `.mcp.json`) — no `.claude\settings.json` versionado |
 | Conector PubMed (escopo de projeto), `paper-lookup`, `scientific-critical-thinking`, `pergunta-clinica` | `pesquisa-clinica` (N5) |
-| `subagentPromptCacheTtl: "1h"` | se o `session-report` mostrar releitura cara de subagente |
+| `subagentPromptCacheTtl: "1h"` | se a medição semanal mostrar cache gravado alto nos subagentes |
+| andrej-karpathy-skills | passou no critério do F3b (Q38) → `config\plugins.json` no F3c |
+| Mensagens entre sessões (`SendMessage`, aviso de "pronto") | o F3a mostrou ganho de tempo ou de tokens (Q45); só dentro do mesmo domínio |
+| `askUserQuestionTimeout` | sessão interativa que o Ettore larga (não vale em `--bg` nem no Remote Control) |
+| OpenTelemetry só com métricas (nunca `OTEL_LOG_USER_PROMPTS` nem o corpo da API) | se a medição pelas transcrições não bastar |
+| herdr | mais de 3 sessões de terminal ao mesmo tempo |
 | Diagrama (Mermaid, mapa mental) **para gente** | no estudo (N1) e no guia, renderizado; nunca como fonte única de regra que o Claude lê |
 
 **NÃO**
@@ -142,6 +189,12 @@ Base: a entrevista de 05-06/10 e a rodada 3; o inventário das pesquisas de 05-0
 | Plugin `healthcare` inteiro | traz extração de nota clínica |
 | hookify, security-guidance | `python3` da Loja; revisão por LLM a cada `Stop` |
 | Mermaid no que o Claude lê (CLAUDE.md, ESTADO, skills, regras) | na regra real de roteamento: prosa 335 caracteres, lista 347, tabela 390, Mermaid 445-542; o único estudo direto (FlowBench, só GPT) dá ganho no passo seguinte mas sessão inteira igual à prosa; a Anthropic recomenda títulos, listas numeradas e tabelas, e 0 de 7 skills oficiais usam Mermaid. Reabrir só se surgir máquina de estados com laço que lista e tabela não deem conta |
+| Aviso por gancho para ntfy, toast, Telegram ou Pushover | não deixa responder pelo celular; o aviso fica só com o Remote Control (Q43) |
+| ccusage, Claude-Code-Usage-Monitor, claude-code-otel | repetem a medição semanal; os dois últimos exigem uv, Docker ou Bun |
+| `/insights` | gasta tokens e escreve texto das conversas de todos os projetos |
+| claude-squad, ccmanager | exigem tmux ou WSL; sem Windows nativo |
+| Nimbalyst, Vibe Kanban | telemetria e servidor de sincronia; a empresa do Vibe Kanban encerrou |
+| Channels (Telegram, Discord) | exige Bun e manda texto de ferramenta a terceiros |
 
 **Regras para escrever**
 
@@ -153,6 +206,7 @@ Base: a entrevista de 05-06/10 e a rodada 3; o inventário das pesquisas de 05-0
   (ADR-0001 D6); conectores pela D4 do ADR-0001 (`desosp-`: todos negados menos o Drive; `pesquisa-` e `estudo-`:
   `disableClaudeAiConnectors: true`; `pessoal-*`: ligados).
 - Memória automática só com preferência e correção; nunca estado.
+- Texto de aviso no celular (`PushNotification`): só projeto, fase e contagem; nunca nome nem pseudônimo (ADR-0001 D8).
 - No nível global, só dispara sozinha a skill que precisa disparar sem o Ettore lembrar (núcleo, `modelo-e-esforco`,
   `fechar-janela`, `orquestrar`, `pesquisa`); o resto é só `/`.
 - Skill de domínio mora no projeto (`.claude\skills\`), nunca no kit.
@@ -230,6 +284,9 @@ prova. As correções que o Ettore escolher (no F5a) viram o F5b.
 - CLAUDE.md pessoal (a regra nova); `LEIA-ME.md` do kit (estrutura, instalação nos dois PCs, guia e gerador);
   `COMO_OPERAR.md` só com a parte "até o F3" (a parte "depois do F3" entra no F3c, se o laço passar); guia em Word com a
   operação como 1ª parte; aviso no guia do Claude Docs (Q28).
+- R1: na abertura, conferir se o Remote Control ligou sozinho (painel e terminal); nas paradas, um `PushNotification`
+  "claude-kit · F1b · precisa de você"; o session-report sai do escopo de usuário (backup antes) e o `config\plugins.json`
+  o registra só nas pastas de teste (Q40). O resto como está (Q46).
 - Portão: `instalar_kit.py --verificar`; ligar e desligar `engenharia` muda a lista; `/grill-me` curto; nenhuma junção
   sobrando; o gancho das cores dispara; guia regenerado.
 
@@ -246,28 +303,51 @@ prova. As correções que o Ettore escolher (no F5a) viram o F5b.
 - Ganchos no `nucleo` (base: `desosp-app\.claude\hooks\abertura.py`), nas duas camadas da Ficha, item 4.
 - Settings, com backup e a outra janela fechada: statusline, `showClearContextOnPlanAccept: true`, limpeza das 4
   permissões com caminho que não existe mais.
+- Medição (Q39, Q42): `scripts\medir_semana.py` completo a partir do protótipo da R1 (planilha `metricas\uso.xlsx` com
+  openpyxl, fora do git; `metricas\BALANCO.md`); o gancho de abertura roda a medição se a última linha tem mais de 7 dias
+  (sem imprimir) e avisa o balanço vencido (15 dias); a statusline anota o % de 5 h e o semanal num arquivo local.
+- Fila e execução largada (Q35, Q36, Q44): modelo de `PERGUNTAS.md`; o protocolo no `fechar-janela` e no `orquestrar`;
+  os ganchos `PermissionRequest` e `PreToolUse` em `AskUserQuestion` (só adiar, nunca escolher); o `Stop` aceita fechar
+  com a fila gravada; o modelo de `PROXIMO.md` com "Decisões pré-aprovadas", "Sempre me pergunte" e a linha `/goal`; a
+  rodada de contingências na nossa skill (a `grilling` não se mexe).
+- Aviso (Q43, Q48): a regra do `PushNotification` (três casos; texto da D8 do ADR-0001).
+- Janelas e sonda (Q37, Q45), na `orquestrar`: um escritor por projeto ou worktree; o % de 5 h antes de abrir outra
+  janela; a sonda por arquivo e o "pronto" ao vivo só no mesmo domínio, se o F3a mostrar ganho.
+- Esforço dos subagentes: na semana de 29/09, 1.197 chamadas do Sonnet 5.5 em `max`, quase todas em subagentes;
+  conferir se o subagente herda o esforço da janela e fixá-lo por papel.
 - No fim, cria `C:\CLAUDE-PROJETOS\teste-fluxo\` e `teste-ferramentas\` vazias, com `git init` (o gancho das cores vai
-  perguntar a cor: `sem-cor`).
-- Portão: `testar_ganchos.py` verde; `perguntas_controle.py` (~10 perguntas) bate; núcleo ≤ 150 linhas; custo fixo
-  menor (número do `/context`); as duas pastas de teste criadas; guia regenerado.
+  perguntar a cor: `sem-cor`); nas duas, o session-report ligado no `.claude\settings.json`, um gancho que barra o
+  `analyze-sessions` sem `--dir` e o HTML no `.gitignore` (Q40).
+- Portão: `testar_ganchos.py` verde (com os ganchos da fila); `perguntas_controle.py` (~10 perguntas) bate; núcleo ≤ 150
+  linhas; custo fixo menor (número do `/context`); o `medir_semana.py` reproduz a linha de 29/09 do
+  `metricas\uso-semanal.csv` e gera a planilha; as duas pastas de teste criadas; guia regenerado.
 
 **F3a — o laço (`teste-fluxo`, dado sintético).** Critérios: aprovar plano limpando o contexto (painel e terminal);
-fase 1 → `ESTADO.md` + `PROXIMO.md` → fase 2 por `--bg` em Sonnet 5.5, parando numa decisão plantada; a sessão `--bg`
-trabalha em worktree e o resultado volta ao ramo principal; portão `Stop`; guarda de escrita em `teste-fluxo-dados\`;
-reserva `/clear` + gancho; `/model sonnet` barrado; statusline; celular (no máximo 1 hora); medição com o `medir_uso.py`.
-Portão: `RESULTADO.md` com prova por critério; ≤ 2 gestos humanos por fase; o resultado salvo em `claude-kit\pesquisas\`
-(sem mexer no `INDICE.md`).
+fase 1 → `ESTADO.md` + `PROXIMO.md` → fase 2 em Sonnet 5.5 lançada de dois jeitos — por `--bg` e por sessão interativa
+numa aba nova —, anotando se começa sozinha, se o Remote Control liga, se o aviso chega ao celular e se ela retoma depois
+do limite de uso; a fila (duas decisões plantadas vão para o `PERGUNTAS.md` e a fase segue com o resto); `/goal` "portão
+ou fila" numa sessão `--bg`; a sessão `--bg` trabalha em worktree e o resultado volta ao ramo principal; portão `Stop`;
+guarda de escrita em `teste-fluxo-dados\`; reserva `/clear` + gancho; `/model sonnet` barrado; statusline; as mesmas 3
+fases em série e em paralelo (tokens e tempo: a condição da Q37); a sonda (duas fases que precisam da mesma pesquisa:
+cada uma sozinha × uma sonda que serve às duas; fica só se poupar tempo ou tokens, Q45); medição com o
+`medir_semana.py`. Portão: `RESULTADO.md` com prova por critério; retornos e maior trecho sem ele medidos e a fila
+funcionando; o resultado salvo em `claude-kit\pesquisas\` (sem mexer no `INDICE.md`).
 
 **F3b — as ferramentas (`teste-ferramentas`, dado sintético, de preferência no terminal).** Disputa SDD × OMC × sem
-orquestrador (plano de 5 tarefas; executores em Sonnet 5.5 · medium; revisor cego `opus`; uma decisão e um comando
-destrutivo plantados); Headroom; claude-mem; `claude-code-setup` por `--plugin-dir` só no projeto sintético (no app,
-vai para o F5a). Portão: `RESULTADO.md` com números e veredito por ferramenta; desinstalação conferida das que saírem;
-o resultado salvo em `claude-kit\pesquisas\` (sem mexer no `INDICE.md`).
+orquestrador × sem orquestrador com a andrej-karpathy-skills por `--plugin-dir` (Q38) (plano de 5 tarefas; executores em
+Sonnet 5.5 · medium; revisor cego `opus`, que conta também as mudanças fora do pedido e as paradas à toa; uma decisão e
+um comando destrutivo plantados); Headroom; claude-mem; `claude-code-setup` por `--plugin-dir` só no projeto sintético
+(no app, vai para o F5a); medição com o `medir_semana.py` (o session-report só com `--dir` na pasta das transcrições
+deste projeto, Q40). Portão: `RESULTADO.md` com números e veredito por ferramenta (a andrej-karpathy-skills pelo critério
+fixado na R1); desinstalação conferida das que saírem; o resultado salvo em `claude-kit\pesquisas\` (sem mexer no
+`INDICE.md`).
 
 **F3c — ajustes no kit.** As duas linhas no `INDICE.md`; `orquestrar` aponta o vencedor; forma final da descoberta
-(Q20); onde entram claude-mem e Headroom; corrigir o que falhou no F3a e repetir só esse critério; se o laço passou,
-ligar o `--bg` (`config\fluxo.json`) e completar o `COMO_OPERAR.md`. Portão: os critérios que falharam passam; INDICE
-com as duas linhas; guia regenerado.
+(Q20); onde entram claude-mem, Headroom e a andrej-karpathy-skills (pelo critério da Q38); a sonda e as mensagens entre
+sessões pelo critério da Q45; corrigir o que falhou no F3a e repetir só esse critério; se o laço passou, o jeito de lançar
+fases que o F3a mostrou melhor (`--bg` ou aba interativa), ligar o lançamento (`config\fluxo.json`) e o do balanço
+quinzenal, e completar o `COMO_OPERAR.md` (fila, aviso no celular, balanço, janelas). Portão: os critérios que falharam
+passam; INDICE com as duas linhas; guia regenerado.
 
 **F5a — migração do app (principal).** Proteção de dado primeiro (as tarefas do app nas tabelas do ADR-0001 e do
 ADR-0002: `deny` interno da D6, conectores da D4, pre-commit de nomes, CLAUDE.md pela D1); `docs\ESTADO.md` a partir do `HANDOFF_APP.md` (congelado
@@ -311,9 +391,9 @@ regenerado.
 o sem-dono em `IA\00-entrada`; o arquivo pessoal que não é de IA fica onde está; a regra "gravar só em `IA\<projeto>`"
 para os escritores. Portão: tabela aprovada; raiz sem arquivo de IA solto; `IA\00-entrada\LEIA-ME.md` com o registro.
 
-**F9 — guia e retrospectiva.** Guia final; `/retro` do redesenho com os números contra a linha de base; limpar as chaves
-velhas da memória automática (`C--DESOSP`…, 10 arquivos divergentes), com a lista mostrada antes; retrospectiva salva em
-`pesquisas\`. Portão: guia regenerado; retrospectiva com números salva; memória velha limpa ou a lista do que ficou.
+**F9 — guia e retrospectiva.** Guia final; `/retro` do redesenho com os números do `metricas\uso-semanal.csv` e dos
+balanços contra a linha de base; limpar as chaves velhas da memória automática (`C--DESOSP`…, 10 arquivos divergentes),
+com a lista mostrada antes; `cleanupPeriodDays` de volta a 30 (Q41, backup antes); retrospectiva salva em `pesquisas\`. Portão: guia regenerado; retrospectiva com números salva; memória velha limpa ou a lista do que ficou.
 
 **Frente 2 (depois do F5b).** Cada projeto: grill próprio → `recursos-do-projeto` → plano → montagem → GitHub privado;
 prefixo e pasta de dado pelo ADR-0002. Até o grill, o material extraído do chat do agente de produtividade fica em
@@ -336,14 +416,21 @@ prefixo e pasta de dado pelo ADR-0002. Até o grill, o material extraído do cha
 
 ## Verificação de ponta a ponta
 
-| o que | antes (05/10) | meta | como medir |
+A régua da R1 (Q34, Q39) vem primeiro; as metas dela são conferidas nas semanas depois do F5b. Base: a semana de 29/09 a
+05/10 no `metricas\uso-semanal.csv`.
+
+| o que | antes | meta | como medir |
 |---|---|---|---|
-| gestos manuais por janela | ~7 (4 de transporte) | ≤ 2 depois do F3 | contagem no F3a e no F5b |
-| contexto mediano por chamada | 199-317 mil | ≤ 120 mil | `medir_uso.py --sessoes` |
+| retornos (mensagem dele depois de mais de 30 min com a sessão parada) | 29 na semana | metade | `scripts\medir_semana.py` |
+| sentadas (mensagens dele em blocos com até 20 min entre elas) | 50 blocos, 613 min | metade dos blocos | idem |
+| maior trecho do Claude sem ele (todas as janelas) | 92 min (mediana de 3 min) | o dobro | idem |
+| janelas trabalhando ao mesmo tempo (máximo por dia) | 4 | sobe quando há trabalho independente, com tokens iguais ou menores que em série (F3a) | idem |
+| contexto mediano por chamada | 307 mil (199-317 mil em 05/10) | ≤ 120 mil | idem |
 | `ctx0` app / kernel / planilha | 58 / 66 / 55 mil | ≤ 40 / 50 / 45 mil | idem |
 | CLAUDE.md app / kernel / planilha | 354 / 430 / 226 linhas | < 200 | `wc -l` |
 | estado | handoffs de 575 e 376 KB | `ESTADO.md` ≤ 1 página | tamanho |
-| chamadas no Sonnet 5 por engano | 188 (03/10) | 0 | `modelUsage` no `medir_uso.py` |
+| chamadas no Sonnet 5 por engano / no Opus 5 (rebaixamento) | 296 / 77 na semana | 0 / 0 | `scripts\medir_semana.py` |
+| gestos manuais por janela (secundária) | ~7 (4 de transporte) | ≤ 2 depois do F3 | contagem no F3a e no F5b |
 | qualidade | — | suítes verdes; correções da R0 aceitas; `/retro` sem retrabalho atribuído ao fluxo | testes; F9 |
 
 ## Prompts das janelas
@@ -407,7 +494,7 @@ Plano aprovado: decisoes\2026-10-06_plano-fluxo.md — leia "A cadeia", "Como vo
 Portão: ADRs aprovados; varredura sem achado; git status limpo; push feito; hardlink conferido. Grave o ESTADO.md do kit (≤ 1 página). Resumo: os dois ADRs em 5 linhas, o link do repositório, o resultado da varredura e "Sinais de insuficiência do modelo: nenhum" (ou quais, com o exemplo). Confira e ajuste o prompt do F1b neste plano e entregue-o (modelo e /effort na 1ª linha).
 ```
 
-### R1 — o objetivo, a medição e a última varredura de recursos (pedido do Ettore ao fechar o F1a, 06/10)
+### R1 — o objetivo, a medição e a última varredura de recursos (pedido do Ettore ao fechar o F1a, 06/10) — feita em 06/10
 
 ```
 Opus 5.5 · /effort high — esta janela revê o objetivo do fluxo e decide o que as fases seguintes medem e instalam (erro aqui se espalha por todas); a pesquisa vai para subagentes sonnet; depois do grill, digite /effort medium para escrever.
@@ -441,16 +528,16 @@ Portão: as decisões gravadas e aprovadas; a linha de base em metricas\; as pes
 ```
 Opus 5.5 · /effort medium — reestruturação conferida por comando a cada passo; suba para /effort high se uma skill sumir ou duplicar sem você notar.
 
-Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: git pull --ff-only; git status limpo; leia docs\ESTADO.md e o caixa\INDICE.md (a janela das cores fechou em 06/10).
+Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: git pull --ff-only; git status limpo; leia docs\ESTADO.md e o caixa\INDICE.md (a janela das cores fechou em 06/10). Confira se o Remote Control ligou sozinho nesta janela (R1; ADR-0001 D8) e anote no ESTADO.md; se não ligou no painel, anote também para o F3a.
 
 ## Contexto
-Plano: decisoes\2026-10-06_plano-fluxo.md (bloco F1b, Ficha, "Como você opera"). Q6, Q14, Q17 e §6.1 do registro decisoes\2026-10-06_entrevista-fluxo.md. Privacidade e isolamento: decisoes\adr\0001-privacidade.md e 0002-isolamento.md (o kit nunca recebe paciente; o pre-commit roda o scripts\checa_kit.py). Fatos e fontes: pesquisas\2026-10-06_marketplace-local-e-skills-por-projeto.md (pasta local serve de marketplace; plugin com caminho relativo carrega no lugar; skill de plugin atende pelo nome curto; enabledPlugins do projeto vence o do usuário; skillOverrides não vale para skill de plugin).
+Plano: decisoes\2026-10-06_plano-fluxo.md (bloco F1b, Ficha, "Como você opera"). Q6, Q14, Q17 e §6.1 do registro decisoes\2026-10-06_entrevista-fluxo.md. Privacidade e isolamento: decisoes\adr\0001-privacidade.md e 0002-isolamento.md (o kit nunca recebe paciente; o pre-commit roda o scripts\checa_kit.py). Fatos e fontes: pesquisas\2026-10-06_marketplace-local-e-skills-por-projeto.md (pasta local serve de marketplace; plugin com caminho relativo carrega no lugar; skill de plugin atende pelo nome curto; enabledPlugins do projeto vence o do usuário; skillOverrides não vale para skill de plugin). R1: decisoes\2026-10-06_R1-objetivo-medicao-recursos.md — Q46: esta fase roda como está, com as paradas; ao parar para pedir o "sim", mande um PushNotification com o texto "claude-kit · F1b · precisa de você" (nada além disso; ADR-0001 D8). Q40: o session-report sai do escopo de usuário e fica só nas pastas de teste.
 
 ## O que fazer
 1. Teste antes de tudo: .claude-plugin\marketplace.json na raiz do kit; plugins\planejamento\ com grill-me e grilling COPIADAS; claude plugin marketplace add C:\CLAUDE-PROJETOS\claude-kit; numa pasta de rascunho com .claude\settings.json, ligar e desligar o grupo e conferir a lista de skills, o /grill-me curto (com a junção antiga ainda lá haverá nome repetido: anote o que acontece), a edição valendo com /reload-plugins e nenhuma cópia em ~\.claude\plugins\cache. Falhou algo: pare e traga ao Ettore.
 2. Grupos (o nosso e o de terceiros em plugins separados; por onde se usa): nucleo (nosso; todo projeto), kit (nosso; só no kit), planejamento (terceiros; todo projeto), engenharia (terceiros; projetos de código). Mostre a tabela skill → grupo em uma tela e espere o "sim". Cada plugin de terceiros com origem.json (skill → repositório → commit).
 3. Migre grupo a grupo: plugin → backup da junção → remove a junção daquele grupo em ~\.claude\skills → confere. As nossas que o F2 vai quebrar entram como estão. O organizar-projetos (a janela das cores já fechou): ao movê-lo, ajuste o caminho do gancho das cores no ~\.claude\settings.json (backup antes) e confira que o gancho ainda dispara.
-4. config\plugins.json (marketplaces e plugins de fora: cc-marketplace/cc-safety-net, claude-md-management, session-report, frontend-design, notion; escopo de cada um). scripts\instalar_kit.py (substitui o ligar_claude.py): marketplace do kit, plugins de fora, git config core.hooksPath .githooks, --verificar (junção sobrando, nome repetido, grupo faltando, hardlink do CLAUDE.md pessoal), o trecho de enabledPlugins por tipo de projeto e o comando da política do safety-net para o Ettore rodar. O hardlink quebra quando um git pull muda o CLAUDE.md (o git grava arquivo novo): antes de escrever o religamento, teste trocar o hardlink por um ~\.claude\CLAUDE.md com só a linha @C:/CLAUDE-PROJETOS/claude-kit/CLAUDE.md (import); se o import carregar o texto numa sessão nova, ele substitui o hardlink (e a regra do hardlink sai do CLAUDE.md e da memória). scripts\atualizar_terceiros.py: npx skills add numa pasta de preparo → copia para o plugin → atualiza o origem.json.
+4. config\plugins.json (marketplaces e plugins de fora: cc-marketplace/cc-safety-net, claude-md-management, session-report — escopo de projeto, só em teste-fluxo e teste-ferramentas, sempre com --dir (Q40) —, frontend-design, notion; escopo de cada um); desligue o session-report no escopo de usuário (backup do ~\.claude\settings.json antes). scripts\instalar_kit.py (substitui o ligar_claude.py): marketplace do kit, plugins de fora, git config core.hooksPath .githooks, --verificar (junção sobrando, nome repetido, grupo faltando, hardlink do CLAUDE.md pessoal), o trecho de enabledPlugins por tipo de projeto e o comando da política do safety-net para o Ettore rodar. O hardlink quebra quando um git pull muda o CLAUDE.md (o git grava arquivo novo): antes de escrever o religamento, teste trocar o hardlink por um ~\.claude\CLAUDE.md com só a linha @C:/CLAUDE-PROJETOS/claude-kit/CLAUDE.md (import); se o import carregar o texto numa sessão nova, ele substitui o hardlink (e a regra do hardlink sai do CLAUDE.md e da memória). scripts\atualizar_terceiros.py: npx skills add numa pasta de preparo → copia para o plugin → atualiza o origem.json.
 5. CLAUDE.md pessoal: a regra do ligar_claude.py passa a instalar_kit.py e atualizar_terceiros.py (hardlink: gravar no próprio arquivo; conferir com fsutil). LEIA-ME.md do kit: estrutura, instalação nos dois PCs, o guia e o gerador.
 6. COMO_OPERAR.md na raiz do kit, só com a parte "até o F3" da seção "Como você opera" (a parte "depois do F3" entra no F3c, se o laço passar), a partir da Parte 2 de docs\2026-10-06_o-que-mudou-e-como-operar.md (não escreva de novo; aponte para ele); o gerar_guia_skills.py passa a gerar o GUIA_DAS_SKILLS.docx com a operação como 1ª parte e as skills por grupo. Regere.
 7. Q28: no guia antigo do Claude Docs (https://claude.ai/code/artifact/954e4c88-eb09-4a18-b4e5-f95f27004488), um aviso no topo apontando para o GUIA_DAS_SKILLS.docx (carregue antes a skill de docs).
@@ -472,7 +559,7 @@ Opus 5.5 · /effort high — as skills do núcleo guiam toda sessão futura e o 
 Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: F1b fechado; instalar_kit.py --verificar passa; a janela das cores fechada.
 
 ## Contexto
-Plano: decisoes\2026-10-06_plano-fluxo.md (bloco F2, Ficha, "Como você opera"). Do registro decisoes\2026-10-06_entrevista-fluxo.md, leia §5 (Q3, Q4, Q5, Q9, Q10, Q13, Q14, Q15) e §6.2, §6.4 e §6.5. Pesquisas: 2026-10-06_continuar-em-contexto-limpo-sem-copiar-prompt.md; 2026-10-06_ferramentas-pedidas-e-orquestradores.md (SDD, regra do Workflow); 2026-10-05_sessoes-memoria-plugins-claude-code.md (ganchos); 2026-10-05_fluxo-atual-dos-projetos.md (as lições). Ao escrever skill, use a skill writing-for-agents.
+Plano: decisoes\2026-10-06_plano-fluxo.md (bloco F2, Ficha, "Como você opera"). Do registro decisoes\2026-10-06_entrevista-fluxo.md, leia §5 (Q3, Q4, Q5, Q9, Q10, Q13, Q14, Q15) e §6.2, §6.4 e §6.5. Pesquisas: 2026-10-06_continuar-em-contexto-limpo-sem-copiar-prompt.md; 2026-10-06_ferramentas-pedidas-e-orquestradores.md (SDD, regra do Workflow); 2026-10-05_sessoes-memoria-plugins-claude-code.md (ganchos); 2026-10-05_fluxo-atual-dos-projetos.md (as lições). R1: decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (seções 2, 5 e 6) e as pesquisas 2026-10-06_medicao-semanal-de-uso.md e 2026-10-06_varredura-final-atencao-concentrada.md; ADR-0001 D8. Ao escrever skill, use a skill writing-for-agents.
 
 ## O que fazer
 1. Quebrar a uso-do-claude no plugin nucleo: núcleo ≤ 150 linhas (princípio, escada, sinais de insuficiência, armadilhas — inclusive: subagente com model: sonnet roda no 5.5; o Sonnet 5 vem só de /model sonnet e --model sonnet —, contexto, uma janela, pontos de checagem de recursos da Q14, exceção da Q15) + modelo-e-esforco + fechar-janela (ESTADO.md reescrito, PROXIMO.md, caixa, resumo com "Sinais", fechar por fim de fase ou ~150 mil ou troca de modelo, push pela Q10; lançar a próxima por claude --bg só se config\fluxo.json disser lancar_bg: true — fica false até o F3c) + pesquisa (biblioteca → subagente → salvar) + orquestrar (roteamento da Q18, os 3 papéis, modelo por papel, paradas da Q10, teto 10 e acima disso estimativa + "sim", cache de subagente). Só disparam sozinhas as que precisam; o resto só /. O reference.md fica como consulta; o medir_uso.py vai para scripts\ e as referências mudam (recursos-do-projeto, CLAUDE.md pessoal, COMO_OPERAR.md). Meça antes e depois (tamanho, /context).
@@ -482,14 +569,19 @@ Plano: decisoes\2026-10-06_plano-fluxo.md (bloco F2, Ficha, "Como você opera").
 5. Ganchos no plugin nucleo (base: C:\CLAUDE-PROJETOS\desosp-app\.claude\hooks\abertura.py), cada um testado por JSON (scripts\testar_ganchos.py), em duas camadas. Sempre, em todo projeto: PreModelSwitch (barra o Sonnet 5, deixa o 5.5); SessionStart só com o aviso de modelo e esforço errados e o git pull --ff-only do kit (no máximo uma vez por hora; avisa se divergiu). Só onde existir docs\ESTADO.md: o resto do SessionStart (estado curto, caixa, git de outra janela; no clear, injeta o PROXIMO.md); Stop (portão: fase dada como pronta sem ESTADO.md reescrito → bloqueia, até 8 vezes seguidas); PreToolUse (Write/Edit em pasta de dado fora da lista aprovada → bloqueia). Nos projetos ainda não migrados, os ganchos antigos deles continuam.
 6. Settings, com backup e só com a outra janela fechada: statusline (modelo, esforço, % do contexto), showClearContextOnPlanAccept: true, limpeza das 4 permissões com caminho que não existe mais.
 7. perguntas_controle.py com ~10 perguntas (ex.: a 1ª linha do prompt; quando usar Workflow; onde mora o estado) numa sessão nova: as respostas batem com as regras. Regenere o guia.
-8. Crie C:\CLAUDE-PROJETOS\teste-fluxo\ e teste-ferramentas\ vazias, com git init e um LEIA-ME de uma linha (o gancho das cores vai perguntar a cor: sem-cor).
+8. Crie C:\CLAUDE-PROJETOS\teste-fluxo\ e teste-ferramentas\ vazias, com git init e um LEIA-ME de uma linha (o gancho das cores vai perguntar a cor: sem-cor). Nas duas, ligue o session-report no .claude\settings.json, com um gancho que barra o analyze-sessions sem --dir, e ponha o HTML dele no .gitignore (Q40).
+9. Medição (Q39, Q42): complete o scripts\medir_semana.py (protótipo da R1; só números): a planilha metricas\uso.xlsx (openpyxl; uma aba com as semanas e outra com os gráficos da régua e a linha da meta; metricas/*.xlsx no .gitignore); o metricas\BALANCO.md (o prompt fixo do balanço: ler o CSV, comparar com as metas, gravar metricas\balancos\AAAA-MM-DD.md e pôr cada ajuste proposto na fila do kit); no gancho de abertura do nucleo, a linha semanal roda em segundo plano se a última tem mais de 7 dias (sem imprimir nada) e o balanço vencido (15 dias) vira uma linha só com números (lançar a sessão do balanço sozinho fica para o F3c); a statusline anota o % de 5 h e o semanal (rate_limits) num arquivo local que o medir_semana.py lê.
+10. Fila e execução largada (Q35, Q36, Q44): o modelo de docs\PERGUNTAS.md (problema, opções, recomendação, o que depende); o protocolo no fechar-janela e no orquestrar (a dúvida vai para a fila; segue com o que não depende; para só quando tudo depende; os pontos da Q10 nunca sem o "sim"); os ganchos PermissionRequest (na execução largada, nega com mensagem e enfileira) e PreToolUse em AskUserQuestion (grava a pergunta e responde "adiada": só adiar, nunca escolher), testados por JSON; o Stop aceita fechar com perguntas abertas se o ESTADO.md e o PERGUNTAS.md estiverem gravados; o modelo de PROXIMO.md ganha "Decisões pré-aprovadas", "Sempre me pergunte" e a linha /goal "portão ou fila"; a rodada de contingências no fim de todo grill e plano entra na nossa skill (não mexa na grilling).
+11. Aviso (Q43, Q48; ADR-0001 D8): no fechar-janela e no orquestrar, o PushNotification só nos três casos (tudo depende da fila; a cadeia terminou; falha que só ele resolve), com o texto "projeto · fase · N perguntas"; onde o Remote Control não estiver ligado, nenhum aviso.
+12. Janelas e sonda (Q37, Q45), na orquestrar: tantas janelas quanto houver trabalho independente, um escritor por projeto ou worktree (até 3), o % de 5 h da statusline antes de abrir outra; a sonda grava em arquivo e as janelas leem; o aviso de "pronto" por SendMessage só no mesmo domínio e só se o F3a mostrar ganho.
+13. Esforço dos subagentes: na semana de 29/09, 1.197 chamadas do Sonnet 5.5 rodaram em max, quase todas em subagentes; confira na documentação se o subagente herda o esforço da janela e, se der, fixe o esforço por papel na orquestrar.
 
 ## Limites
 - Nada em projeto (desosp-*, pesquisa-*): os projetos entram nas fases deles.
 - Commit por assunto, caminho explícito.
 
 ## Ao fechar
-Portão: testar_ganchos.py verde; perguntas_controle.py bate; núcleo ≤ 150 linhas; /context com o custo fixo menor (o número); as duas pastas de teste criadas; guia regenerado. ESTADO.md do kit. Resumo com "Sinais de insuficiência do modelo". Confira e ajuste os prompts do F3a e do F3b neste plano e entregue os dois (rodam em paralelo).
+Portão: testar_ganchos.py verde (com os ganchos da fila); perguntas_controle.py bate; núcleo ≤ 150 linhas; /context com o custo fixo menor (o número); o medir_semana.py reproduz a linha de 29/09 do metricas\uso-semanal.csv e gera a planilha; as duas pastas de teste criadas; guia regenerado. ESTADO.md do kit. Resumo com "Sinais de insuficiência do modelo". Confira e ajuste os prompts do F3a e do F3b neste plano e entregue os dois (rodam em paralelo).
 ```
 
 ### F3a — o laço
@@ -500,20 +592,23 @@ Opus 5.5 · /effort medium — esta janela orquestra e confere critérios escrit
 Janela aberta em C:\CLAUDE-PROJETOS\teste-fluxo\ (criada no F2). Crie a irmã teste-fluxo-dados\ para o teste do gancho. Em paralelo roda o F3b em teste-ferramentas\: não mexa lá.
 
 ## Contexto
-Plano: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco F3a, "Como você opera"). Do registro claude-kit\decisoes\2026-10-06_entrevista-fluxo.md, leia Q9 (§5), §6.3 (celular) e §6.5 (peças). Linha de base: claude-kit\pesquisas\2026-10-05_fluxo-atual-dos-projetos.md (~7 passos manuais por janela; contexto mediano de 199 a 317 mil).
+Plano: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco F3a, "Como você opera"). Do registro claude-kit\decisoes\2026-10-06_entrevista-fluxo.md, leia Q9 (§5), §6.3 (celular) e §6.5 (peças). Linha de base: claude-kit\metricas\uso-semanal.csv (R1: retornos, sentadas, maior trecho sem ele, tokens) e claude-kit\pesquisas\2026-10-05_fluxo-atual-dos-projetos.md (~7 passos manuais por janela). R1: claude-kit\decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (Q35, Q37, Q43-Q45).
 
 ## O que fazer
 1. Projeto sintético mínimo (ex.: CSV sintético de internações → relatório), especificação curta, plano de 3 fases com critério de pronto e testes. Para este teste, config\fluxo.json do kit vale como lancar_bg: true só aqui (variável de ambiente ou cópia local; não mude o do kit).
 2. Rodar e anotar, com prova, cada critério (passou / falhou / como):
    a. aprovar o plano com "Yes, clear context" no painel e no terminal;
-   b. a fase 1 fecha (fechar-janela) → ESTADO.md + PROXIMO.md → lança a fase 2 por claude --bg --name … --model claude-sonnet-5-5 --effort medium "Leia docs/PROXIMO.md e siga"; a fase 2 para numa decisão plantada e espera; claude agents, attach e logs mostram;
-   c. a sessão --bg trabalha em worktree? como o resultado volta ao ramo principal?
-   d. o portão Stop barra fechar sem ESTADO.md;
-   e. o gancho barra Write em teste-fluxo-dados\ fora da lista aprovada e deixa a que está na lista;
-   f. reserva no painel: /clear + gancho injeta o PROXIMO.md; "siga" continua;
-   g. /model sonnet é barrado; o Sonnet 5.5 pela lista passa; a statusline mostra modelo, esforço e %;
-   h. celular (no máximo 1 hora): uma janela pequena no terminal, com Remote Control, lança uma fase por --bg e recebe o aviso de volta;
-   i. medir com o medir_uso.py --sessoes: gestos humanos por fase, contexto mediano por fase, tokens totais.
+   b. a fase 1 fecha (fechar-janela) → ESTADO.md + PROXIMO.md → lança a fase 2 (claude-sonnet-5-5 · medium) de dois jeitos: por claude --bg --name … --model claude-sonnet-5-5 --effort medium "Leia docs/PROXIMO.md e siga" e por uma sessão interativa numa aba nova do terminal; para cada jeito: começou sozinha? o Remote Control ligou? o PushNotification chegou ao celular e deu para responder pelo app? ao bater o limite de uso, ela espera e retoma?; claude agents, attach e logs mostram;
+   c. a fila (Q35): duas decisões plantadas na fase 2 vão para o docs\PERGUNTAS.md e a fase segue com o que não depende delas; os ganchos de AskUserQuestion e de PermissionRequest funcionam também em --bg; a fase só para quando tudo depende da fila;
+   d. /goal "portão ou fila" numa sessão --bg (Q44);
+   e. a sessão --bg trabalha em worktree? como o resultado volta ao ramo principal?
+   f. o portão Stop barra fechar sem ESTADO.md e aceita fechar com a fila gravada;
+   g. o gancho barra Write em teste-fluxo-dados\ fora da lista aprovada e deixa a que está na lista;
+   h. reserva no painel: /clear + gancho injeta o PROXIMO.md; "siga" continua;
+   i. /model sonnet é barrado; o Sonnet 5.5 pela lista passa; a statusline mostra modelo, esforço, % do contexto e os % de 5 h e semanal;
+   j. paralelo (Q37): as mesmas 3 fases em série e em paralelo (3 sessões ao mesmo tempo, arquivos separados): tokens totais e tempo de relógio; vale se os tokens forem iguais ou menores;
+   k. sonda (Q45): duas fases paralelas que precisam da mesma pesquisa — cada uma pesquisando sozinha × uma sonda que grava em arquivo e serve às duas, com o aviso de "pronto" por SendMessage; fica só se poupar tempo ou tokens;
+   l. medir com o scripts\medir_semana.py: retornos, maior trecho sem ele, sentadas, tokens por fase.
 3. RESULTADO.md: critério → resultado → prova; o que falhou vira tarefa do F3c.
 
 ## Limites
@@ -521,7 +616,7 @@ Plano: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco F3a, "Como você ope
 - No máximo 2 tentativas diferentes por critério; falhou, anota e segue.
 
 ## Ao fechar
-Portão: RESULTADO.md com prova por critério; ≤ 2 gestos humanos por fase (ou o motivo de não ter dado). Copie o RESULTADO.md para claude-kit\pesquisas\2026-10-XX_teste-do-laco.md (cabeçalho fixo da biblioteca). Resumo com "Sinais de insuficiência do modelo". O próximo é o F3c (prompt neste plano), depois que o F3b também fechar.
+Portão: RESULTADO.md com prova por critério; retornos e maior trecho sem ele medidos; a fila funcionou (as duas decisões ficaram na fila e a fase seguiu) — ou o motivo de não ter dado. Copie o RESULTADO.md para claude-kit\pesquisas\2026-10-XX_teste-do-laco.md (cabeçalho fixo da biblioteca). Resumo com "Sinais de insuficiência do modelo". O próximo é o F3c (prompt neste plano), depois que o F3b também fechar.
 ```
 
 ### F3b — as ferramentas
@@ -532,15 +627,15 @@ Opus 5.5 · /effort medium — esta janela organiza e mede; executores fixados e
 Janela aberta em C:\CLAUDE-PROJETOS\teste-ferramentas\ (criada no F2), de preferência no terminal (o Headroom quebra a extensão do VS Code). Em paralelo roda o F3a: não mexa em teste-fluxo\.
 
 ## Contexto
-Plano: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco F3b). Do registro claude-kit\decisoes\2026-10-06_entrevista-fluxo.md, leia §12.7. Q18, Q19, Q20 (tabela do plano). Pesquisa: claude-kit\pesquisas\2026-10-06_ferramentas-pedidas-e-orquestradores.md (custos, riscos, flags). Nunca /omc-setup.
+Plano: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco F3b). Do registro claude-kit\decisoes\2026-10-06_entrevista-fluxo.md, leia §12.7. Q18, Q19, Q20 (tabela do plano). Pesquisa: claude-kit\pesquisas\2026-10-06_ferramentas-pedidas-e-orquestradores.md (custos, riscos, flags). R1: Q38 e Q40 (claude-kit\decisoes\2026-10-06_R1-objetivo-medicao-recursos.md) e claude-kit\pesquisas\2026-10-06_andrej-karpathy-skills.md. Nunca /omc-setup.
 
 ## O que fazer
 1. Plano sintético de 5 tarefas ("Task 1" a "Task 5") com testes; três clones limpos.
-2. Disputa: (i) SDD; (ii) OMC — claude plugin install oh-my-claudecode@omc --scope local; OMC_BUDGET_ENFORCE=active e OMC_RUN_BUDGET_TOKENS; ralplan → execute → verify; nada de autopilot, ralph, team, ask; (iii) uma sessão sem orquestrador. Medir: tokens (medir_uso.py, session-report), tempo, testes, defeitos achados pelo revisor cego (sem saber qual executor), paradas respeitadas (uma decisão e um comando destrutivo plantados), intervenções humanas. Uma tentativa por executor; se um travar ou passar de 2 horas, pare-o e anote.
+2. Disputa: (i) SDD; (ii) OMC — claude plugin install oh-my-claudecode@omc --scope local; OMC_BUDGET_ENFORCE=active e OMC_RUN_BUDGET_TOKENS; ralplan → execute → verify; nada de autopilot, ralph, team, ask; (iii) uma sessão sem orquestrador; (iv) uma sessão sem orquestrador com a andrej-karpathy-skills carregada por claude --plugin-dir <clone de multica-ai/andrej-karpathy-skills> (sem instalar; Q38). Medir: tokens (scripts\medir_semana.py; o session-report só com --dir na pasta das transcrições deste projeto, Q40), tempo, testes, defeitos achados pelo revisor cego (sem saber qual executor), mudanças fora do pedido e paradas à toa (o revisor conta em todos), paradas respeitadas (uma decisão e um comando destrutivo plantados), intervenções humanas. Uma tentativa por executor; se um travar ou passar de 2 horas, pare-o e anote.
 3. Headroom (só terminal; HEADROOM_BEACON=off, --no-subscription-tracking, --code-memory none): uma tarefa com e sem; passa se cortar ≥ 20% dos tokens com os mesmos testes e sem quebrar nada.
 4. claude-mem (--scope local; DO_NOT_TRACK=1; recusar o observador na nuvem): duas sessões; passa se a 2ª responder 3 perguntas sobre a 1ª sem ler o ESTADO.md, se a compressão (Haiku) custar pouco (o número) e se o bloqueio de releitura não atrapalhar. Anote o que fica global (worker, porta 37777, ~/.claude-mem, Bun).
 5. claude-code-setup sem instalar: claude --plugin-dir <clone do claude-plugins-official>\plugins\claude-code-setup, só neste projeto sintético (no app ele roda no F5a, na janela do app).
-6. Veredito por ferramenta: adotar (onde), adotar com restrição, ou remover — e desinstalação conferida das que saírem (claude plugin list, processos, pastas).
+6. Veredito por ferramenta: adotar (onde), adotar com restrição, ou remover — e desinstalação conferida das que saírem (claude plugin list, processos, pastas). A andrej-karpathy-skills pelo critério fixado na R1: entra se, com os mesmos testes verdes, gastar ≥ 20% menos tokens que o (iii) ou fizer claramente menos mudanças fora do pedido, sem parar mais na decisão plantada; com uma tentativa, só efeito grande aparece.
 
 ## Limites
 - Só dado sintético; nenhum projeto real aberto.
@@ -558,15 +653,15 @@ Opus 5.5 · /effort medium — aplicar resultados medidos; suba para high se um 
 Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: F3a e F3b fechados; os dois resultados em pesquisas\ (2026-10-XX_teste-do-laco.md e 2026-10-XX_ferramentas-testadas.md).
 
 ## Contexto
-Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F3a, F3b, F3c; "Como você opera"). Q9, Q18, Q19, Q20.
+Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F3a, F3b, F3c; "Como você opera"). Q9, Q18, Q19, Q20. R1: decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (seção 5).
 
 ## O que fazer
 1. Leia os dois resultados e acrescente as duas linhas ao pesquisas\INDICE.md.
 2. orquestrar aponta o vencedor da disputa, com os números; se o OMC venceu, mostre ao Ettore o custo de adotá-lo e espere o "sim".
 3. recursos-do-projeto: forma final do passo de descoberta (claude-code-setup por --plugin-dir, ou nada).
-4. claude-mem e Headroom: onde entram, ou a confirmação de que saíram.
+4. claude-mem, Headroom e a andrej-karpathy-skills (pelo critério da Q38: no config\plugins.json ou fora): onde entram, ou a confirmação de que saíram. A sonda e as mensagens entre sessões pelo critério da Q45.
 5. O que falhou no laço: corrija nos ganchos ou nas skills e repita só aquele critério em teste-fluxo\.
-6. Se o laço passou: lancar_bg: true no config\fluxo.json e a parte "depois do F3" no COMO_OPERAR.md; se não passou, fica a reserva (/clear + gancho) e o COMO_OPERAR.md diz isso.
+6. Se o laço passou: o jeito de lançar fases que o F3a mostrou melhor (--bg ou aba interativa com Remote Control) e lancar_bg: true no config\fluxo.json; o lançamento automático do balanço quinzenal (Q42); a parte "depois do F3" no COMO_OPERAR.md (a fila, o aviso no celular, o balanço, as janelas); se não passou, fica a reserva (/clear + gancho) e o COMO_OPERAR.md diz isso.
 7. Regenere o guia.
 
 ## Limites
@@ -709,9 +804,10 @@ Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit.
 
 ## O que fazer
 1. Guia final (gerar_guia_skills.py): a operação e as skills por grupo.
-2. /retro do redesenho: os números contra a linha de base (tabela "Verificação de ponta a ponta" do plano), o que funcionou, o que cortar.
+2. /retro do redesenho: os números do metricas\uso-semanal.csv e dos balanços contra a linha de base (tabela "Verificação de ponta a ponta" do plano), o que funcionou, o que cortar.
 3. Chaves velhas da memória automática (C--DESOSP…, 10 arquivos divergentes): mostre a lista e espere o "sim" antes de limpar.
 4. Salve a retrospectiva em pesquisas\ + INDICE.
+5. cleanupPeriodDays volta a 30 no ~\.claude\settings.json (backup antes; Q41 da R1).
 
 ## Ao fechar
 Portão: guia regenerado; retrospectiva com números salva; memória velha limpa ou a lista do que ficou. Resumo com "Sinais de insuficiência do modelo".

@@ -3,6 +3,7 @@ status: accepted
 data: 2026-10-06
 decidido_por: Ettore (minientrevista em duas rodadas na janela do F1a)
 substitui: as regras "nome de paciente nunca em arquivo versionado" e "console sem linha de paciente" no que conflitarem
+atualizado: 2026-10-06 (R1, D8 — Remote Control e aviso no celular)
 ---
 
 # Privacidade: o paciente aparece por pseudônimo, só nos projetos `desosp-`
@@ -38,7 +39,8 @@ conversa quando o assunto é ele e nunca sai dela. Fora dos `desosp-`, nada de p
 - **Padrão ao inspecionar dado:** contagem, cabeçalho, tipo. Quando a tarefa é sobre um registro, a linha vem com o
   pseudônimo no lugar do nome e dos números.
 - **Regra de saída:** identificador direto nunca vai para arquivo fora das pastas de dado, commit, `ESTADO.md`,
-  `PROXIMO.md`, resumo, prompt de `claude --bg` ou caixa. Mensagem para fora (e-mail, WhatsApp) segue a D7.
+  `PROXIMO.md`, resumo, prompt de `claude --bg`, caixa ou texto de aviso no celular (D8). Mensagem para fora (e-mail,
+  WhatsApp) segue a D7.
 
 **D2 · Repositório**
 - **Código:** identificador direto nunca entra no repositório de código. O pre-commit de nomes, no modelo do
@@ -96,6 +98,21 @@ conversa quando o assunto é ele e nunca sai dela. Fora dos `desosp-`, nada de p
 - O acervo de mensagens antigas só é lido em cópia com marcadores, feita por script.
 - O Claude nunca envia: só redige.
 
+**D8 · Remote Control e aviso no celular (R1, 06/10)**
+- O Remote Control liga sozinho em toda sessão interativa, **inclusive nos `desosp-`**: `remoteControlAtStartup: true`
+  no `~\.claude\settings.json`, gravado na R1. Um projeto pode desligá-lo com `false` no settings dele.
+- **Por quê:** o aviso no celular só serve se o Ettore puder responder dali, e o trabalho longo acontece nos `desosp-`
+  (F5a a F7).
+- **O que se aceitou:** enquanto ele está ligado, a conversa aparece no app e em claude.ai, em todo aparelho logado na
+  conta. Isso inclui o pseudônimo e, quando o conector do Drive trouxer, o nome completo. A retenção não muda (30 dias,
+  com o treino desligado): a conversa já ia à Anthropic para ser processada.
+- **Contornos:**
+  - bloqueio de tela no celular e verificação em duas etapas na conta Claude;
+  - o texto do aviso (`PushNotification`) aparece na tela bloqueada, por isso leva só o projeto, a fase e a contagem
+    (ex.: `desosp-app · F5b parada · 3 perguntas`), nunca nome nem pseudônimo;
+  - o aviso sai só em três casos: a fase parou porque tudo o que sobra depende da fila de perguntas; a cadeia de fases
+    terminou; uma falha que só ele resolve (limite de uso, login, erro).
+
 ## O que não depende do Ettore (dito uma vez, em 06/10)
 
 - O controlador do dado é o hospital ou a operadora. A política deles pode proibir o envio a terceiros (Anthropic,
@@ -125,6 +142,7 @@ identificando o paciente pelas iniciais; o fluxo aqui é o mesmo.
 | D2 | Dado no próprio repositório de código: o histórico é permanente e vai junto em todo clone. "Nunca em repositório": tira a sincronização entre PCs. |
 | D3 | claude-mem nos `desosp-`: o banco global quebra o isolamento (ADR-0002). |
 | D4 | Pasta sincronizada para planilha com paciente e conector só sem paciente (era a recomendação): o Ettore preferiu o conector para tudo. |
+| D8 | Remote Control em todos menos os `desosp-` (`claude --remote-control` só fora deles): o aviso não chegaria onde o trabalho longo acontece. Aviso por gancho para ntfy ou toast: não deixa responder pelo celular, então não serve (Q43 da R1). |
 
 ## Tarefas por fase (as regras dos projetos não mudam antes da fase deles)
 
@@ -133,6 +151,8 @@ identificando o paciente pelas iniciais; o fluxo aqui é o mesmo.
 | F1a (feito) | `~\.claude\CLAUDE.md` (hardlink com `claude-kit\CLAUDE.md`) | Item "Privacidade e isolamento" apontando este ADR e o 0002. |
 | F1a (feito) | `organizar-projetos\ORGANIZAR.md` (regra 7), `prompts.md` (prompt da arrumação) | "Nem ao GitHub" e "arquivo versionado" passam a "repositório de código". |
 | F1a (feito) | memória `recursos-antes-de-recusa` | Aponta este ADR. |
+| R1 (feito) | `~\.claude\settings.json` | `remoteControlAtStartup: true` (D8) e `cleanupPeriodDays: 90` até o F9; backup em `~\.claude\backups\settings.json.2026-10-06_antes-da-R1`. |
+| F2 | núcleo (`fechar-janela`, `orquestrar`) | A regra do aviso da D8: os três casos e o texto sem nome nem pseudônimo. |
 | F5a | `desosp-app\CLAUDE.md:163` e `:264` | "Nenhum nome de paciente" passa a "nenhum identificador direto; pseudônimo pode (D1)". |
 | F5a | `desosp-app` | Pre-commit de nomes (D2); `.claude\settings.json` com o `deny` da D6 e os conectores da D4. |
 | F5c | `desosp-app\app\ia\` | A porta de leitura devolve o pseudônimo e os campos mínimos. |
