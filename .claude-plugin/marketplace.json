@@ -1,12 +1,14 @@
 {
   "name": "claude-kit",
-  "owner": { "name": "Ettore" },
+  "owner": {
+    "name": "Ettore"
+  },
   "description": "As skills do Ettore em grupos, ligados por projeto.",
   "plugins": [
     {
       "name": "planejamento",
       "source": "./plugins/planejamento",
-      "description": "Terceiros: entrevista e planejamento (grill-me, grilling, ...). Todo projeto."
+      "description": "Terceiros: entrevistar, decidir, registrar e escrever para agentes. Liga em todo projeto (escopo de usuário)."
     }
   ]
 }

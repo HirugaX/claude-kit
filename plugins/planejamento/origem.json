@@ -1,0 +1,113 @@
+{
+  "_leia": "De onde veio cada skill deste plugin. Atualize com scripts/atualizar_terceiros.py, nunca à mão. \"hash_da_pasta\" é o hash git da pasta da skill no repositório (do ~/.agents/.skill-lock.json); \"commit\" fica null até a 1ª atualização pelo script.",
+  "skills": {
+    "grill-me": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/productivity/grill-me",
+      "hash_da_pasta": "3df14e2d3a89459bf300614be9247e3ce74798f8",
+      "commit": null,
+      "instalada_em": "2026-10-03",
+      "atualizada_em": "2026-10-03"
+    },
+    "grilling": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/productivity/grilling",
+      "hash_da_pasta": "f0732035b8b1b60ae39454e4191caef32fa91903",
+      "commit": null,
+      "instalada_em": "2026-10-03",
+      "atualizada_em": "2026-10-03"
+    },
+    "grill-with-docs": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/grill-with-docs",
+      "hash_da_pasta": "eedaf2562c83155115e9c649fa3ecaac2e10e81d",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "domain-modeling": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/domain-modeling",
+      "hash_da_pasta": "ea30ee454ba264543dbe40737973b1a5afb9f0e6",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "to-questionnaire": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/productivity/to-questionnaire",
+      "hash_da_pasta": "46dfbeeba12a9e52eef446676f42e7551023d9a9",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "wait-what": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/productivity/wait-what",
+      "hash_da_pasta": "c8b050e6b8c711be1a9008ceacb2126914f0763e",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "teach": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/productivity/teach",
+      "hash_da_pasta": "2ab11f2f51f3c29771edb5d4258d807a49462491",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "writing-for-agents": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/productivity/writing-for-agents",
+      "hash_da_pasta": "ad2925850efb8973a72d2e666f7a975f9a2d4a9b",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "claude-handoff": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/in-progress/claude-handoff",
+      "hash_da_pasta": "6845c30e62e1c0c2c0fbdea8307379197f0b4dc4",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "chief-of-staff": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/in-progress/chief-of-staff",
+      "hash_da_pasta": "4086bbb5127e616878fad9a9fe1db9e78b04c28c",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "retro": {
+      "repositorio": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "caminho": "skills/engineering/retro",
+      "hash_da_pasta": "335c1862a43da9d629abafdb79ca0c0de118be08",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    },
+    "goal-prompt": {
+      "repositorio": "trailofbits/skills",
+      "url": "https://github.com/trailofbits/skills.git",
+      "caminho": "plugins/goal-prompt/skills/goal-prompt",
+      "hash_da_pasta": "863c6a21f6492931e384895b2c81710b688c6b7d",
+      "commit": null,
+      "instalada_em": "2026-10-06",
+      "atualizada_em": "2026-10-06"
+    }
+  }
+}
