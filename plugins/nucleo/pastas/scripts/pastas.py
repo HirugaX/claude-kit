@@ -1,4 +1,4 @@
-r"""O sistema de cores das pastas (pastas.md): aplicar, conferir, manter.
+r"""O sistema de cores das pastas (skill cores-das-pastas, do plugin kit): aplicar, conferir, manter.
 
     python pastas.py instalar [--mae C:\CLAUDE-PROJETOS] [--lapide C:\VELHO ...]   (uma vez por PC; precisa de Pillow)
     python pastas.py aplicar [--ver] [projeto]      --ver: só conta, por projeto e por verbo; nada se escreve
@@ -7,9 +7,12 @@ r"""O sistema de cores das pastas (pastas.md): aplicar, conferir, manter.
     python pastas.py legenda                        <mãe>\LEGENDA DAS PASTAS.html, do mesmo mapa
     python pastas.py vscode [--ver]                 Material Icon Theme + Peacock no .vscode\settings.json de cada projeto
     python pastas.py remover [pasta]                tira os nossos desktop.ini (o alheio fica)
-    python pastas.py ligar-gancho | desligar-gancho [--settings ARQ]   o PostToolUse no settings.json de usuário
+    python pastas.py desligar-gancho [--settings ARQ]   tira do settings.json um gancho das cores antigo (o de antes do F1b)
 
-O código e o mapa se acham pelo local.json (%LOCALAPPDATA%\claude-pastas\local.json), gravado pelo instalar.
+O gancho das cores é do plugin nucleo (plugins\nucleo\hooks\hooks.json): liga onde o nucleo está ligado, sem gravar
+nada em settings.json. O "ligar-gancho" ficou só para dizer isso.
+O código e o mapa se acham pelo local.json (%LOCALAPPDATA%\claude-pastas\local.json), gravado pelo instalar e
+consertado pelo instalar_kit.py do kit.
 Nada aqui segue junção ou link.
 """
 from __future__ import annotations
@@ -31,7 +34,13 @@ import regras as R  # noqa: E402
 
 MODULO = AQUI.parent
 MATCHER = 'Write|Edit|MultiEdit|NotebookEdit|Bash|PowerShell'
-ASSINATURA_GANCHO = 'organizar-projetos/scripts/gancho.py'
+GANCHO_DO_PLUGIN = MODULO.parent / 'hooks' / 'hooks.json'     # plugins/nucleo/hooks/hooks.json
+
+
+def e_gancho_nosso(comando: str) -> bool:
+    """O gancho das cores, no caminho de antes do F2a (organizar-projetos) ou no de agora (nucleo/pastas)."""
+    c = comando.replace('\\', '/')
+    return 'gancho.py' in c and ('organizar-projetos/scripts/' in c or '/pastas/scripts/' in c)
 
 
 # ---------------------------------------------------------------- contexto
@@ -241,11 +250,19 @@ def achados(ctx: Contexto) -> tuple[list[str], list[str]]:
     for lap in ctx.local.get('lapides', []):
         if not Path(lap).is_file():
             prob.append(f'lápide ausente: {lap} (deveria ser um arquivo)')
-    copia = Path.home() / '.claude' / 'skills' / 'uso-do-claude'
-    if copia.is_dir() and not R.e_link(copia):
-        outro = copia / 'organizar-projetos' / 'mapa.json'
-        if outro.exists() and outro.read_bytes() != ctx.arq_mapa.read_bytes():
-            prob.append(f'modo cópia: o mapa de {outro} difere do do kit ({ctx.arq_mapa})')
+    plugin = json.loads(GANCHO_DO_PLUGIN.read_text(encoding='utf-8')) if GANCHO_DO_PLUGIN.is_file() else {}
+    cmds = [h.get('command', '') for g in plugin.get('hooks', {}).get('PostToolUse', []) for h in g.get('hooks', [])]
+    if not any(e_gancho_nosso(c) for c in cmds):
+        prob.append(f'o gancho das cores não está no plugin nucleo ({GANCHO_DO_PLUGIN})')
+    elif not any(Path(c.split('"')[1].replace('${CLAUDE_PLUGIN_ROOT}', str(MODULO.parent))).is_file()
+                 for c in cmds if e_gancho_nosso(c) and c.count('"') >= 2):
+        prob.append(f'o gancho do plugin nucleo aponta para um gancho.py que não existe ({GANCHO_DO_PLUGIN})')
+    usuario = Path.home() / '.claude' / 'settings.json'
+    if usuario.is_file():
+        dados = json.loads(usuario.read_text(encoding='utf-8'))
+        if any(e_gancho_nosso(h.get('command', '')) for g in dados.get('hooks', {}).get('PostToolUse', [])
+               for h in g.get('hooks', [])):
+            prob.append(f'o gancho das cores está também em {usuario} (dispara duas vezes): pastas.py desligar-gancho')
     for proj, por_nome in nomes.items():
         for nome, vs in por_nome.items():
             if len(vs) > 1:
@@ -391,8 +408,8 @@ hora, em vez de recriar uma pasta vazia. Não apague: elas saem quando nenhum pr
 <ul>{lapides or "<li>nenhuma neste PC</li>"}</ul>
 <h2>Aplicar num projeto ou num PC novo</h2>
 <p>Projeto novo: o Claude propõe as linhas dele no <code>mapa.json</code>, você aprova, e ele roda
-<code>pastas.py aplicar</code>. PC novo: o roteiro está na skill <code>uso-do-claude</code>, módulo
-<code>organizar-projetos</code> (<code>ORGANIZAR.md</code>).</p>
+<code>pastas.py aplicar</code>. PC novo: o roteiro está na skill <code>/organizar-projetos</code> (plugin
+<code>kit</code>, ligado no kit e na janela da raiz).</p>
 </main></body></html>'''
 
 
@@ -458,24 +475,19 @@ def cmd_vscode(ctx: Contexto, ver: bool) -> int:
     return status
 
 
-# ---------------------------------------------------------------- o gancho no settings.json
+# ---------------------------------------------------------------- o gancho antigo no settings.json
 
-def comando_gancho() -> str:
-    alvo = (MODULO / 'scripts' / 'gancho.py').as_posix()
-    return f'python "{alvo}" || true'
-
-
-def ligar_gancho(settings: Path, ligar: bool = True) -> str:
+def desligar_gancho(settings: Path) -> str:
+    """Tira do settings.json o gancho das cores de antes do F1b; os outros ganchos ficam. Guarda cópia antes."""
     dados = json.loads(settings.read_text(encoding='utf-8')) if settings.exists() else {}
-    ganchos = dados.setdefault('hooks', {})
-    lista = ganchos.setdefault('PostToolUse', [])
-    nosso = lambda h: ASSINATURA_GANCHO in h.get('command', '').replace('\\', '/')
-    tinha = any(nosso(h) for g in lista for h in g.get('hooks', []))
+    ganchos = dados.get('hooks', {})
+    lista = ganchos.get('PostToolUse', [])
+    tinha = any(e_gancho_nosso(h.get('command', '')) for g in lista for h in g.get('hooks', []))
+    if not tinha:
+        return 'não havia gancho nosso'
     for g in lista:
-        g['hooks'] = [h for h in g.get('hooks', []) if not nosso(h)]
+        g['hooks'] = [h for h in g.get('hooks', []) if not e_gancho_nosso(h.get('command', ''))]
     lista[:] = [g for g in lista if g.get('hooks')]
-    if ligar:
-        lista.append({'matcher': MATCHER, 'hooks': [{'type': 'command', 'command': comando_gancho(), 'timeout': 10}]})
     if not lista:
         del ganchos['PostToolUse']
     if not ganchos:
@@ -485,9 +497,7 @@ def ligar_gancho(settings: Path, ligar: bool = True) -> str:
         copia.write_bytes(settings.read_bytes())
     settings.parent.mkdir(parents=True, exist_ok=True)
     settings.write_text(json.dumps(dados, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    if ligar:
-        return 'gancho religado (o antigo foi trocado)' if tinha else 'gancho ligado'
-    return 'gancho desligado' if tinha else 'não havia gancho nosso'
+    return 'gancho desligado'
 
 
 # ---------------------------------------------------------------- main
@@ -517,8 +527,12 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     if a.cmd == 'instalar':
         return cmd_instalar(a.mae, a.lapide)
-    if a.cmd in ('ligar-gancho', 'desligar-gancho'):
-        print(ligar_gancho(a.settings, a.cmd == 'ligar-gancho'))
+    if a.cmd == 'ligar-gancho':
+        print(f'Nada a gravar: o gancho das cores é do plugin nucleo ({GANCHO_DO_PLUGIN}) e liga onde o nucleo '
+              'está ligado. Para conferir: pastas.py conferir; numa janela nova, uma pasta nova num projeto ganha a cor.')
+        return 0
+    if a.cmd == 'desligar-gancho':
+        print(desligar_gancho(a.settings))
         print('Abra uma janela nova do Claude Code: os ganchos são lidos ao abrir a sessão.')
         return 0
     ctx = Contexto()

@@ -153,7 +153,9 @@ def test_mapa_real_carrega_e_cada_ícone_tem_os_quadros():
     ('desosp-hc/node_modules', 'sem-cor'),
     ('claude-kit/pesquisas', 'eu-leio'),
     ('claude-kit/plugins/nucleo/skills/uso-do-claude/fontes', 'eu-forneco-fontes'),
-    ('claude-kit/plugins/nucleo/skills/uso-do-claude/organizar-projetos', 'nao-toco'),
+    ('claude-kit/plugins/nucleo/pastas', 'nao-toco'),
+    ('claude-kit/plugins/kit/skills/icones', 'nao-toco'),
+    ('.claude', 'nao-toco'),
     ('prototipos-icones', 'eu-leio'),
     ('projeto-que-ainda-nao-existe', 'provisoria'),
 ])

@@ -94,6 +94,7 @@
  "mae": {
   "marca": "projeto-ia",
   "pastas": {
+   ".claude": "nao-toco",
    "prototipos-icones": "eu-leio",
    "prototipos-icones/*": "sem-cor"
   }

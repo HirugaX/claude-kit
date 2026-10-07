@@ -290,8 +290,4 @@ como "Sonnet 5.5, escolhido na lista do `/model`" (§4). Regra do projeto vence 
 
 ## 13. Organizar os projetos e as pastas de um PC
 
-Reunir os projetos e o kit do Claude numa pasta-mãe, pôr no GitHub o que falta (privado) e pintar as pastas pelo
-que o usuário faz com elas: módulo [organizar-projetos/ORGANIZAR.md](organizar-projetos/ORGANIZAR.md) — as fases com
-portões, as lições de 04-05/10 e os scripts testados. Num PC novo, comece pela fase 0
-([reaproveitar.md](organizar-projetos/reaproveitar.md)): o que o PC já tem, para não instalar nada em dobro. O
-sistema de cores: [organizar-projetos/pastas.md](organizar-projetos/pastas.md).
+Só por `/`, no kit e na janela da raiz (plugin `kit`): `/organizar-projetos`, `/cores-das-pastas`, `/icones`.

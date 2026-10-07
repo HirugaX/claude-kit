@@ -1,6 +1,6 @@
 r"""O gancho PostToolUse do sistema de cores: pinta a pasta que acabou de nascer.
 
-Ligado por "pastas.py ligar-gancho" no settings.json de usuário, com o matcher
+Ligado pelo plugin nucleo (plugins/nucleo/hooks/hooks.json), em todo projeto onde o nucleo está ligado, com o matcher
 Write|Edit|MultiEdit|NotebookEdit|Bash|PowerShell e o comando  python "<módulo>/scripts/gancho.py" || true
 (os ganchos rodam no Git Bash: o "|| true" impede que um erro apareça ao Claude em todo comando).
 

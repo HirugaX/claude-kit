@@ -1,5 +1,6 @@
 {
   "enabledPlugins": {
-    "engenharia@claude-kit": true
+    "engenharia@claude-kit": true,
+    "kit@claude-kit": true
   }
 }

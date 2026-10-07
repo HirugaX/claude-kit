@@ -220,8 +220,8 @@ def verificar(a: Ambiente) -> list[str]:
 # ---------------------------------------------------------------- instalação
 
 def _modulo_cores(a: Ambiente) -> Path | None:
-    achados = sorted(a.kit.glob('plugins/*/skills/**/organizar-projetos/scripts/pastas.py'))
-    return achados[0].parents[1] if achados else None
+    p = a.kit / 'plugins' / 'nucleo' / 'pastas'          # o módulo das pastas (F2a): onde o gancho do nucleo o acha
+    return p if (p / 'scripts' / 'pastas.py').is_file() else None
 
 
 def _sem_cli(a: Ambiente, args: list[str]) -> None:

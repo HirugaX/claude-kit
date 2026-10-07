@@ -1,4 +1,4 @@
-r"""A mudança das pastas (ORGANIZAR.md, fase 5), lendo o plano de um arquivo JSON (modelo: planos\).
+r"""A mudança das pastas (skill /organizar-projetos, fase 5), lendo o plano de um arquivo JSON (modelo: planos\).
 
     python mudanca.py retrato <plano.json> antes.json          (com os caminhos velhos)
     python mudanca.py tudo <plano.json>                         checar + mover + lápides (o que o usuário roda)

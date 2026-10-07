@@ -11,6 +11,11 @@
       "description": "Nossas: como usar o Claude Code e escolher os recursos de cada projeto. Liga em todo projeto (escopo de usuário)."
     },
     {
+      "name": "kit",
+      "source": "./plugins/kit",
+      "description": "Nossas, só por /: organizar os projetos de um PC, as cores das pastas e os ícones. Liga só no claude-kit e na janela da raiz."
+    },
+    {
       "name": "planejamento",
       "source": "./plugins/planejamento",
       "description": "Terceiros: entrevistar, decidir, registrar e escrever para agentes. Liga em todo projeto (escopo de usuário)."

@@ -27,7 +27,7 @@ e a fase 2 já trouxeram), nunca pergunta ao usuário. Termina quando não sobra
 |---|---|---|---|
 | 6 | **Dado sensível**: em cada projeto, que pastas têm dado pessoal, de saúde ou financeiro? Pode sair da máquina? | nenhum dado sensível sai; a pasta de dados de um app fica **fora** do repositório, ao lado dele (`<app>-dados`), com regra `deny` no settings do Claude Code | a pasta de dados; a regra `deny`; o que o `antes_do_github.py` procura (o arquivo de termos, fora do repositório) |
 | 7 | **O que vai ao GitHub**: cada projeto sem remote vai? | sim, **privado**, depois da varredura; o que não for código (dados, rodadas) fica no `.gitignore` | a fase 6 |
-| 8 | **O que é do usuário e o que é da IA** em cada projeto (onde você deposita, onde lê, onde edita, onde não mexe) | levantar pelas pastas que o inventário viu e propor o verbo de cada uma | o mapa das cores daquele projeto ([pastas.md](pastas.md)) |
+| 8 | **O que é do usuário e o que é da IA** em cada projeto (onde você deposita, onde lê, onde edita, onde não mexe) | levantar pelas pastas que o inventário viu e propor o verbo de cada uma | o mapa das cores daquele projeto (`/cores-das-pastas`) |
 | 9 | **As pastas que o programa cria e apaga sozinho** (as passageiras) e as de rodada | ficam sem cor; quem lista é a janela de cada projeto, lendo o código | as entradas `sem-cor` do mapa |
 | 10 | **O que roda agora** e o que não pode parar (app ligado, rodada em andamento, prazo próximo) | mudar fora dos dias de rodada, com o app desligado pelo próprio app | a data e as condições da fase 5 |
 
@@ -44,7 +44,7 @@ e a fase 2 já trouxeram), nunca pergunta ao usuário. Termina quando não sobra
 
 ## O que já está decidido (não se pergunta de novo)
 
-- O sistema de cores: 5 verbos, 3 marcas, a regra da pasta nova, o gancho, o manual ([pastas.md](pastas.md)). Num PC
+- O sistema de cores: 5 verbos, 3 marcas, a regra da pasta nova, o gancho, o manual (`/cores-das-pastas`). Num PC
   novo, só se pergunta o **mapa** dos projetos dele.
 - `+s` na pasta, nunca `+r`; o `.ico` gerado em cada PC; nenhum `CLAUDE.md` na raiz da mãe.
 - O original do kit é o do notebook.

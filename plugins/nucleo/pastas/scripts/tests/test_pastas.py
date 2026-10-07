@@ -1,5 +1,6 @@
 """aplicar, conferir, marcar, remover, legenda, vscode, o gancho no settings.json e o ignore do git."""
 import json
+from pathlib import Path
 import subprocess
 
 import pytest
@@ -199,22 +200,29 @@ def test_vscode_não_mexe_em_settings_versionado(ctx, cena):
     assert (app / '.vscode' / 'settings.json').read_text(encoding='utf-8') == '{}'
 
 
-def test_ligar_gancho_acrescenta_sem_apagar_os_outros(tmp_path):
+def test_desligar_gancho_antigo_sem_apagar_os_outros(tmp_path):
     s = tmp_path / 'settings.json'
     outro = {'matcher': '*', 'hooks': [{'type': 'command', 'command': 'python semanal.py'}]}
-    s.write_text(json.dumps({'hooks': {'PostToolUse': [outro], 'SessionStart': [outro]}, 'model': 'x'}), encoding='utf-8')
-    assert P.ligar_gancho(s) == 'gancho ligado'
-    assert P.ligar_gancho(s) == 'gancho religado (o antigo foi trocado)'
+    antigo = {'matcher': P.MATCHER, 'hooks': [{'type': 'command', 'timeout': 10,
+              'command': 'python "C:/CLAUDE-PROJETOS/claude-kit/plugins/nucleo/skills/uso-do-claude/'
+                         'organizar-projetos/scripts/gancho.py" || true'}]}
+    s.write_text(json.dumps({'hooks': {'PostToolUse': [outro, antigo], 'SessionStart': [outro]}, 'model': 'x'}),
+                 encoding='utf-8')
+    assert P.desligar_gancho(s) == 'gancho desligado'
     d = json.loads(s.read_text(encoding='utf-8'))
-    pos = d['hooks']['PostToolUse']
-    assert outro in pos and len(pos) == 2 and d['hooks']['SessionStart'] == [outro] and d['model'] == 'x'
-    nosso = pos[1]
-    assert nosso['matcher'] == P.MATCHER and nosso['hooks'][0]['timeout'] == 10
-    assert nosso['hooks'][0]['command'].endswith('|| true') and '\\' not in nosso['hooks'][0]['command']
+    assert d['hooks'] == {'PostToolUse': [outro], 'SessionStart': [outro]} and d['model'] == 'x'
     assert list(tmp_path.glob('settings.json.antes-gancho-*'))
-    assert P.ligar_gancho(s, ligar=False) == 'gancho desligado'
-    d = json.loads(s.read_text(encoding='utf-8'))
-    assert d['hooks']['PostToolUse'] == [outro]
+    assert P.desligar_gancho(s) == 'não havia gancho nosso'
+
+
+def test_o_gancho_é_do_plugin_nucleo():
+    """O hooks.json do nucleo chama o gancho.py deste módulo, com o matcher de sempre e o "|| true"."""
+    d = json.loads(P.GANCHO_DO_PLUGIN.read_text(encoding='utf-8'))
+    (g,) = d['hooks']['PostToolUse']
+    (h,) = g['hooks']
+    assert g['matcher'] == P.MATCHER and h['timeout'] == 10 and h['command'].endswith('|| true')
+    alvo = h['command'].split('"')[1].replace('${CLAUDE_PLUGIN_ROOT}', str(P.MODULO.parent))
+    assert P.e_gancho_nosso(h['command']) and Path(alvo).resolve() == (P.MODULO / 'scripts' / 'gancho.py').resolve()
 
 
 def test_ignore_do_git_sem_repetir(tmp_path):

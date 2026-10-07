@@ -1,4 +1,4 @@
-r"""Varredura dos caminhos velhos (ORGANIZAR.md, fases 4 e 7). Só lê; mostra arquivo:linha e o caminho achado.
+r"""Varredura dos caminhos velhos (skill /organizar-projetos, fases 4 e 7). Só lê; mostra arquivo:linha e o caminho achado.
 
     python varredura.py <plano.json> <saida.json>
 

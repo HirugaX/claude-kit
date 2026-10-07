@@ -1,6 +1,6 @@
 # GitHub — publicar o que falta, re-registrar o que mudou de pasta
 
-A fase 6 do [ORGANIZAR.md](ORGANIZAR.md). Publicar é ação para fora: o que vai ao GitHub pode ser copiado ou indexado
+A fase 6 do `/organizar-projetos` ([SKILL.md](SKILL.md)). Publicar é ação para fora: o que vai ao GitHub pode ser copiado ou indexado
 mesmo depois de apagado. Por isso: **sempre privado, sempre com a varredura antes, sempre com o "sim" do usuário.**
 
 ## Antes do primeiro envio de um repositório
@@ -12,7 +12,7 @@ mesmo depois de apagado. Por isso: **sempre privado, sempre com a varredura ante
    cada PC). Pasta de dados de app fica **fora** do repositório (a vizinha `<app>-dados`), não só no `.gitignore`.
 3. **A conferência**:
    ```
-   python scripts\antes_do_github.py <repositório> --termos <arquivo de termos>
+   python C:\CLAUDE-PROJETOS\claude-kit\plugins\nucleo\pastas\scripts\antes_do_github.py <repositório> --termos <arquivo de termos>
    ```
    Confere o que iria (versionados, novos que um `git add -A` pegaria e **todo o histórico**, porque o primeiro push leva
    todos os commits): segredos conhecidos, chave privada, `.env`, senha ou token com valor; os termos (mostra só

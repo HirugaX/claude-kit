@@ -2,10 +2,11 @@ r"""O que este PC já tem, antes de instalar qualquer coisa (reaproveitar.md). S
 
     python inventario.py [--kit C:\CLAUDE-PROJETOS\claude-kit] [--mae C:\CLAUDE-PROJETOS] [--raiz D:\ ...] [--json ARQ]
 
-Olha: as skills de ~\.claude\skills (por nome e hash, comparadas com as do kit); os ganchos e a statusline dos
-settings de usuário e de cada projeto; o CLAUDE.md pessoal (linhas, hardlink, as linhas que só ele tem); os
-desktop.ini com marca (nosso, o de 30/09, alheio) e as pastas de ícones; os scripts do kit; as pastas de projeto
-(git, remote, CLAUDE.md, memória) nas raízes de costume, inclusive a raiz do disco virando repositório; o kit.
+Olha: as skills de ~\.claude\skills (por nome e hash, comparadas com as dos plugins do kit, em
+plugins\<grupo>\skills); os ganchos e a statusline dos settings de usuário e de cada projeto; o CLAUDE.md pessoal
+(é a linha de import do CLAUDE.md do kit? as linhas que só ele tem); os desktop.ini com marca (nosso, o de 30/09,
+alheio) e as pastas de ícones; os scripts do kit e o instalar_kit.py --verificar; as pastas de projeto (git, remote,
+CLAUDE.md, memória) nas raízes de costume, inclusive a raiz do disco virando repositório; o kit.
 
 Para cada item diz: SERVE (reaproveitar), DUPLICARIA (já existe; não instalar de novo), FALTA, ou ATENÇÃO.
 Lê só metadados, settings e os CLAUDE.md (para contar e comparar linhas): nunca conteúdo de projeto. Não segue
@@ -25,7 +26,7 @@ AQUI = Path(__file__).resolve().parent
 sys.path.insert(0, str(AQUI))
 import regras as R  # noqa: E402
 
-KIT_PADRAO = AQUI.parents[3]          # organizar-projetos -> uso-do-claude -> skills -> claude-kit
+KIT_PADRAO = AQUI.parents[3]          # scripts -> pastas -> nucleo -> plugins -> claude-kit
 CASA = Path.home() / '.claude'
 PULAR = {'node_modules', '.venv', 'venv', '__pycache__', '.git', 'AppData', 'Windows', 'Program Files',
          'Program Files (x86)', 'ProgramData', '$Recycle.Bin', 'System Volume Information'}
@@ -50,43 +51,47 @@ def impressao(pasta: Path) -> dict[str, str]:
     return out
 
 
+def skills_do_kit(kit: Path) -> dict[str, Path]:
+    """Nome -> pasta de cada skill dos plugins do kit (plugins/<grupo>/skills/<nome>/SKILL.md)."""
+    out = {}
+    for sk in sorted(kit.glob('plugins/*/skills/*/SKILL.md')):
+        out.setdefault(sk.parent.name, sk.parent)
+    return out
+
+
 def skills(casa: Path, kit: Path) -> list[dict]:
+    """As skills de ~/.claude/skills. As do kit não moram ali: chegam pelos plugins (instalar_kit.py)."""
     out = []
     pasta = casa / 'skills'
-    kit_sk = kit / 'skills'
-    nomes = set()
+    do_kit = skills_do_kit(kit)
     if pasta.is_dir():
         for e in sorted(os.scandir(pasta), key=lambda e: e.name):
             if not e.is_dir():
                 continue
             p = Path(e.path)
-            nomes.add(e.name)
-            no_kit = kit_sk / e.name
+            no_kit = do_kit.get(e.name)
             item = {'nome': e.name}
             if R.e_link(p):
                 alvo = Path(os.path.realpath(p))
                 item['tipo'] = f'junção -> {alvo}'
-                if not alvo.exists():
-                    item['veredito'] = 'ATENÇÃO: junção sem alvo (o ligar_claude.py re-aponta)'
-                elif no_kit.exists() and alvo == no_kit.resolve():
-                    item['veredito'] = 'SERVE: já ligada ao kit'
+                if 'claude-kit' in alvo.as_posix().lower() or not alvo.exists():
+                    item['veredito'] = 'DUPLICARIA: junção antiga para o kit; o instalar_kit.py a tira'
                 else:
                     item['veredito'] = 'ATENÇÃO: junção para outro lugar'
             else:
                 item['tipo'] = 'pasta de verdade (cópia)'
                 if e.name == 'synced':
                     item['veredito'] = 'SERVE: sincronizada pelo claude.ai; não se mexe'
-                elif not no_kit.is_dir():
-                    item['veredito'] = 'SERVE: não existe no kit (o ligar_claude.py a traz para o kit)'
+                elif no_kit is None:
+                    item['veredito'] = ('SERVE: só deste PC; se for de uso comum, vai para um plugin do kit (nossa) '
+                                        'ou pelo atualizar_terceiros.py (de terceiros)')
                 elif impressao(p) == impressao(no_kit):
-                    item['veredito'] = 'DUPLICARIA: igual à do kit; vira junção (ligar_claude.py)'
+                    item['veredito'] = (f'DUPLICARIA: igual à do plugin {no_kit.parents[1].name}; nome repetido — '
+                                        'tirar a cópia (guardar antes)')
                 else:
-                    item['veredito'] = 'ATENÇÃO: difere da do kit; comparar antes (--kit-vence ou --pasta-vence)'
+                    item['veredito'] = (f'ATENÇÃO: difere da do plugin {no_kit.parents[1].name}; comparar e levar ao '
+                                        'kit o que só esta tem, depois tirar a cópia')
             out.append(item)
-    if kit_sk.is_dir():
-        for d in sorted(kit_sk.iterdir()):
-            if d.is_dir() and not d.name.startswith(('_', '.')) and d.name not in nomes:
-                out.append({'nome': d.name, 'tipo': 'só no kit', 'veredito': 'FALTA: ligar (ligar_claude.py)'})
     return out
 
 
@@ -97,6 +102,11 @@ def _ganchos(dados: dict) -> list[str]:
             for h in g.get('hooks', []):
                 out.append(f'{evento} [{g.get("matcher", "*")}] {h.get("command", h.get("type", "?"))}')
     return out
+
+
+def e_gancho_das_cores(comando: str) -> bool:
+    c = comando.replace('\\', '/')
+    return 'gancho.py' in c and ('organizar-projetos/scripts/' in c or '/pastas/scripts/' in c)
 
 
 def settings(casa: Path, projetos: list[Path]) -> list[dict]:
@@ -113,14 +123,15 @@ def settings(casa: Path, projetos: list[Path]) -> list[dict]:
             out.append({'arquivo': str(a), 'veredito': 'ATENÇÃO: não é JSON válido'})
             continue
         g = _ganchos(d)
-        nosso = [x for x in g if 'organizar-projetos/scripts/gancho.py' in x.replace('\\', '/')]
+        nosso = [x for x in g if e_gancho_das_cores(x)]
         item = {'arquivo': str(a), 'ganchos': g, 'statusline': bool(d.get('statusLine')),
                 'deny': (d.get('permissions') or {}).get('deny', []),
                 'modelSettings': d.get('modelSettings'), 'effortLevel': d.get('effortLevel')}
         if nosso:
-            item['veredito'] = 'DUPLICARIA: o gancho das cores já está ligado aqui; não ligar de novo'
+            item['veredito'] = ('DUPLICARIA: o gancho das cores está neste settings, mas ele é do plugin nucleo '
+                                '(dispararia duas vezes): pastas.py desligar-gancho')
         elif g:
-            item['veredito'] = 'SERVE: há outros ganchos; o ligar-gancho ACRESCENTA, nunca substitui'
+            item['veredito'] = 'SERVE: há outros ganchos; ficam como estão'
         else:
             item['veredito'] = 'SERVE'
         if d.get('effortLevel'):
@@ -130,26 +141,26 @@ def settings(casa: Path, projetos: list[Path]) -> list[dict]:
 
 
 def claude_md(casa: Path, kit: Path) -> dict:
+    """O CLAUDE.md pessoal certo é só a linha de import do CLAUDE.md do kit (instalar_kit.py)."""
     casa_md, kit_md = casa / 'CLAUDE.md', kit / 'CLAUDE.md'
     out = {'pessoal': str(casa_md), 'existe': casa_md.is_file()}
-    if casa_md.is_file():
-        linhas = casa_md.read_text(encoding='utf-8', errors='replace').splitlines()
-        out['linhas'] = len(linhas)
-        out['nomes_do_arquivo'] = os.stat(casa_md).st_nlink
-        if kit_md.is_file():
-            if os.path.samefile(casa_md, kit_md):
-                out['veredito'] = 'SERVE: já é o mesmo arquivo do kit (hardlink)'
-            else:
-                do_kit = set(l.strip() for l in kit_md.read_text(encoding='utf-8', errors='replace').splitlines())
-                so_aqui = [l for l in linhas if l.strip() and l.strip() not in do_kit]
-                out['so_neste_pc'] = so_aqui
-                out['veredito'] = (f'ATENÇÃO: difere do do kit; {len(so_aqui)} linha(s) só deste PC — juntar com o '
-                                   '"sim" e ligar como hardlink (nunca pela ferramenta Edit)') if so_aqui else \
-                    'DUPLICARIA: o do kit já tem todas as linhas deste; ligar o do kit (hardlink)'
-        else:
-            out['veredito'] = 'SERVE: ainda sem kit neste PC'
+    if not casa_md.is_file():
+        out['veredito'] = 'FALTA: o import do kit (instalar_kit.py)' if kit_md.is_file() else 'FALTA'
+        return out
+    texto = casa_md.read_text(encoding='utf-8-sig', errors='replace')
+    linhas = texto.splitlines()
+    out['linhas'] = len(linhas)
+    if texto.strip() == '@' + kit_md.as_posix():
+        out['veredito'] = 'SERVE: já é o import do CLAUDE.md do kit'
+    elif not kit_md.is_file():
+        out['veredito'] = 'SERVE: ainda sem kit neste PC'
     else:
-        out['veredito'] = 'FALTA: ligar o do kit (ligar_claude.py)' if kit_md.is_file() else 'FALTA'
+        do_kit = set(l.strip() for l in kit_md.read_text(encoding='utf-8', errors='replace').splitlines())
+        so_aqui = [l for l in linhas if l.strip() and l.strip() not in do_kit]
+        out['so_neste_pc'] = so_aqui
+        out['veredito'] = (f'ATENÇÃO: difere do do kit; {len(so_aqui)} linha(s) só deste PC — levar ao CLAUDE.md do '
+                           'kit com o "sim", depois instalar_kit.py --claude-md-kit-vence') if so_aqui else \
+            'DUPLICARIA: o do kit já tem todas as linhas deste; instalar_kit.py --claude-md-kit-vence põe o import'
     return out
 
 
@@ -254,7 +265,12 @@ def projetos(raizes: list[Path], casa: Path) -> list[dict]:
 def kit(kit_: Path, mae: Path) -> dict:
     out = {'kit': str(kit_), 'existe': kit_.is_dir(), 'mae': str(mae), 'mae_existe': mae.is_dir(),
            'claude_md_na_raiz_da_mae': (mae / 'CLAUDE.md').exists()}
-    out['scripts'] = {n: (kit_ / 'scripts' / n).is_file() for n in ('ligar_claude.py', 'perguntas_controle.py')}
+    out['scripts'] = {n: (kit_ / 'scripts' / n).is_file()
+                      for n in ('instalar_kit.py', 'atualizar_terceiros.py', 'perguntas_controle.py')}
+    if out['scripts']['instalar_kit.py']:
+        r = subprocess.run([sys.executable, str(kit_ / 'scripts' / 'instalar_kit.py'), '--verificar'],
+                           capture_output=True, text=True, encoding='utf-8', errors='replace')
+        out['instalar_kit_verificar'] = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith('- ')]
     local = R.ler_local()
     out['sistema_de_cores'] = local or 'não instalado neste PC'
     v = []
@@ -262,6 +278,8 @@ def kit(kit_: Path, mae: Path) -> dict:
         v.append('ATENÇÃO: há CLAUDE.md na raiz da mãe — todo projeto o carregaria')
     if not out['existe']:
         v.append('FALTA: trazer o kit')
+    elif out.get('instalar_kit_verificar'):
+        v.append(f'FALTA: instalar_kit.py ({len(out["instalar_kit_verificar"])} achado(s) no --verificar)')
     out['veredito'] = '; '.join(v) or 'SERVE'
     return out
 
@@ -294,7 +312,7 @@ def imprimir(inv: dict) -> None:
         if s.get('statusline'):
             print('      statusline: sim')
     c = inv['claude_md']
-    print(f'== CLAUDE.md pessoal: {c.get("linhas", 0)} linhas, {c.get("nomes_do_arquivo", 0)} nome(s) — {c["veredito"]}')
+    print(f'== CLAUDE.md pessoal: {c.get("linhas", 0)} linhas — {c["veredito"]}')
     for l in c.get('so_neste_pc', [])[:20]:
         print(f'      só neste PC: {l}')
     d = inv['desktop_ini']
@@ -309,6 +327,8 @@ def imprimir(inv: dict) -> None:
     k = inv['kit']
     print(f'== kit: {k["kit"]} ({"existe" if k["existe"] else "não existe"}); mãe {k["mae"]} '
           f'({"existe" if k["mae_existe"] else "não existe"}) — {k["veredito"]}')
+    for l in k.get('instalar_kit_verificar', []):
+        print(f'      {l}')
 
 
 def main(argv=None) -> int:

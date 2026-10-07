@@ -1,6 +1,6 @@
 # Prompts — os modelos das janelas
 
-Tirados dos prompts reais de 05/10 (`claude-kit\decisoes\2026-10-04_prompts-das-janelas.md`). Troque o que está entre
+Tirados dos prompts reais de 05/10, atualizados em 07/10 (plugins, import) (`claude-kit\decisoes\2026-10-04_prompts-das-janelas.md`). Troque o que está entre
 `<>`. Todo prompt leva: **o modelo e o comando `/effort` na 1ª linha**, com o porquê; a pasta em que a janela abre; o que
 ler; o que fazer, numerado; os limites; e o que o resumo de fechamento traz (com a linha "Sinais de insuficiência do
 modelo"). Nenhum nome de paciente, de funcionário ou de operadora em prompt nenhum.
@@ -55,16 +55,16 @@ Opus 5.5 · /effort high — aplica o sistema em todas as pastas dos projetos e 
 Janela aberta em <mãe>\claude-kit. Só abra depois que as janelas de projeto disseram "pronto" e a prévia dos ícones foi aprovada.
 
 ## Contexto
-- O módulo: plugins\nucleo\skills\uso-do-claude\organizar-projetos\ (pastas.md, ORGANIZAR.md fase 8). O mapa: mapa.json (confira as passageiras que as janelas listaram; o que faltar entra antes de aplicar).
+- O roteiro: /cores-das-pastas. O módulo: plugins\nucleo\pastas\ (o mapa: mapa.json; confira as passageiras que as janelas listaram; o que faltar entra antes de aplicar).
 - As suítes antes das cores: <números de cada projeto>.
 
 ## O que fazer
-1. Peça ao usuário para fechar as outras janelas do Claude (o gancho é lido ao abrir a sessão, e o settings.json é gravado pelo Claude Code).
-2. python scripts\pastas.py instalar --lapide <cada caminho velho>.
+1. Peça ao usuário para fechar as outras janelas do Claude (as suítes paradas: a guarda do app fotografa as pastas de dado).
+2. python plugins\nucleo\pastas\scripts\pastas.py instalar --lapide <cada caminho velho>.
 3. pastas.py aplicar --ver; mostre o resumo (pastas por verbo em cada projeto, as provisórias) e, com o "sim", aplique.
 4. pastas.py vscode; com o "sim", instale o Material Icon Theme e o Peacock e ponha o workbench.iconTheme.
 5. pastas.py legenda.
-6. Teste do gancho numa sessão nova (claude -p, uso-do-claude §9b) e pastas.py ligar-gancho. Numa janela nova: uma pasta nova dentro de um projeto ganha o verbo sem nada impresso; uma na raiz de um projeto gera a pergunta.
+6. O gancho é do plugin nucleo (já liga com ele). Numa janela nova: uma pasta nova dentro de um projeto ganha o verbo sem nada impresso; uma na raiz de um projeto gera a pergunta.
 7. pastas.py conferir = 0; git check-ignore -v desktop.ini em cada repositório; as suítes de novo, já com as cores; o usuário olha o Explorador (ícone, dica, coluna Comentários) e o VS Code.
 8. Limpeza (fase 9), com o "sim": o pacote de ícones velho (quando a conferência não achar ini apontando para ele), os protótipos, os retratos da mudança. As lápides saem quando a varredura de cada projeto der zero (arquivo de administrador: entregue o comando).
 
@@ -76,7 +76,7 @@ Janela aberta em <mãe>\claude-kit. Só abra depois que as janelas de projeto di
 Resumo curto: o que foi aplicado (números por projeto), a conferência, as suítes, o que ficou pendente (como pergunta, com a recomendação) e a linha "Sinais de insuficiência do modelo: nenhum" (ou quais).
 ```
 
-## 3 · outro PC · enviar a cópia (cedo; não muda nada lá)
+## 3 · outro PC · enviar a cópia (cedo; não muda nada lá) — só para PC sem git; com git, o kit viaja por `git clone`/`git pull`
 
 ```
 Sonnet 5.5 (escolha-o na lista do /model; o atalho "sonnet" abre o Sonnet 5) · /effort medium — é cópia de arquivos com conferência por hash; o erro aparece na hora.
@@ -85,7 +85,7 @@ Janela no <outro PC>, aberta em qualquer pasta que não seja de projeto. Não mu
 
 ## O que fazer
 1. Pergunte ao usuário e anote, em uma linha cada: o que mudou aqui nas skills, no CLAUDE.md pessoal e no settings.json desde a última cópia.
-2. Copie, numa pasta claude-kit-do-<pc>_AAAA-MM-DD: de %USERPROFILE%\.claude\skills\ as skills do kit (não a synced), o %USERPROFILE%\.claude\CLAUDE.md (se existir) e qualquer pasta de kit deste PC. Sem __pycache__.
+2. Copie, numa pasta claude-kit-do-<pc>_AAAA-MM-DD: de %USERPROFILE%\.claude\skills\ as pastas que não são a synced, o %USERPROFILE%\.claude\CLAUDE.md (se existir) e qualquer pasta de kit deste PC. Sem __pycache__.
 3. Na mesma pasta: manifesto.json (caminho relativo → sha256 de cada arquivo) e LEIA-ME.txt com as respostas do passo 1.
 4. Confira que todo arquivo copiado bate com o manifesto.
 
@@ -98,21 +98,21 @@ Resumo curto e a linha "Sinais de insuficiência do modelo: nenhum" (ou quais). 
 ```
 Opus 5.5 · /effort high — vai mover projetos com dados de verdade e publicar código no GitHub pela primeira vez; erro silencioso (pasta errada, dado sensível enviado) custa caro e é difícil de desfazer.
 
-Janela no <outro PC>, aberta em <mãe> (crie a pasta antes, vazia, se não existir). Nunca trabalhe de dentro de uma pasta que vai mudar de lugar. O usuário traz uma cópia de <mãe>\claude-kit do PC original (sem a subpasta _do_*).
+Janela no <outro PC>, aberta em <mãe> (crie a pasta antes, vazia, se não existir). Nunca trabalhe de dentro de uma pasta que vai mudar de lugar. O kit chega por git clone do repositório privado HirugaX/claude-kit em <mãe>\claude-kit.
 
 ## Contexto
-- O roteiro é o módulo organizar-projetos da skill uso-do-claude (plugins\nucleo\skills\uso-do-claude\organizar-projetos\ORGANIZAR.md). Siga as fases, cada uma com o "sim" do usuário, e os avisos de aproveitar só o necessário (reaproveitar.md).
+- O roteiro é a skill /organizar-projetos (plugin kit; plugins\kit\skills\organizar-projetos\SKILL.md). Siga as fases, cada uma com o "sim" do usuário, e os avisos de aproveitar só o necessário (reaproveitar.md).
 - <o que já se sabe deste PC: projetos, o que está no GitHub, repositório na raiz, ganchos próprios>
 
 ## O que fazer
-1. Trazer o kit para <mãe>\claude-kit e conferir arquivo a arquivo (hash) com o do PC original.
-2. Fase 0: python <kit>\plugins\nucleo\skills\uso-do-claude\organizar-projetos\scripts\inventario.py. Mostre o que serve, o que duplicaria e o que fica de fora, antes de instalar qualquer coisa.
-3. Fase 1: ligar as skills (ligar_claude.py --conferir, depois --kit-vence se houver cópia velha); o CLAUDE.md pessoal do kit, com as linhas que só existirem neste PC juntadas com o "sim"; hardlink conferido com fsutil hardlink list. Se o app Claude Desktop esconder skill por junção, volte ao modo cópia e anote no LEIA-ME do kit.
-4. As fases 2 a 9 do ORGANIZAR.md: inventário (subagente, só leitura), entrevista (perguntas.md), plano (planos\<pc>_<data>.json e o mapa no mapa.json), mudança (o comando é do usuário se o modo automático bloquear), GitHub (github.md; sempre privado, depois do antes_do_github.py), os prompts das janelas de cada projeto, as cores (pastas.md), a limpeza. Pillow e git instalados com o "sim".
+1. git clone do kit em <mãe>\claude-kit; git log -1 igual ao do PC original.
+2. Fase 0: python <kit>\plugins\nucleo\pastas\scripts\inventario.py. Mostre o que serve, o que duplicaria e o que fica de fora, antes de instalar qualquer coisa.
+3. Fase 1: python <kit>\scripts\instalar_kit.py (sem o claude no PATH, ele lista os comandos /plugin para colar); as linhas do CLAUDE.md pessoal que só existirem neste PC vão ao do kit com o "sim", depois --claude-md-kit-vence; instalar_kit.py --verificar com 0 achados.
+4. As fases 2 a 9 do /organizar-projetos: inventário (subagente, só leitura), entrevista (perguntas.md), plano (planos\<pc>_<data>.json e o mapa no mapa.json), mudança (o comando é do usuário se o modo automático bloquear), GitHub (github.md; sempre privado, depois do antes_do_github.py), os prompts das janelas de cada projeto, as cores (/cores-das-pastas), a limpeza. Pillow e git instalados com o "sim".
 5. Se a raiz do C: for um repositório (git -C C:\ status), traga ao usuário como pergunta antes de qualquer outra coisa.
 
 ## Limites
-- O original do kit é o do PC original: mudança feita aqui volta para lá pela cópia, sempre comparada.
+- O kit é um só, no GitHub: mudança feita aqui vai por commit e push (git pull --ff-only antes).
 - Nunca CLAUDE.md na raiz de <mãe>. Nunca reclonar: mover.
 - Dado sensível nunca vai ao GitHub nem a prompt.
 

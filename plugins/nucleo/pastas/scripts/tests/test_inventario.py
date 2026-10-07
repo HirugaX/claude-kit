@@ -15,20 +15,22 @@ def skill(p, texto='x'):
 
 @so_windows
 def test_skills_cada_veredito(tmp_path):
-    casa, kit = tmp_path / 'casa', tmp_path / 'kit'
-    skill(kit / 'skills' / 'ligada')
-    skill(kit / 'skills' / 'igual', 'i')
-    skill(kit / 'skills' / 'diferente', 'kit')
-    skill(kit / 'skills' / 'so-no-kit')
+    casa, kit = tmp_path / 'casa', tmp_path / 'claude-kit'
+    sk = kit / 'plugins' / 'nucleo' / 'skills'
+    skill(sk / 'ligada')
+    skill(sk / 'igual', 'i')
+    skill(sk / 'diferente', 'kit')
     (casa / 'skills').mkdir(parents=True)
-    juncao(casa / 'skills' / 'ligada', kit / 'skills' / 'ligada')
+    juncao(casa / 'skills' / 'ligada', sk / 'ligada')
     skill(casa / 'skills' / 'igual', 'i')
     skill(casa / 'skills' / 'diferente', 'cópia')
     skill(casa / 'skills' / 'nova')
     skill(casa / 'skills' / 'synced')
-    v = {s['nome']: s['veredito'].split(':')[0] for s in I.skills(casa, kit)}
-    assert v == {'ligada': 'SERVE', 'igual': 'DUPLICARIA', 'diferente': 'ATENÇÃO', 'nova': 'SERVE',
-                 'synced': 'SERVE', 'so-no-kit': 'FALTA'}
+    r = {s['nome']: s['veredito'] for s in I.skills(casa, kit)}
+    v = {k: x.split(':')[0] for k, x in r.items()}
+    assert v == {'ligada': 'DUPLICARIA', 'igual': 'DUPLICARIA', 'diferente': 'ATENÇÃO', 'nova': 'SERVE',
+                 'synced': 'SERVE'}
+    assert 'instalar_kit' in r['ligada'] and 'plugin nucleo' in r['igual']
 
 
 def test_impressao_ignora_os_arquivos_de_cada_pc(tmp_path):
@@ -54,9 +56,10 @@ def test_settings_acha_o_gancho_e_os_outros(tmp_path):
     r = I.settings(casa, [proj])
     assert r[0]['veredito'].startswith('DUPLICARIA') and 'effortLevel' in r[0]['veredito']
     assert r[1]['veredito'].startswith('SERVE: há outros ganchos')
+    assert I.e_gancho_das_cores('python "C:/k/plugins/nucleo/pastas/scripts/gancho.py" || true')
 
 
-def test_claude_md_linhas_só_deste_pc_e_hardlink(tmp_path):
+def test_claude_md_linhas_só_deste_pc_e_import(tmp_path):
     casa, kit = tmp_path / 'casa', tmp_path / 'kit'
     casa.mkdir()
     kit.mkdir()
@@ -64,10 +67,12 @@ def test_claude_md_linhas_só_deste_pc_e_hardlink(tmp_path):
     (casa / 'CLAUDE.md').write_text('# regras\n- a\n- só aqui\n', encoding='utf-8')
     r = I.claude_md(casa, kit)
     assert r['so_neste_pc'] == ['- só aqui'] and r['veredito'].startswith('ATENÇÃO')
+    (casa / 'CLAUDE.md').write_text('# regras\n- a\n', encoding='utf-8')
+    assert I.claude_md(casa, kit)['veredito'].startswith('DUPLICARIA')
+    (casa / 'CLAUDE.md').write_text('@' + (kit / 'CLAUDE.md').as_posix() + '\n', encoding='utf-8')
+    assert I.claude_md(casa, kit)['veredito'].startswith('SERVE: já é o import')
     (casa / 'CLAUDE.md').unlink()
-    os.link(kit / 'CLAUDE.md', casa / 'CLAUDE.md')
-    r = I.claude_md(casa, kit)
-    assert r['veredito'].startswith('SERVE') and r['nomes_do_arquivo'] == 2
+    assert I.claude_md(casa, kit)['veredito'].startswith('FALTA')
 
 
 def test_inis_por_marca_sem_seguir_junção(tmp_path):
