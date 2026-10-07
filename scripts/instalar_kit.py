@@ -46,15 +46,19 @@ class Ambiente:
                                if os.environ.get('LOCALAPPDATA') else None)
     claude: Callable[[list[str]], subprocess.CompletedProcess] | None = None   # roda `claude ...` (troca nos testes)
     feito: list[str] = field(default_factory=list)
+    no_painel: list[str] = field(default_factory=list)     # sem o CLI: os comandos para colar no Claude Code
 
     @property
     def mae(self) -> Path:
         return self.kit.parent
 
     def rodar_claude(self, args: list[str]) -> subprocess.CompletedProcess:
+        """Roda `claude ...`; sem o CLI no PATH (a extensão do VS Code não o põe lá), devolve o código 127."""
         if self.claude:
             return self.claude(args)
-        exe = shutil.which('claude') or 'claude'
+        exe = shutil.which('claude')
+        if not exe:
+            return subprocess.CompletedProcess(args, 127, '', 'o comando claude não está no PATH')
         return subprocess.run([exe, *args], capture_output=True, text=True, encoding='utf-8', errors='replace')
 
 
@@ -220,20 +224,34 @@ def _modulo_cores(a: Ambiente) -> Path | None:
     return achados[0].parents[1] if achados else None
 
 
-def instalar(a: Ambiente) -> list[str]:
+def _sem_cli(a: Ambiente, args: list[str]) -> None:
+    """Sem o CLI: guarda o comando equivalente para o Ettore colar numa janela do Claude Code."""
+    a.no_painel.append('/' + ' '.join(args))
+
+
+def instalar(a: Ambiente, claude_md_kit_vence: bool = False) -> list[str]:
     cfg = config(a)
     if not cfg:
         raise SystemExit(f'config\\plugins.json ausente ou inválido em {a.kit}')
     feito = a.feito
     backups = a.casa / 'backups'
 
+    def claude(args: list[str], ok: str) -> bool | None:
+        """True: deu certo; False: falhou (anotado); None: sem o CLI (o comando vai para o painel)."""
+        r = a.rodar_claude(args)
+        if r.returncode == 127:
+            _sem_cli(a, [x for x in args if x not in ('--scope', 'user')])
+            return None
+        feito.append(ok if r.returncode == 0
+                     else f'claude {" ".join(args)}: FALHOU ({(r.stderr or r.stdout).strip()[:200]})')
+        return r.returncode == 0
+
     conhecidos = _json(a.casa / 'plugins' / 'known_marketplaces.json')
     for nome, m in cfg.get('marketplaces', {}).items():
         if nome in conhecidos:
             continue
         fonte = str(a.kit) if nome == MKT else m.get('repo') or m.get('caminho')
-        r = a.rodar_claude(['plugin', 'marketplace', 'add', fonte])
-        feito.append(f'marketplace {nome}: ' + ('registrado' if r.returncode == 0 else f'FALHOU ({(r.stderr or r.stdout).strip()[:200]})'))
+        claude(['plugin', 'marketplace', 'add', fonte], f'marketplace {nome} registrado')
 
     usuario = ligados_usuario(a)
     grupos = plugins_do_kit(a)
@@ -243,6 +261,9 @@ def instalar(a: Ambiente) -> list[str]:
         if usuario.get(pid) is True:
             continue
         r = a.rodar_claude(['plugin', 'install', pid, '--scope', 'user'])
+        if r.returncode == 127:
+            _sem_cli(a, ['plugin', 'install', pid])
+            continue
         if r.returncode != 0:
             r = a.rodar_claude(['plugin', 'enable', pid, '--scope', 'user'])
         feito.append(f'{pid}: ' + ('ligado no escopo de usuário' if r.returncode == 0 else f'FALHOU ({(r.stderr or r.stdout).strip()[:200]})'))
@@ -250,8 +271,7 @@ def instalar(a: Ambiente) -> list[str]:
     proj += [pid for pid, c in cfg.get('de_fora', {}).items() if c.get('escopo') == 'projeto']
     for pid in proj:
         if ligados_usuario(a).get(pid) is True:
-            r = a.rodar_claude(['plugin', 'disable', pid, '--scope', 'user'])
-            feito.append(f'{pid}: ' + ('desligado no escopo de usuário (é por projeto)' if r.returncode == 0 else 'FALHOU ao desligar'))
+            claude(['plugin', 'disable', pid, '--scope', 'user'], f'{pid}: desligado no escopo de usuário (é por projeto)')
 
     r = subprocess.run(['git', '-C', str(a.kit), 'config', 'core.hooksPath'], capture_output=True, text=True)
     if r.stdout.strip() != '.githooks':
@@ -267,15 +287,23 @@ def instalar(a: Ambiente) -> list[str]:
             os.rmdir(j)                 # só a junção; o alvo fica intacto
         feito.append(f'{len(juncoes)} junção(ões) antiga(s) tirada(s) de {a.casa / "skills"} (lista em {lista})')
 
-    casa_md = a.casa / 'CLAUDE.md'
+    casa_md, kit_md = a.casa / 'CLAUDE.md', a.kit / 'CLAUDE.md'
     if not casa_md.is_file() or casa_md.read_text(encoding='utf-8-sig').strip() != linha_import(a):
-        if casa_md.exists():
-            backups.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(casa_md, backups / f'CLAUDE.md.{time.strftime("%Y-%m-%d_%H%M%S")}_antes-do-import')
-            casa_md.unlink()            # se era hardlink, só este endereço sai; o do kit fica
-        casa_md.parent.mkdir(parents=True, exist_ok=True)
-        casa_md.write_text(linha_import(a) + '\n', encoding='utf-8')
-        feito.append(f'{casa_md}: só a linha de import do CLAUDE.md do kit')
+        trocar = True
+        if casa_md.is_file() and kit_md.is_file() and not os.path.samefile(casa_md, kit_md):
+            igual = casa_md.read_bytes().replace(b'\r\n', b'\n') == kit_md.read_bytes().replace(b'\r\n', b'\n')
+            if not igual and not claude_md_kit_vence:
+                trocar = False      # este PC tem um CLAUDE.md pessoal diferente: juntar à mão antes
+                feito.append(f'ATENÇÃO: {casa_md} difere do {kit_md} e não é hardlink dele; não mexi. Leve ao '
+                             'CLAUDE.md do kit o que só este tem e rode de novo com --claude-md-kit-vence.')
+        if trocar:
+            if casa_md.exists():
+                backups.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(casa_md, backups / f'CLAUDE.md.{time.strftime("%Y-%m-%d_%H%M%S")}_antes-do-import')
+                casa_md.unlink()        # se era hardlink, só este endereço sai; o do kit fica
+            casa_md.parent.mkdir(parents=True, exist_ok=True)
+            casa_md.write_text(linha_import(a) + '\n', encoding='utf-8')
+            feito.append(f'{casa_md}: só a linha de import do CLAUDE.md do kit')
 
     if a.local_json and a.local_json.is_file():
         lj = _json(a.local_json)
@@ -318,14 +346,20 @@ def main(argv=None) -> int:
     g = ap.add_mutually_exclusive_group()
     g.add_argument('--verificar', action='store_true', help='só confere; sai com 1 se houver achado')
     g.add_argument('--trecho', metavar='TIPO', help='imprime o enabledPlugins de um tipo de projeto')
+    ap.add_argument('--claude-md-kit-vence', action='store_true',
+                    help='o ~\\.claude\\CLAUDE.md deste PC difere do kit: guarda uma cópia e põe o import no lugar')
     arg = ap.parse_args(argv)
     a = Ambiente()
     if arg.trecho:
         print(trecho(a, arg.trecho))
         return 0
     if not arg.verificar:
-        feito = instalar(a)
+        feito = instalar(a, arg.claude_md_kit_vence)
         print('\n'.join(feito) if feito else 'Instalação: nada a fazer, tudo já estava no lugar.')
+        if a.no_painel:
+            print('\nO comando claude não está no PATH deste PC (a extensão do VS Code usa o dela). Abra uma janela '
+                  'do Claude Code, cole estes comandos um a um e rode este script de novo:')
+            print('\n'.join(f'  {c}' for c in a.no_painel))
         print(f'\nA política do safety-net é sua (rode num terminal e confirme):\n  {comando_safety_net(a)}')
     ach = verificar(a)
     grupos = plugins_do_kit(a)

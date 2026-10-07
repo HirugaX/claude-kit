@@ -121,6 +121,25 @@ def test_hardlink_vira_import_e_o_arquivo_do_kit_fica(amb):
     assert list((amb.casa / 'backups').glob('CLAUDE.md.*'))
 
 
+def test_claude_md_diferente_do_kit_nao_e_trocado_sem_pedir(amb):
+    (amb.casa / 'CLAUDE.md').write_text('# Regras do desktop, com uma linha só daqui\n', encoding='utf-8')
+    feito = ik.instalar(amb)
+    assert any(f.startswith('ATENÇÃO') and 'difere' in f for f in feito)
+    assert 'só daqui' in (amb.casa / 'CLAUDE.md').read_text(encoding='utf-8')
+    amb.feito = []
+    ik.instalar(amb, claude_md_kit_vence=True)
+    assert (amb.casa / 'CLAUDE.md').read_text(encoding='utf-8').startswith('@')
+    assert any('só daqui' in b.read_text(encoding='utf-8') for b in (amb.casa / 'backups').glob('CLAUDE.md.*'))
+
+
+def test_sem_o_cli_os_comandos_vao_para_o_painel(amb):
+    amb.claude = lambda args: subprocess.CompletedProcess(args, 127, '', 'sem claude')
+    ik.instalar(amb)
+    assert f'/plugin marketplace add {amb.kit}' in amb.no_painel
+    assert '/plugin install nucleo@claude-kit' in amb.no_painel
+    assert not any('FALHOU' in f for f in amb.feito)
+
+
 def test_verificar_acusa_os_erros_de_escopo_e_de_lugar(amb):
     ik.instalar(amb)
     s = json.loads((amb.casa / 'settings.json').read_text(encoding='utf-8'))
