@@ -104,6 +104,10 @@ GRUPOS = [
      'este grupo no seu `.claude\\settings.json`, na fase dele; fora dali estas skills não aparecem.'),
     ('kit', 'Grupo kit — as nossas, só no kit e na janela da raiz',
      'Organizar os projetos de um PC, as cores e os ícones das pastas. Só com `/`.'),
+    ('sdd', 'Grupo sdd — executar um plano de várias tarefas (terceiros), só nos projetos de código',
+     'O subagent-driven-development do Superpowers e as 3 skills de que ele depende: um subagente novo por '
+     'tarefa, com revisão. Ligado por projeto de código, junto com a engenharia; a nossa `orquestrar` diz '
+     'quando usar.'),
     ('pensar','Pensar e decidir (a família do grill, de Matt Pocock)',
      'Antes de construir, decidir. A família do grill faz perguntas, uma de cada vez, até não '
      'sobrar decisão escondida.'),
@@ -275,12 +279,65 @@ _c('dataviz', 'interface',
 
 # --- Janelas, contexto e memória -------------------------------------
 _c('uso-do-claude', 'janelas',
-   'Modelo e esforço, organização das janelas, passagem de trabalho (handoff) e biblioteca de '
-   'pesquisas.',
-   'Ao abrir ou fechar uma janela, escolher modelo e esforço, planejar um trabalho longo ou '
-   'perguntar quanto algo custa. O `CLAUDE.md` pessoal já manda usá-la nesses momentos.',
-   '“Qual modelo e esforço uso nesta fase?”',
-   t='vai ser quebrada em partes menores (plano de 06/10)')
+   'O núcleo: a escada de modelo e esforço, os sinais de que o modelo não deu conta, as armadilhas '
+   '(o atalho `sonnet`, o `/effort` que grava), o contexto, uma janela por fase e o planejamento, com a '
+   'rodada de contingências. Aponta as quatro peças abaixo.',
+   'Entra sozinha ao abrir uma janela, ao planejar e quando você pergunta por que o uso está alto. O '
+   '`CLAUDE.md` pessoal manda usá-la.',
+   '“Por que esta janela está gastando tanto?”')
+_c('modelo-e-esforco', 'janelas',
+   'Qual modelo e qual `/effort` para cada tipo de tarefa, quando subir ou descer, e a 1ª linha do '
+   'prompt.',
+   'Entra sozinha quando o Claude vai recomendar modelo ou esforço.',
+   '“Qual modelo e esforço uso nesta fase?”')
+_c('fechar-janela', 'janelas',
+   'Fecha a janela: reescreve o `docs\\ESTADO.md`, grava o `docs\\PROXIMO.md` (o prompt da próxima) e a '
+   'fila de perguntas, faz commit e push e entrega o resumo com os sinais. Traz os modelos desses arquivos.',
+   'No fim de cada fase, ou perto de ~150 mil tokens. Entra sozinha.',
+   '“Feche a janela.”')
+_c('pesquisa', 'janelas',
+   'Antes de pesquisar, procura na biblioteca do kit (`pesquisas\\`); o que falta, pesquisa por '
+   'subagente; depois, salva lá.',
+   'Entra sozinha antes de pesquisa na internet ou varredura grande.',
+   '“Pesquise como o Claude Code trata ganchos em plugins.”')
+_c('orquestrar', 'janelas',
+   'Delegar e paralelizar com economia: subagentes por papel, com modelo e esforço fixados; SDD; '
+   'Workflow (teto 10); várias janelas; a execução largada com a fila de perguntas.',
+   'Entra sozinha ao delegar, ao executar um plano ou antes de trabalho longo sem supervisão.',
+   '“Execute o plano das 5 tarefas.”')
+_c('organizar-projetos', 'kit',
+   'Reunir os projetos e o kit numa pasta-mãe, pôr no GitHub o que falta (privado), reaproveitar o '
+   'que o PC já tem e criar projeto novo.',
+   'PC novo, projetos espalhados, ou projeto novo (a pasta nasce na janela da raiz). Só com `/`.',
+   '/organizar-projetos')
+_c('cores-das-pastas', 'kit',
+   'O sistema de cores das pastas: aplicar, conferir, marcar a pasta provisória, legenda, mapa e '
+   'VS Code. O gancho que pinta a pasta nova é do grupo nucleo e roda em todo projeto.',
+   'Depois de mudar o mapa, num projeto novo, ou quando o `conferir` acusar algo. Só com `/`.',
+   '/cores-das-pastas')
+_c('icones', 'kit',
+   'Os desenhos dos ícones, a montagem do `.ico` em cada PC e a prévia. Pedido de ícone novo se '
+   'anota e se desenha em lote.',
+   'Quando surgir um verbo ou marca nova, ou um desenho a trocar. Só com `/`.',
+   '/icones')
+_c('subagent-driven-development', 'codigo',
+   'Executa um plano de várias tarefas: um subagente novo por tarefa, em série, com revisão de '
+   'especificação e de qualidade, e uma revisão final.',
+   'Plano de 4 ou mais tarefas no mesmo código, com cabeçalhos “Task N”. A `orquestrar` diz modelo e '
+   'esforço de cada despacho.',
+   '“Execute o plano com o subagent-driven-development.”')
+_c('requesting-code-review', 'codigo',
+   'Pede uma revisão de código a um subagente revisor, com o pacote do que mudou.',
+   'Chamada pelo [[subagent-driven-development]]; também ao fechar uma tarefa importante.',
+   '“Peça uma revisão deste ramo.”')
+_c('using-git-worktrees', 'codigo',
+   'Cria ou confere um worktree (uma cópia de trabalho isolada do repositório) antes de mexer.',
+   'Chamada pelo [[subagent-driven-development]]; também quando duas janelas precisam do mesmo projeto.',
+   '“Abra um worktree para esta tarefa.”')
+_c('finishing-a-development-branch', 'codigo',
+   'Fecha o ramo: testes, e a escolha entre mesclar, abrir PR ou manter. Merge e push seguem a Q10.',
+   'No fim do [[subagent-driven-development]].',
+   '“Termine este ramo.”')
 _c('recursos-do-projeto', 'janelas',
    'Depois do grill de um projeto novo: decide que ferramentas entram e quais ficam de fora, e '
    'escreve as regras do projeto.',
@@ -1746,7 +1803,7 @@ def sec2(inv: Inventario) -> None:
       'de projeto vale **só ali**. Um plugin **liga e desliga por projeto**.', manter=True)
     caixas([
         ('Skill pessoal', 'Todas as janelas, de todos os projetos desta máquina. Não se desliga '
-                          'por projeto.', 'Hoje: as do kit'),
+                          'por projeto.', 'Hoje: só as do claude.ai; as do kit vêm por plugin'),
         ('Skill de projeto', 'Só dentro daquele projeto: aparece quando a janela abre naquela '
                              'pasta.', 'Hoje: ' + (', '.join(PROJETOS.get(x, x) for x in inv.projetos_lidos)
                                                    or 'nenhum')),
@@ -1755,12 +1812,14 @@ def sec2(inv: Inventario) -> None:
                                                        or 'nenhum')),
     ])
     tabela(['Tipo', 'Onde mora', 'Como se liga ou desliga'], [
-        ['Skill pessoal (kit)', f'`{KIT / "skills"}`, ligada por junção em '
-                                f'`{CLAUDE_HOME / "skills"}`', 'Não se desliga por projeto. '
-                                'Instalou ou atualizou? Rode o `ligar_claude.py` (seção 7).'],
+        ['Skill do kit (plugin)', f'`{KIT / "plugins"}\\<grupo>\\skills`, carregada da própria pasta '
+                                  '(o kit é um marketplace local)',
+         'Por grupo, no `enabledPlugins` do usuário (nucleo, planejamento) ou do projeto (engenharia, '
+         'sdd, kit). Depois de `git pull`: `instalar_kit.py --verificar`; de terceiros: '
+         '`atualizar_terceiros.py`.'],
         ['Skill de projeto', r'`<projeto>\.claude\skills` e `<projeto>\.claude\commands`',
          'Só existe naquele projeto.'],
-        ['Plugin', f'`{CLAUDE_HOME / "plugins" / "cache"}`',
+        ['Plugin de fora', f'`{CLAUDE_HOME / "plugins" / "cache"}`',
          '`enabledPlugins` no `settings.json` do usuário ou do projeto.'],
         ['claude.ai (sincronizada)', f'`{CLAUDE_HOME / "skills" / "synced"}` (não mexer)',
          'No próprio claude.ai: o Claude Code recebe a lista pronta.'],
