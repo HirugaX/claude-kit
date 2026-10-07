@@ -24,6 +24,11 @@
       "name": "engenharia",
       "source": "./plugins/engenharia",
       "description": "Terceiros: do plano ao código (spec, tarefas, implementação, testes, diagnóstico, interface). Liga por projeto de código."
+    },
+    {
+      "name": "sdd",
+      "source": "./plugins/sdd",
+      "description": "Terceiros (obra/superpowers): executar um plano de várias tarefas, um subagente por tarefa, com revisão. Liga por projeto de código e nas pastas de teste."
     }
   ]
 }

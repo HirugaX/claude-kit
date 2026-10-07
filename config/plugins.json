@@ -21,6 +21,11 @@
       "escopo": "projeto",
       "onde": "claude-kit e a janela da raiz (C:\\CLAUDE-PROJETOS\\.claude\\settings.json, que não vaza para os projetos)",
       "desde": "F2a"
+    },
+    "sdd": {
+      "escopo": "projeto",
+      "onde": "projetos de código, junto com a engenharia (a orquestrar o usa num plano de 4+ tarefas), e as pastas de teste (F3b). Nunca no escopo de usuário.",
+      "desde": "F2a"
     }
   },
   "de_fora": {
@@ -35,11 +40,11 @@
     "notion@claude-plugins-official": {"escopo": "projeto", "ligado_em_prefixo": "pessoal-", "nota": "ADR-0001 D4"}
   },
   "tipos_de_projeto": {
-    "codigo": {"enabledPlugins": {"engenharia@claude-kit": true}, "nota": "desosp-: conectores pela ADR-0001 D4 (todos negados menos o Drive)"},
+    "codigo": {"enabledPlugins": {"engenharia@claude-kit": true, "sdd@claude-kit": true}, "nota": "desosp-: conectores pela ADR-0001 D4 (todos negados menos o Drive)"},
     "pesquisa-estudo": {"enabledPlugins": {}, "outros": {"disableClaudeAiConnectors": true}},
     "pessoal": {"enabledPlugins": {"notion@claude-plugins-official": true}},
     "kit": {"enabledPlugins": {"engenharia@claude-kit": true, "kit@claude-kit": true}},
     "raiz": {"enabledPlugins": {"kit@claude-kit": true}},
-    "teste": {"enabledPlugins": {"engenharia@claude-kit": true, "session-report@claude-plugins-official": true}}
+    "teste": {"enabledPlugins": {"engenharia@claude-kit": true, "sdd@claude-kit": true, "session-report@claude-plugins-official": true}}
   }
 }

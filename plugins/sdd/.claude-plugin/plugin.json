@@ -1,0 +1,5 @@
+{
+  "name": "sdd",
+  "description": "Terceiros (obra/superpowers): executar um plano de várias tarefas com um subagente novo por tarefa e revisão por tarefa (subagent-driven-development e as 3 de que ele depende). Liga por projeto de código e nas pastas de teste.",
+  "version": "0.1.0"
+}

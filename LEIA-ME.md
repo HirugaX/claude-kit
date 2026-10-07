@@ -12,15 +12,19 @@ direto desta pasta (a edição vale na sessão seguinte, ou com `/reload-plugins
 
 | grupo | de quem | onde mora | onde liga |
 |---|---|---|---|
-| `nucleo` | nossas | `plugins\nucleo\skills\` | todo projeto (escopo de usuário) |
+| `nucleo` | nossas: `uso-do-claude` (o núcleo), `modelo-e-esforco`, `fechar-janela`, `pesquisa`, `orquestrar`, `recursos-do-projeto` | `plugins\nucleo\skills\` | todo projeto (escopo de usuário) |
 | `planejamento` | terceiros | `plugins\planejamento\skills\` | todo projeto (escopo de usuário) |
 | `engenharia` | terceiros | `plugins\engenharia\skills\` | só nos projetos de código, cada um na sua fase (`<projeto>\.claude\settings.json`); hoje, no kit |
-| `kit` (a partir do F2a) | nossas | `plugins\kit\skills\` | no kit e na janela da raiz `C:\CLAUDE-PROJETOS` |
+| `kit` | nossas, só por `/`: `organizar-projetos`, `cores-das-pastas`, `icones` | `plugins\kit\skills\` | no kit e na janela da raiz `C:\CLAUDE-PROJETOS` |
+| `sdd` | terceiros (obra/superpowers): `subagent-driven-development` e as 3 de que ele depende | `plugins\sdd\skills\` | só nos projetos de código, com a `engenharia`, e nas pastas de teste |
 
 - **O que cada skill faz e quando usar:** o `GUIA_DAS_SKILLS.docx` (abaixo), com a tabela de qual projeto liga qual
   grupo.
 - **De onde veio cada skill de terceiros:** o `origem.json` de cada plugin (repositório, caminho, commit, data).
 - **O gancho das cores das pastas** é do plugin `nucleo` (`plugins\nucleo\hooks\hooks.json`): roda em todo projeto.
+  Os scripts dele (e os do `organizar-projetos`), o `mapa.json` e os quadros dos ícones moram em `plugins\nucleo\pastas\`.
+- **Os modelos** de `ESTADO.md`, `PROXIMO.md`, `PERGUNTAS.md`, ADR e glossário: `plugins\nucleo\skills\fechar-janela\modelos\`.
+- **O lançamento automático da próxima fase** (`claude --bg`) fica desligado em `config\fluxo.json` até o F3c.
 
 ## Instalar ou conferir (os dois PCs)
 

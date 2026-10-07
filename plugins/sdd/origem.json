@@ -1,0 +1,40 @@
+{
+  "skills": {
+    "subagent-driven-development": {
+      "repositorio": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers.git",
+      "caminho": "",
+      "hash_da_pasta": "aacfc60b54e36c583bcc0746ba0d92cb8eb648728e4882e1d67b913ba7218536",
+      "commit": "8ca22dba9a94f28898bbce59f2537ff4d87c747d",
+      "instalada_em": "2026-10-07",
+      "atualizada_em": "2026-10-07"
+    },
+    "requesting-code-review": {
+      "repositorio": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers.git",
+      "caminho": "",
+      "hash_da_pasta": "2abaeac1de432c76abda0ca7ba618901d2e94f8817b3650f9c523acea2d224f5",
+      "commit": "8ca22dba9a94f28898bbce59f2537ff4d87c747d",
+      "instalada_em": "2026-10-07",
+      "atualizada_em": "2026-10-07"
+    },
+    "using-git-worktrees": {
+      "repositorio": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers.git",
+      "caminho": "",
+      "hash_da_pasta": "48c8a1040e378e0cb7208107294e3afa9067b9370c3f33b49a443eb6b7528b0d",
+      "commit": "8ca22dba9a94f28898bbce59f2537ff4d87c747d",
+      "instalada_em": "2026-10-07",
+      "atualizada_em": "2026-10-07"
+    },
+    "finishing-a-development-branch": {
+      "repositorio": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers.git",
+      "caminho": "",
+      "hash_da_pasta": "4f571e7befb8b0946d9d7770232c818812412e9ab1dfb811f847edfba1fc6275",
+      "commit": "8ca22dba9a94f28898bbce59f2537ff4d87c747d",
+      "instalada_em": "2026-10-07",
+      "atualizada_em": "2026-10-07"
+    }
+  }
+}
