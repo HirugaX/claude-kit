@@ -43,10 +43,22 @@ F2a → F2b → F3a ∥ F3b (em paralelo, cada uma na sua pasta de teste) → F3
 | que skills existem, para que servem, quem liga | `claude-kit\GUIA_DAS_SKILLS.docx` (gere com `python scripts\gerar_guia_skills.py`); as skills moram em `claude-kit\plugins\<grupo>\skills\` |
 | se o kit está bem instalado | `python C:\CLAUDE-PROJETOS\claude-kit\scripts\instalar_kit.py --verificar` (rode depois de todo `git pull` do kit) |
 | o custo de abrir uma janela | `python C:\CLAUDE-PROJETOS\claude-kit\scripts\medir_uso.py --sessoes` |
-| a semana em números | `claude-kit\metricas\uso-semanal.csv` (`scripts\medir_semana.py`); a planilha e o balanço chegam no F2b |
+| a semana em números | `claude-kit\metricas\uso-semanal.csv` (uma linha por semana e por PC); a planilha com os gráficos da régua e as metas em `claude-kit\metricas\uso.xlsx` (fora do git; cada PC a refaz) |
+| modelo, esforço, contexto e limites, ao vivo | a statusline, no terminal (o painel do VS Code não a mostra): `Opus 5.5 · medium · ctx 34% · 5h 12% · sem 40%` |
 
-**Manutenção:** a janela aberta na raiz `C:\CLAUDE-PROJETOS` cuida das cores e dos ícones das pastas e da medição
-semanal. Os ícones novos ficam para depois, todos juntos.
+**Manutenção:** a janela aberta na raiz `C:\CLAUDE-PROJETOS` cuida das cores e dos ícones das pastas e do balanço das
+métricas. Os ícones novos ficam para depois, todos juntos.
+
+## O que os ganchos fazem sozinhos (desde o F2b)
+
+- **Ao abrir qualquer janela:** avisam modelo errado (Sonnet 5, Opus 5) e esforço `xhigh` ou `max`; atualizam o kit
+  (`git pull`, no máximo uma vez por hora) e avisam se ele divergiu; medem a semana fechada em segundo plano; e, a cada
+  15 dias, avisam numa linha que o balanço das métricas venceu — aí abra a janela da raiz e peça "rode o
+  `claude-kit\metricas\BALANCO.md`" (as propostas vão para a fila do kit, `claude-kit\docs\PERGUNTAS.md`).
+- **`/model` para o Sonnet 5 é barrado** (o Sonnet 5.5 passa).
+- **Nos projetos já migrados (com `docs\ESTADO.md`):** a abertura traz o estado curto, a fila, a caixa e o git; depois
+  de um `/clear`, o `docs\PROXIMO.md`. A janela não fecha a fase sem reescrever o `ESTADO.md`, e escrita em pasta de
+  dado fora das "Escritas em dado real aprovadas" do `PROXIMO.md` é barrada.
 
 ## O que continua sendo seu
 
