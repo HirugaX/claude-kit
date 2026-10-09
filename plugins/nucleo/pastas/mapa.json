@@ -97,7 +97,9 @@
   "pastas": {
    ".claude": "nao-toco",
    "prototipos-icones": "eu-leio",
-   "prototipos-icones/*": "sem-cor"
+   "prototipos-icones/*": "sem-cor",
+   "teste-fluxo": "sem-cor",
+   "teste-ferramentas": "sem-cor"
   }
  },
  "projetos": {

@@ -45,6 +45,10 @@
     "pessoal": {"enabledPlugins": {"notion@claude-plugins-official": true}},
     "kit": {"enabledPlugins": {"engenharia@claude-kit": true, "kit@claude-kit": true}},
     "raiz": {"enabledPlugins": {"kit@claude-kit": true}},
-    "teste": {"enabledPlugins": {"engenharia@claude-kit": true, "sdd@claude-kit": true, "session-report@claude-plugins-official": true}}
+    "teste": {
+      "enabledPlugins": {"engenharia@claude-kit": true, "sdd@claude-kit": true, "session-report@claude-plugins-official": true},
+      "outros": {"hooks": {"PreToolUse": [{"matcher": "Bash|PowerShell", "hooks": [{"type": "command", "command": "python \"C:/CLAUDE-PROJETOS/claude-kit/plugins/nucleo/ganchos/so_com_dir.py\" || true", "timeout": 10}]}]}},
+      "nota": "pastas de teste (F3a, F3b): o gancho barra o analyze-sessions do session-report sem --dir (Q40); no .gitignore, session-report-*.html e .claude/largada"
+    }
   }
 }
