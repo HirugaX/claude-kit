@@ -1,4 +1,4 @@
-# Estado do claude-kit — 07/10/2026, fim do F2a
+# Estado do claude-kit — 09/10/2026, fim do F2b
 
 ## Objetivo
 
@@ -8,57 +8,52 @@ responde de uma vez; entre as sentadas o Claude trabalha sozinho, com a mesma qu
 
 ## Onde estamos
 
-- **Feito:** F1a (privacidade, isolamento, git); R1 (objetivo, medição); F1b (marketplace); **F2a (as skills), 07/10.**
-- **Próximo passo:** o F2b (ganchos, settings, statusline, medição, pastas de teste), com o prompt do plano ("### F2b",
-  conferido em 07/10). Depois, F3a ∥ F3b, F3c, F5a.
-- **Critério de pronto do F2b:** o portão do prompt (`testar_ganchos.py` verde com os da fila; numa sessão nova o
-  `SessionStart` avisa modelo errado e o `PreModelSwitch` barra o `/model sonnet`; `medir_semana.py` reproduz 29/09).
-- **Em paralelo, quando o Ettore quiser:** a R0 (front do app); o desktop instala pela `caixa\NB-003` (substitui a NB-002).
-- **Push:** feito em 07/10, no fim do F2a.
+- **Feito:** F1a; R1; F1b (marketplace); F2a (skills, 07/10); **F2b (ganchos, statusline, medição, pastas de teste), 09/10.**
+- **Próximo passo:** F3a (`teste-fluxo`) ∥ F3b (`teste-ferramentas`), com os prompts do plano (conferidos em 09/10).
+  Depois, F3c e F5a.
+- **Critério de pronto do F3a e do F3b:** o `RESULTADO.md` de cada um, com prova por critério (F3a) e números com
+  veredito por ferramenta (F3b), copiado para `pesquisas\`.
+- **Em paralelo, quando o Ettore quiser:** a R0 (front do app); o desktop instala pela `caixa\NB-004` (soma-se à NB-003).
 
-## O que o F2a deixou
+## O que o F2b deixou
 
-- **Grupos:** `nucleo` 6 (usuário) · `planejamento` 12 (usuário) · `kit` 3, só `/` (no kit e na raiz) · `engenharia` 14
-  e `sdd` 4 (por projeto de código; teste). O kit e a janela da raiz ligam o `kit`; o `instalar_kit.py` grava a raiz.
-- **`uso-do-claude`** virou núcleo (123 linhas, 9,7 KB por disparo; eram 298 e 22,3 KB) + `modelo-e-esforco`,
-  `fechar-janela` (com `modelos\`: ESTADO, PROXIMO, PERGUNTAS, ADR, GLOSSARY), `pesquisa`, `orquestrar`. Consulta:
-  `reference.md` e `testar-instrucao.md`. **Custo fixo** (`claude -p "/context"`, pasta de rascunho): descrições do
-  `nucleo` ~470 → ~290 tokens; skills 6,4 mil → 6,2 mil (total 31,4 mil, arredondado igual).
-- **Módulo das pastas** em `plugins\nucleo\pastas\` (scripts, testes, mapa, quadros dos ícones, planos); o gancho do
-  `nucleo` o chama por `${CLAUDE_PLUGIN_ROOT}/pastas/...`; o `ligar-gancho` não grava mais em settings. Suíte: 150
-  verdes; `pastas.py conferir` = 0; o gancho disparou numa sessão nova.
-- **`config\fluxo.json`** com `lancar_bg: false` (o F3c liga). `scripts\medir_uso.py` (movido).
-  `scripts\perguntas_nucleo.txt`: 11 de 11 batem (Sonnet 5.5, US$ 1,16 as 12 sessões).
-- **`.gitattributes`:** scripts bash dos plugins sempre em LF (o `task-brief` do SDD quebra com CRLF).
+- **Ganchos** em `plugins\nucleo\ganchos\` (um script por gancho, `comum.py`), pelo `hooks\hooks.json`. Todo projeto:
+  abertura (modelo e esforço errados, `git pull` do kit por hora, medição semanal em segundo plano, balanço vencido),
+  `PreModelSwitch` (barra o `claude-sonnet-5`), lembrete de `effort` no `Agent`. Onde há `docs\ESTADO.md`: estado
+  curto, fila, caixa e git na abertura; `PROXIMO.md` no `/clear`; portão `Stop`; guarda de pasta de dado; a fila.
+  `scripts\testar_ganchos.py`: 52 verdes. Estado local por PC em `~\.claude\kit-local\`.
+- **Settings** (backup `~\.claude\backups\settings.json.2026-10-09_antes-do-F2b`): statusline, `showClearContextOnPlanAccept`,
+  3 permissões mortas fora; o `instalar_kit.py` instala e confere os dois primeiros.
+- **Medição:** `medir_semana.py --planilha` (`metricas\uso.xlsx`, fora do git) e o % semanal da statusline;
+  `metricas\metas.json` (fonte única das metas); `metricas\BALANCO.md` (roda na janela da raiz; 1º vence em 24/10).
+- `teste-fluxo` e `teste-ferramentas` com `git init`, settings do tipo `teste`, sem cor.
 
 ## Surpresas
 
-- **Descrição de skill com `: ` sem aspas some** (o YAML quebra e a skill não carrega, sem aviso). As do `nucleo` estão
-  entre aspas; confira com `claude -p "/context"` ou a 1ª linha do `stream-json`.
-- **Quebrar uma skill em cinco aumenta as descrições fixas**, se não forem enxutas: a 1ª versão foi para ~590 tokens.
-- **A pergunta 9 falhou** até o CLAUDE.md pessoal apontar a rodada de contingências: regra só dentro da skill não chega
-  à sessão que responde pelo CLAUDE.md.
-- **Heredoc do Git Bash come barras invertidas**: `\n` de `plugins\nucleo` virou quebra de linha no plano (consertado e
-  conferido). Editar por arquivo `.py` ou pela ferramenta Edit.
-- **Pasta com o diretório do shell dentro não se move** no Windows (`Permission denied`).
-- **Esforço do subagente:** a documentação não diz se herda; a ferramenta Agent (desta versão) e o `agent()` do
-  Workflow aceitam `effort`. A `orquestrar` manda fixá-lo em todo despacho.
+- **`/model sonnet` e `--model sonnet` já abrem o Sonnet 5.5** (2.1.291, provado por `claude -p`). A regra do CLAUDE.md,
+  da `uso-do-claude` e do COMO_OPERAR ainda diz que abrem o 5; mudar é decisão do Ettore (no resumo do F2b).
+- **O SessionStart em `-p` não traz o `model`**: a abertura lê o `--model` da linha de comando do processo (~1,5 s).
+- **`CLAUDE_CODE_SESSION_ATTENDED`** vale 1 na sessão com gente e 0 em `-p` (não documentado): é o sinal da execução
+  largada. O `PermissionRequest` não dispara em `-p` nem em `--bg` (documentação).
+- **O painel do VS Code não roda a statusline**: o % só chega ao arquivo pelo terminal.
+- O `pastas.py marcar` resolve o caminho a partir do diretório atual: rode-o da pasta-mãe.
+- Heredoc do Git Bash comeu barras de novo (consertado pelo Edit); o safety-net barra `git checkout --`.
 
 ## Decisões
 
-- O módulo das pastas inteiro no `nucleo` (todos os scripts importam o `regras.py`); as skills do `kit` só com texto.
-- `sdd` de escopo de projeto (tipos `codigo` e `teste`), nunca no usuário.
-- O CLAUDE.md pessoal aponta as peças do núcleo e a rodada de contingências (§3 e §7 da `uso-do-claude`).
-- No prompt do F2b entrou um gancho a mais: `PreToolUse` em `Agent` lembra o `effort` quando falta (não bloqueia).
+- Execução largada = `ATTENDED=0`, `KIT_LARGADA=1` ou `.claude\largada` (texto na `orquestrar` §4).
+- O `AskUserQuestion` largado é **negado** com "Adiada" (nunca `answers`): o gancho não escolhe.
+- "Fase dada como pronta" = a última mensagem traz "Sinais de insuficiência do modelo"; "reescrito" = o hash do
+  `ESTADO.md` mudou desde a abertura.
+- A regra de leitura da memória `c--DESOSP` ficou no allow (a pasta existe; a limpeza é do F9).
 
 ## Riscos
 
-- **Engenharia e sdd fora dos projetos** até as fases deles (decisão do Ettore). A R0 liga só no app, `--scope local`.
-- **`cc-plugin-telemetry`:** decisão do Ettore, para depois (desligar tira o `Monitor` e o Remote Control).
+- A 2ª camada age no próprio kit (tem `ESTADO.md`): fechar uma fase do kit sem reescrevê-lo é bloqueado.
 - Herdados: os bugs da `--bg` no Windows (F3a); o conector do Drive desligado; as 6 lápides do `C:`; o `gh` ausente;
-  `deep-research` com nome repetido (embutida e do claude.ai).
+  `deep-research` com nome repetido; `pastas.py conferir` acusa 2 pastas de outra janela no `desosp-censo`.
 
 ## Como retomar
 
-1. `git pull --ff-only`; `python scripts\instalar_kit.py --verificar` (0 achados); ler este arquivo e o `caixa\INDICE.md`.
-2. Abrir o F2b com o prompt do plano. Antes de commit: `python scripts\checa_kit.py --tudo`.
+1. `git pull --ff-only`; `python scripts\instalar_kit.py --verificar` (0 achados); `python scripts\testar_ganchos.py`.
+2. Abrir o F3a e o F3b com os prompts do plano, cada um na sua pasta. Antes de commit: `python scripts\checa_kit.py --tudo`.
