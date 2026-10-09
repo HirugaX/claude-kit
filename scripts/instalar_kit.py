@@ -16,7 +16,8 @@ config\plugins.json. O que a instalação faz:
   5. o CLAUDE.md pessoal: ~\.claude\CLAUDE.md com só a linha de import do CLAUDE.md do kit (o import
      sobrevive ao git pull; o hardlink de antes se separava);
   6. o local.json das cores (%LOCALAPPDATA%\claude-pastas), se existir: o "modulo" aponta para o kit;
-  7. a janela da raiz: o grupo kit no .claude\settings.json da pasta-mãe, quando o plugin kit existir.
+  7. a janela da raiz: o grupo kit no .claude\settings.json da pasta-mãe, quando o plugin kit existir;
+  8. no ~\.claude\settings.json, a statusline do nucleo e o showClearContextOnPlanAccept (F2b).
 No fim imprime o comando da política do safety-net, que é do Ettore (o plugin não deixa o Claude
 mudar a própria política).
 """
@@ -137,6 +138,13 @@ def linha_import(a: Ambiente) -> str:
     return '@' + (a.kit / 'CLAUDE.md').as_posix()
 
 
+def settings_do_fluxo(a: Ambiente) -> dict:
+    r"""O que o fluxo novo quer no ~\.claude\settings.json (F2b): a statusline do nucleo (modelo, esforço, contexto e
+    os % dos limites, gravados para o medir_semana.py) e o "Yes, clear context and…" ao aprovar um plano."""
+    cmd = f'python {(a.kit / "plugins" / "nucleo" / "ganchos" / "statusline.py").as_posix()}'
+    return {'statusLine': {'type': 'command', 'command': cmd, 'padding': 0}, 'showClearContextOnPlanAccept': True}
+
+
 # ---------------------------------------------------------------- conferência
 
 def verificar(a: Ambiente) -> list[str]:
@@ -186,6 +194,9 @@ def verificar(a: Ambiente) -> list[str]:
             ach.append(f'{pid} está ligado no escopo de usuário; devia ser só nos projetos ({c.get("ligado_em") or c.get("ligado_em_prefixo")})')
 
     settings = _json(a.casa / 'settings.json')
+    for chave, valor in settings_do_fluxo(a).items():
+        if settings.get(chave) != valor:
+            ach.append(f'{chave} do ~\\.claude\\settings.json não é o do fluxo novo (rode o instalar_kit.py)')
     for h in settings.get('hooks', {}).get('PostToolUse', []):
         for x in h.get('hooks', []):
             if 'gancho.py' in x.get('command', ''):
@@ -311,6 +322,12 @@ def instalar(a: Ambiente, claude_md_kit_vence: bool = False) -> list[str]:
         if mod and Path(lj.get('modulo', '')) != mod:
             _gravar_json(a.local_json, {**lj, 'modulo': str(mod)}, backups)
             feito.append(f'local.json das cores: modulo -> {mod}')
+
+    s = _json(a.casa / 'settings.json')
+    falta = {k: v for k, v in settings_do_fluxo(a).items() if s.get(k) != v}
+    if falta:
+        _gravar_json(a.casa / 'settings.json', {**s, **falta}, backups)
+        feito.append(f'~\\.claude\\settings.json: {", ".join(falta)}')
 
     if 'kit' in grupos:
         p = a.mae / '.claude' / 'settings.json'
