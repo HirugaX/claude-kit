@@ -1,0 +1,21 @@
+{
+  "_leia": "As metas da régua (plano, 'Verificação de ponta a ponta'; R1, Q34 e Q39). Base: a semana de 29/09 no uso-semanal.csv (pc notebook). Lido pelo scripts/medir_semana.py --planilha (a linha da meta nos gráficos) e pelo metricas/BALANCO.md (o balanço quinzenal). Mude aqui, num lugar só.",
+  "base_semana": "2026-09-29",
+  "regua": [
+    {"coluna": "retornos_30min_estrito", "titulo": "Retornos (mensagem dele depois de > 30 min parado)", "base": 29, "meta": 14.5, "sentido": "menor", "regra": "metade"},
+    {"coluna": "sentadas_estrito", "titulo": "Sentadas (blocos de mensagens com até 20 min entre elas)", "base": 50, "meta": 25, "sentido": "menor", "regra": "metade dos blocos"},
+    {"coluna": "maior_trecho_global_min", "titulo": "Maior trecho do Claude sem ele (min, todas as janelas)", "base": 92, "meta": 184, "sentido": "maior", "regra": "o dobro"},
+    {"coluna": "conc_max_humano", "titulo": "Janelas trabalhando ao mesmo tempo (máximo por dia)", "base": 4, "meta": null, "sentido": "maior", "regra": "sobe quando há trabalho independente, com tokens iguais ou menores que em série (F3a)"},
+    {"coluna": "ctx_mediano_principal", "titulo": "Contexto mediano por chamada (tokens)", "base": 307005, "meta": 120000, "sentido": "menor", "regra": "≤ 120 mil"},
+    {"coluna": "chamadas_sonnet5", "titulo": "Chamadas no Sonnet 5 por engano", "base": 296, "meta": 0, "sentido": "menor", "regra": "0"},
+    {"coluna": "chamadas_opus5", "titulo": "Chamadas no Opus 5 (rebaixamento)", "base": 77, "meta": 0, "sentido": "menor", "regra": "0"},
+    {"coluna": "chamadas_esforco_max", "titulo": "Chamadas em esforço max", "base": 3058, "meta": null, "sentido": "menor", "regra": "só com motivo escrito (controle: gancho do Agent, F2b)"},
+    {"coluna": "pct_limite_semanal", "titulo": "% do limite semanal (máximo da semana, pela statusline)", "base": null, "meta": null, "sentido": "menor", "regra": "acompanhar (desde o F2b)"}
+  ],
+  "fora_da_planilha": {
+    "ctx0_por_projeto": "app / kernel / planilha: 58 / 66 / 55 mil → ≤ 40 / 50 / 45 mil (metricas/ctx0-por-projeto.csv)",
+    "claude_md_linhas": "app / kernel / planilha: 354 / 430 / 226 → < 200 (wc -l)",
+    "estado": "handoffs de 575 e 376 KB → docs/ESTADO.md ≤ 1 página",
+    "gestos_por_janela": "~7 → ≤ 2 depois do F3 (contagem no F3a e no F5b)"
+  }
+}

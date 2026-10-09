@@ -1,4 +1,4 @@
-"""Protótipo da R1 (06/10/2026): linha semanal de uso do Claude Code a partir das transcrições. Só imprime números. O F2 completa: planilha, gancho de abertura e % do limite."""
+"""Linha semanal de uso do Claude Code a partir das transcrições (protótipo da R1, 06/10; completo no F2b, 09/10: a planilha, o % do limite semanal e o gancho de abertura que roda esta medição). Só números."""
 # Lê ~/.claude/projects/**/*.jsonl (principais e subagentes). O texto das mensagens é só testado (começa com tal
 # marcador?) e comparado por HASH (sha1, nunca impresso); nada de texto, caminho, comando ou título é impresso nem
 # gravado. Saída: contagens, durações, datas, IDs de modelo, níveis de esforço, nomes de pasta de projeto e de projeto.
@@ -7,6 +7,12 @@
 #     python medir_semana.py --inicio 2026-10-06 --dias 7
 #     python medir_semana.py --csv uso-semanal.csv --ctx0-csv ctx0-por-projeto.csv --mapa pastas-projetos.csv
 #         (a linha da semana troca a de mesmo semana_inicio e pc, ou entra no fim; o ctx0 troca as da semana)
+#     python medir_semana.py --planilha ../metricas/uso.xlsx --csv ../metricas/uso-semanal.csv
+#         (só refaz a planilha a partir do CSV e do metricas/metas.json; não lê transcrição)
+#
+# Quem roda sozinho: o gancho de abertura do nucleo (plugins/nucleo/ganchos/semana.py), em segundo plano, quando falta
+# a linha de uma semana já fechada deste PC; ele refaz a planilha em seguida. O pct_limite_semanal vem do arquivo que a
+# statusline grava (~/.claude/kit-local/limites.jsonl): o maior % semanal visto dentro da semana.
 #
 # Regras (pesquisas/2026-10-06_medicao-semanal-de-uso.md, seção 4):
 #   humano estrito  = H (digitada) + HQ (digitada com o Claude ocupado, entra como attachment queued_command) + HC (comando)
@@ -20,6 +26,9 @@ import os, re, sys, csv, json, time, bisect, hashlib, argparse, statistics, coll
 import datetime as dt
 
 BASE = os.path.join(os.path.expanduser('~'), '.claude', 'projects')
+LIMITES = os.path.join(os.path.expanduser('~'), '.claude', 'kit-local', 'limites.jsonl')
+KIT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RX_INT = re.compile(r'^-?\d+$')
 VERSAO = 'r1-1'
 LIM_RETORNO = 30 * 60      # retorno: humano volta depois de > 30 min sem evento
 LIM_SENTADA = 20 * 60      # sentada: mensagens do humano com intervalo <= 20 min
@@ -114,6 +123,109 @@ def corridas(seq, gap, t_ini, t_fim):
     if ini is not None and ult > ini and t_ini <= ini < t_fim:
         saida.append((ult - ini, ini, 0))
     return saida
+
+
+def pct_semanal(caminho, t_ini, t_fim):
+    """O maior % do limite semanal (rate_limits.seven_day) que a statusline anotou dentro da semana; '' sem dado."""
+    vals = []
+    for f in (caminho + '.1', caminho):
+        if not os.path.exists(f):
+            continue
+        with open(f, encoding='utf-8') as fh:
+            for ln in fh:
+                try:
+                    r = json.loads(ln)
+                except ValueError:
+                    continue
+                if isinstance(r.get('sem'), (int, float)) and t_ini <= float(r.get('ts', 0)) < t_fim:
+                    vals.append(round(r['sem']))
+    return max(vals) if vals else ''
+
+
+def _num(v):
+    return int(v) if RX_INT.match(v or '') else None
+
+
+def gerar_planilha(xlsx, caminho_csv, caminho_metas):
+    """metricas/uso.xlsx: a aba "semanas" (o CSV) e a aba "regua" (um gráfico de linha por métrica, com a meta).
+
+    Um gráfico por métrica, nunca dois eixos; uma cor por PC e a meta em cinza tracejado (skill dataviz). Fica fora do
+    git (metricas/*.xlsx): cada PC a refaz."""
+    from openpyxl import Workbook
+    from openpyxl.chart import LineChart, Reference
+    from openpyxl.styles import Font
+    with open(caminho_csv, encoding='utf-8', newline='') as fh:
+        linhas = [r for r in csv.reader(fh) if r]
+    with open(caminho_metas, encoding='utf-8') as fh:
+        metas = json.load(fh)
+    cab, dados = linhas[0], linhas[1:]
+    i_pc = cab.index('pc')
+    wb = Workbook()
+    ws = wb.active
+    ws.title = 'semanas'
+    ws.append(cab)
+    for r in dados:
+        ws.append([_num(x) if _num(x) is not None else x for x in r])
+    for c in ws[1]:
+        c.font = Font(bold=True)
+    ws.freeze_panes = 'B2'
+    rg = wb.create_sheet('regua')
+    rg['A1'] = 'A régua (metricas/metas.json): o valor de cada semana, por PC, e a meta. Base: a semana de %s.' % (
+        metas.get('base_semana', ''))
+    rg['A1'].font = Font(bold=True)
+    pcs = sorted({r[i_pc] for r in dados})
+    semanas = sorted({r[0] for r in dados})
+    cores = ['2A78D6', '1BAF7A', 'E6A100']          # series-1..3 da paleta de referência, sempre nesta ordem
+    lin = 3
+    for m in metas.get('regua', []):
+        if m['coluna'] not in cab:
+            continue
+        j = cab.index(m['coluna'])
+        tem_meta = m.get('meta') is not None
+        rg.cell(lin, 1, m['titulo']).font = Font(bold=True)
+        rg.cell(lin + 1, 1, 'semana')
+        for k, p in enumerate(pcs):
+            rg.cell(lin + 1, 2 + k, p)
+        if tem_meta:
+            rg.cell(lin + 1, 2 + len(pcs), 'meta (%s)' % m.get('regra', ''))
+        for s_i, s in enumerate(semanas):
+            rg.cell(lin + 2 + s_i, 1, s)
+            for k, p in enumerate(pcs):
+                v = next((r[j] for r in dados if r[0] == s and r[i_pc] == p), '')
+                rg.cell(lin + 2 + s_i, 2 + k, _num(v))
+            if tem_meta:
+                rg.cell(lin + 2 + s_i, 2 + len(pcs), m['meta'])
+        ult = lin + 1 + len(semanas)
+        ch = LineChart()
+        ch.title = m['titulo'].split(' (')[0]          # o nome completo fica na célula acima da tabela
+        ch.height, ch.width = 6.5, 14
+        ch.legend.position = 'b'
+        ch.add_data(Reference(rg, min_col=2, max_col=1 + len(pcs) + tem_meta, min_row=lin + 1, max_row=ult),
+                    titles_from_data=True)
+        ch.set_categories(Reference(rg, min_col=1, min_row=lin + 2, max_row=ult))
+        for k, s in enumerate(ch.series):
+            e_meta = tem_meta and k == len(pcs)
+            cor = '52514E' if e_meta else cores[k % len(cores)]
+            s.smooth = False
+            s.graphicalProperties.line.width = 19050 if e_meta else 25400       # 1,5 pt e 2 pt
+            s.graphicalProperties.line.solidFill = cor
+            if e_meta:
+                s.graphicalProperties.line.dashStyle = 'dash'
+                s.marker.symbol = 'none'
+            else:
+                s.marker.symbol = 'circle'
+                s.marker.size = 7
+                s.marker.graphicalProperties.solidFill = cor
+                s.marker.graphicalProperties.line.solidFill = cor
+        rg.add_chart(ch, 'G%d' % lin)
+        lin = max(ult + 2, lin + 15)
+    rg.column_dimensions['A'].width = 14
+    os.makedirs(os.path.dirname(os.path.abspath(xlsx)), exist_ok=True)
+    tmp = xlsx + '.tmp.xlsx'
+    wb.save(tmp)
+    os.replace(tmp, xlsx)
+    print('planilha: %d semana(s), %d PC(s), %d gráfico(s) -> %s' % (len(semanas), len(pcs), len(rg._charts), xlsx))
+    return 0
 
 
 def carregar_mapa(caminho):
@@ -287,7 +399,12 @@ def main():
     ap.add_argument('--pc', default='notebook', help='rotulo do PC na coluna pc da linha semanal')
     ap.add_argument('--ctx0-csv', default='', help='CSV longo do ctx0 por projeto (troca as linhas da semana)')
     ap.add_argument('--mapa', default='', help='CSV pasta,projeto (pastas-projetos.csv); sem ele, o ctx0 sai por pasta')
+    ap.add_argument('--limites', default=LIMITES, help='o arquivo da statusline com o %% do limite semanal')
+    ap.add_argument('--planilha', default='', help='so refaz a planilha (xlsx) a partir do --csv e do --metas')
+    ap.add_argument('--metas', default=os.path.join(KIT, 'metricas', 'metas.json'))
     a = ap.parse_args()
+    if a.planilha:
+        return gerar_planilha(a.planilha, a.csv or os.path.join(KIT, 'metricas', 'uso-semanal.csv'), a.metas)
     if not RX_ENUM.match(a.pc):
         ap.error('--pc: so letras, digitos, _, - e . (rotulo curto)')
     global LIM_RETORNO, LIM_SENTADA, GAP_CONTINUO
@@ -730,7 +847,7 @@ def main():
     linha['chamadas_esforco_max'] = esf_tot['max']
     linha['chamadas_esforco_xhigh'] = esf_tot['xhigh']
     linha['limites_batidos'] = len(lim_sem)
-    linha['pct_limite_semanal'] = ''      # so a statusline traz o numero (F2)
+    linha['pct_limite_semanal'] = pct_semanal(a.limites, t_ini, t_fim)   # so a statusline traz o numero
     linha['pc'] = a.pc
     linha['versao'] = VERSAO
     assert list(linha) == CABECALHO, 'colunas fora do esquema'
