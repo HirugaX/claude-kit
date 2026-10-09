@@ -71,7 +71,10 @@ Numa fase que roda sem o usuário olhando:
 
 A fila vale onde há `docs\ESTADO.md` e os ganchos do `nucleo` que a garantem (F2b: o `PreToolUse` em `AskUserQuestion`
 grava a pergunta e responde "adiada"; o `PermissionRequest` nega e enfileira; o `Stop` aceita fechar com a fila
-gravada). Sem eles — projeto ainda não migrado, ou fase supervisionada —, a dúvida vai ao chat, como sempre.
+gravada). Para eles, a execução é largada quando a sessão não tem gente (`-p`, `--bg`), quando quem lançou pôs
+`KIT_LARGADA=1` no ambiente, ou quando existe o arquivo `.claude\largada` no projeto — a fase largada numa aba
+interativa o cria ao começar e o apaga ao fechar. O `PermissionRequest` não dispara em `-p` nem em `--bg`. Sem esses
+ganchos — projeto ainda não migrado, ou fase supervisionada —, a dúvida vai ao chat, como sempre.
 
 ## 5. Várias janelas e a sonda (Q37, Q45)
 

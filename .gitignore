@@ -13,3 +13,7 @@ Thumbs.db
 __pycache__/
 *.py[cod]
 .pytest_cache/
+# Gerada em cada PC pelo scripts/medir_semana.py --planilha (F2b):
+metricas/*.xlsx
+# O marcador da execução largada (skill orquestrar §4; F2b):
+.claude/largada

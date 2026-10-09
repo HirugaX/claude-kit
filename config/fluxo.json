@@ -2,5 +2,11 @@
   "_leia": "O encadeamento das fases (Q9; plano, Ficha item 5). A skill fechar-janela lê este arquivo: com lancar_bg true, a janela que fecha lança a próxima por claude --bg; com false, o usuário cola o docs/PROXIMO.md. Fica false até o F3c ligar, depois de o laço passar no F3a (teste-fluxo).",
   "lancar_bg": false,
   "desde": "F2a (07/10/2026)",
-  "quem_liga": "F3c"
+  "quem_liga": "F3c",
+  "pcs": {
+    "_leia": "COMPUTERNAME -> rótulo do PC (coluna pc do metricas/uso-semanal.csv; série da caixa que este PC lê). PC fora da lista usa o próprio nome em minúsculas.",
+    "NOTE_ETTORE": "notebook"
+  },
+  "balanco_desde": "2026-10-09",
+  "_balanco": "O gancho de abertura avisa o balanço das métricas vencido (15 dias desde o último metricas/balancos/AAAA-MM-DD.md; sem nenhum, desde balanco_desde). A sessão do balanço roda na janela da raiz (decisão de 07/10); lançá-la sozinha é do F3c."
 }
