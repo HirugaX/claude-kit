@@ -1,4 +1,4 @@
-# Estado do claude-kit — 09/10/2026, fim do F2b
+# Estado do claude-kit — 10/10/2026, fim do F2b (com os ajustes de 10/10)
 
 ## Objetivo
 
@@ -9,8 +9,12 @@ responde de uma vez; entre as sentadas o Claude trabalha sozinho, com a mesma qu
 ## Onde estamos
 
 - **Feito:** F1a; R1; F1b (marketplace); F2a (skills, 07/10); **F2b (ganchos, statusline, medição, pastas de teste), 09/10.**
-- **Próximo passo:** F3a (`teste-fluxo`) ∥ F3b (`teste-ferramentas`), com os prompts do plano (conferidos em 09/10).
-  Depois, F3c e F5a.
+- **Em andamento (10/10):** F3a (`teste-fluxo`, no terminal) e F3b (`teste-ferramentas`, quase fechado: o RESULTADO
+  está commitado lá; falta copiá-lo para `pesquisas\` e o push). Depois, o F3c (prompt do plano, conferido em 10/10) e
+  o F5a.
+- **Pendente do Ettore:** apagar as 7 sobras dos testes no perfil (o safety-net barra o `rm -rf` fora da pasta da
+  sessão): `~\.claude-mem`, `~\.headroom`, `~\.bun`, `~\.claude\.omc`, `~\.claude\plugins\cache\omc` e `\thedotmack`,
+  `~\.claude\plugins\data\sonda-inline`. Nada rodando nem apontando para elas (conferido em 10/10).
 - **Critério de pronto do F3a e do F3b:** o `RESULTADO.md` de cada um, com prova por critério (F3a) e números com
   veredito por ferramenta (F3b), copiado para `pesquisas\`.
 - **Em paralelo, quando o Ettore quiser:** a R0 (front do app); o desktop instala pela `caixa\NB-004` (soma-se à NB-003).
@@ -30,8 +34,14 @@ responde de uma vez; entre as sentadas o Claude trabalha sozinho, com a mesma qu
 
 ## Surpresas
 
-- **`/model sonnet` e `--model sonnet` já abrem o Sonnet 5.5** (2.1.291, provado por `claude -p`). A regra do CLAUDE.md,
-  da `uso-do-claude` e do COMO_OPERAR ainda diz que abrem o 5; mudar é decisão do Ettore (no resumo do F2b).
+- **`/model sonnet` e `--model sonnet` já abrem o Sonnet 5.5** (2.1.291, provado por `claude -p`). Em 10/10 o Ettore
+  escolheu atualizar a regra: CLAUDE.md, `uso-do-claude`, `modelo-e-esforco`, modelo do PROXIMO, COMO_OPERAR e plano
+  dizem agora "o atalho abre o 5.5; em prompt e `--model`, o ID; o gancho barra o Sonnet 5" (perguntas: 11 de 11).
+- **Sessão filha (`claude -p` lançada de dentro de outra) herda o `CLAUDE_EFFORT` da mãe**: a abertura avisava o
+  esforço da mãe; consertado em 10/10 (com `ATTENDED=0` vale só o gravado; caso novo no `testar_ganchos.py`, 53 verdes).
+- **O safety-net mede o `rm -rf` pela pasta da sessão**, não pelo `cd` do comando: apagar fora do projeto é do Ettore.
+- **O fechamento do F2b entregou só a 1ª linha dos prompts** e a janela do F3a teve de buscar o resto no plano (fora da
+  pasta de trabalho: pedido de leitura). Daqui em diante, o prompt vai inteiro no chat.
 - **O SessionStart em `-p` não traz o `model`**: a abertura lê o `--model` da linha de comando do processo (~1,5 s).
 - **`CLAUDE_CODE_SESSION_ATTENDED`** vale 1 na sessão com gente e 0 em `-p` (não documentado): é o sinal da execução
   largada. O `PermissionRequest` não dispara em `-p` nem em `--bg` (documentação).
@@ -46,6 +56,8 @@ responde de uma vez; entre as sentadas o Claude trabalha sozinho, com a mesma qu
 - "Fase dada como pronta" = a última mensagem traz "Sinais de insuficiência do modelo"; "reescrito" = o hash do
   `ESTADO.md` mudou desde a abertura.
 - A regra de leitura da memória `c--DESOSP` ficou no allow (a pasta existe; a limpeza é do F9).
+- **claude-mem fora** (Ettore, 10/10): não testado no F3b (a rede derruba o npm) e "possivelmente atrapalha mais do que
+  ajuda nos nossos fluxos"; o F3c registra na Ficha e no N1.
 
 ## Riscos
 

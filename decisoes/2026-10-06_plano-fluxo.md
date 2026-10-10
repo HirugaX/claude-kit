@@ -37,9 +37,9 @@ janela = um projeto.
 **Até o F3 terminar (F1a até F3c), como hoje, pela última vez:**
 
 1. Abra a janela na pasta que o prompt indica (painel do VS Code: abrir a pasta; terminal: `cd <pasta>` e `claude`).
-2. Digite o `/effort` da 1ª linha do prompt. Se o prompt pedir Sonnet 5.5 para a janela, escolha-o **na lista** do
-   `/model` — nunca digite `sonnet` (abre o Sonnet 5). O `/effort` digitado grava o padrão para as próximas janelas;
-   não importa, porque todo prompt traz o seu (para valer só na sessão, use o seletor do `/effort` e a tecla `s`).
+2. Digite o `/effort` da 1ª linha do prompt. Se o prompt pedir Sonnet 5.5 para a janela, digite `/model sonnet` ou
+   escolha-o na lista do `/model` (o atalho abre o 5.5 desde a 2.1.291, 09/10; o gancho barra o Sonnet 5). O
+   `/effort` digitado grava o padrão para as próximas janelas; não importa, porque todo prompt traz o seu (para valer só na sessão, use o seletor do `/effort` e a tecla `s`).
 3. Cole o prompt. O Claude trabalha e para nos pontos da Q10: escrita em dado real não aprovada antes; rodada real ou
    reprocesso não aprovados; migração de banco ou de esquema; regra clínica nova; leitura de fonte nova; subir para
    Fable, `xhigh`, `max` ou ultracode (descer, se mantém a qualidade, não pergunta); o mesmo erro depois de duas
@@ -221,7 +221,8 @@ HC de lugar (F6, F7).
 Cada janela fecha pelo que vier primeiro: fim da fase, ~150 mil tokens ou troca de modelo (Q9) — por isso nenhuma fase
 troca de modelo no meio; trocar o esforço no meio pode (não quebra o cache). Commit por caminho explícito; `git push`
 livre no fim de fase com testes verdes, depois de `git log origin/main..` (Q10). Subagente com `model: sonnet` roda no
-Sonnet 5.5 (conferido nesta janela); a armadilha do Sonnet 5 é só `/model sonnet` e `--model sonnet`.
+Sonnet 5.5 (conferido nesta janela); a armadilha do Sonnet 5 era só `/model sonnet` e `--model sonnet`, e acabou na
+2.1.291 (09/10). Em prompt e em `--model`, o ID `claude-sonnet-5-5`; o gancho do `nucleo` barra o Sonnet 5.
 
 | fase | onde | modelo · esforço | por quê | sinal para subir |
 |---|---|---|---|---|
@@ -348,7 +349,7 @@ statusline, a medição e o balanço (a sessão do balanço roda na janela da ra
     `scripts\testar_ganchos.py` com 52 casos verdes; provados em sessão nova (`claude -p`): o aviso do Sonnet 5, o
     `/model claude-sonnet-5` barrado, a 2ª camada no kit, o gancho do `--dir` em `teste-fluxo`;
   - **o `/model sonnet` e o `--model sonnet` já abrem o Sonnet 5.5 (2.1.291)**: o gancho barra o `claude-sonnet-5`
-    pedido pelo ID; o texto das regras sobre o atalho fica para o Ettore decidir;
+    pedido pelo ID; o texto das regras sobre o atalho foi atualizado em 10/10 (decisão do Ettore);
   - execução largada, para os ganchos: `CLAUDE_CODE_SESSION_ATTENDED=0` (`-p`, `--bg`), `KIT_LARGADA=1` ou o arquivo
     `.claude\largada`; o `PermissionRequest` não dispara em `-p` nem em `--bg` (documentação);
   - statusline (só no terminal) grava os % em `~\.claude\kit-local\limites.jsonl`; o `instalar_kit.py` instala e
@@ -707,21 +708,21 @@ Plano: claude-kit\decisoes\2026-10-06_plano-fluxo.md (bloco F3b). Do registro cl
 Portão: RESULTADO.md com números e veredito por ferramenta; desinstalação conferida. Copie para claude-kit\pesquisas\2026-10-XX_ferramentas-testadas.md (cabeçalho fixo da biblioteca); no kit, o F3a pode estar gravando ao mesmo tempo: git pull --ff-only, commit só desse arquivo, git log origin/main.. e push. Resumo com "Sinais de insuficiência do modelo". O próximo é o F3c (prompt neste plano), depois que o F3a também fechar.
 ```
 
-### F3c — ajustes no kit
+### F3c — ajustes no kit (conferido em 10/10, no fechamento do F2b, com o que o F3b já disse; o F3a ainda rodava)
 
 ```
 Opus 5.5 · /effort medium — aplicar resultados medidos; suba para high se um ajuste quebrar um critério que já passava.
 
-Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: F3a e F3b fechados; os dois resultados em pesquisas\ (2026-10-XX_teste-do-laco.md e 2026-10-XX_ferramentas-testadas.md).
+Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: F3a e F3b fechados, com os dois resultados em pesquisas\ (2026-10-XX_teste-do-laco.md e 2026-10-XX_ferramentas-testadas.md); git pull --ff-only; python scripts\instalar_kit.py --verificar com 0 achados; python scripts\testar_ganchos.py verde; leia docs\ESTADO.md e o caixa\INDICE.md. Nenhuma outra janela no kit.
 
 ## Contexto
-Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F3a, F3b, F3c; "Como você opera"). Q9, Q18, Q19, Q20. R1: decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (seção 5).
+Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F3a, F3b, F3c; "Como você opera"). Q9, Q18, Q19, Q20. R1: decisoes\2026-10-06_R1-objetivo-medicao-recursos.md (seção 5). Já decidido pelo Ettore em 10/10: o claude-mem fica fora — não foi testado (a rede derruba o registro do npm) e, nas palavras dele, "possivelmente vai atrapalhar mais do que ajudar nossos fluxos"; não pergunte de novo. A regra do atalho sonnet já foi atualizada (10/10: abre o 5.5 desde a 2.1.291; em prompt, o ID).
 
 ## O que fazer
 1. Leia os dois resultados e acrescente as duas linhas ao pesquisas\INDICE.md.
 2. orquestrar aponta o vencedor da disputa, com os números; se o OMC venceu, mostre ao Ettore o custo de adotá-lo e espere o "sim".
 3. recursos-do-projeto: forma final do passo de descoberta (claude-code-setup por --plugin-dir, ou nada).
-4. claude-mem, Headroom e a andrej-karpathy-skills (pelo critério da Q38: no config\plugins.json ou fora): onde entram, ou a confirmação de que saíram. A sonda e as mensagens entre sessões pelo critério da Q45.
+4. claude-mem: fora (decisão de 10/10) — tire-o do QUANDO da Ficha, da Q19 e do N1, com o motivo. Headroom: o critério escrito era "≥ 20% menos tokens sem quebrar nada"; se ele passou na letra mas o custo ou o tempo subiram (o F3b viu −46% de tokens, +8% de custo, +47% de tempo), é desvio do critério: pergunte ao Ettore, com a recomendação do F3b. A andrej-karpathy-skills pelo critério da Q38 (no config\plugins.json ou fora). Onde entram, ou a confirmação de que saíram (desinstalação conferida). A sonda e as mensagens entre sessões pelo critério da Q45.
 5. O que falhou no laço: corrija nos ganchos ou nas skills e repita só aquele critério em teste-fluxo\.
 6. Se o laço passou: o jeito de lançar fases que o F3a mostrou melhor (--bg ou aba interativa com Remote Control) e lancar_bg: true no config\fluxo.json; o lançamento automático do balanço quinzenal (Q42); a parte "depois do F3" no COMO_OPERAR.md (a fila, o aviso no celular, o balanço, as janelas); se não passou, fica a reserva (/clear + gancho) e o COMO_OPERAR.md diz isso.
 7. Regenere o guia.
@@ -730,7 +731,7 @@ Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F3a, F3b, F3c; "Como você ope
 - Nada em projeto (desosp-*, pesquisa-*, estudo-*, pessoal-*).
 
 ## Ao fechar
-Portão: os critérios que falharam passam; INDICE com as duas linhas; guia regenerado. ESTADO.md do kit. Resumo com "Sinais de insuficiência do modelo". Confira e entregue o prompt do F5a (deste plano).
+Portão: os critérios que falharam passam; INDICE com as duas linhas; testar_ganchos.py verde; se texto de skill ou o CLAUDE.md mudou, scripts\perguntas_nucleo.txt com 11 de 11 (perguntas_controle.py); instalar_kit.py --verificar com 0 achados; checa_kit.py --tudo sem achado; guia regenerado. ESTADO.md do kit; push. Resumo com "Sinais de insuficiência do modelo". Confira o prompt do F5a (deste plano) e entregue-o INTEIRO no chat, num bloco só, pronto para colar.
 ```
 
 ### F5a — migração do app
@@ -878,7 +879,7 @@ Portão: guia regenerado; retrospectiva com números salva; memória velha limpa
 ### Fd — o Drive (no desktop)
 
 ```
-Sonnet 5.5 (escolha na lista do /model) · /effort medium — classificar e mover arquivos com aprovação; o erro é visível e se desfaz; suba para Opus 5.5 · medium se mais de 1 em 10 sair classificado errado.
+Sonnet 5.5 (claude-sonnet-5-5) · /effort medium — classificar e mover arquivos com aprovação; o erro é visível e se desfaz; suba para Opus 5.5 · medium se mais de 1 em 10 sair classificado errado.
 
 No DESKTOP. Janela aberta em G:\Meu Drive, só para esta tarefa. Antes: o Google Drive para computador sincronizado.
 
