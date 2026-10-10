@@ -8,9 +8,9 @@ plano, `decisoes\2026-10-06_plano-fluxo.md`, seção "Como você opera daqui em 
 
 1. **Abra a janela na pasta que o prompt indica.** No painel do VS Code, abra a pasta; no terminal, `cd <pasta>` e
    `claude`. Uma janela é um projeto só.
-2. **Digite o `/effort` da 1ª linha do prompt.** Se o prompt pedir Sonnet 5.5, escolha-o **na lista** do `/model`.
-   Nunca digite `sonnet`: o atalho abre o Sonnet 5. O `/effort` digitado vira o padrão das próximas janelas, o que não
-   atrapalha, porque todo prompt traz o seu. Para valer só nesta sessão, use o seletor do `/effort` e a tecla `s`.
+2. **Digite o `/effort` da 1ª linha do prompt.** Se o prompt pedir Sonnet 5.5, digite `/model sonnet` ou escolha-o na
+   lista do `/model` (o atalho abre o 5.5 desde a 2.1.291; a troca para o Sonnet 5 é barrada pelo gancho). O
+   `/effort` digitado vira o padrão das próximas janelas, o que não atrapalha, porque todo prompt traz o seu. Para valer só nesta sessão, use o seletor do `/effort` e a tecla `s`.
 3. **Cole o prompt.** O Claude trabalha e para só nos pontos da Q10:
    - escrita em dado real não aprovada antes;
    - rodada real ou reprocesso não aprovados;

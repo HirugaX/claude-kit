@@ -16,7 +16,8 @@ depois de mudar qualquer skill do `nucleo` ou o `CLAUDE.md` pessoal.
    pergunta que vem depois dele.
 2. **Feche o stdin**: `< /dev/null` no shell, `stdin=DEVNULL` no Python. O `-p` junta à pergunta tudo o que chega pelo
    stdin; num laço `while read`, cada sessão recebeu o resto do arquivo de perguntas.
-3. **Modelo pelo ID completo** (`claude-sonnet-5-5`), nunca pelo atalho. Confira o modelo que rodou no `modelUsage` da
+3. **Modelo pelo ID completo** (`claude-sonnet-5-5`), nunca pelo atalho (o que ele abre muda entre versões: até a
+   2.1.234, `sonnet` abria o Sonnet 5). Confira o modelo que rodou no `modelUsage` da
    saída `--output-format json`.
 4. **Respostas numa pasta nova, com nome que não casa com o do arquivo de perguntas.** Um `rm q*.txt` feito para limpar
    as respostas apagou também o `qs.txt`, que era a lista de perguntas.

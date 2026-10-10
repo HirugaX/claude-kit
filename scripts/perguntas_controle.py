@@ -14,8 +14,8 @@ Feito para não repetir os erros de 03/10 (KN42 do kernel DESOSP):
   1. a pergunta vai logo depois do -p, ANTES das opções: o --allowedTools aceita vários valores
      e engole o que vem depois dele;
   2. stdin fechado: o claude -p junta à pergunta tudo o que chegar pelo stdin;
-  3. o modelo vai pelo ID completo e é conferido no modelUsage da saída JSON. O atalho `sonnet`
-     abre o Sonnet 5, e não o 5.5; modelo diferente do pedido sai como ERRO;
+  3. o modelo vai pelo ID completo e é conferido no modelUsage da saída JSON. O que um atalho abre
+     muda entre versões (até a 2.1.234, `sonnet` abria o Sonnet 5); modelo diferente do pedido sai como ERRO;
   4. as respostas vão para uma pasta nova, nunca para o lugar das perguntas;
   5. sem shell: não há conversão de caminho do Git Bash (/doctor virava C:/Program Files/Git/doctor)
      nem aspas quebradas.
@@ -94,8 +94,8 @@ def main():
     a = ap.parse_args()
 
     if not a.modelo.startswith('claude-'):
-        sys.exit(f'--modelo {a.modelo!r}: use o ID completo (ex.: claude-sonnet-5-5). O atalho '
-                 '"sonnet" abre o Sonnet 5, e não o 5.5.')
+        sys.exit(f'--modelo {a.modelo!r}: use o ID completo (ex.: claude-sonnet-5-5). O que um atalho '
+                 'abre muda entre versões (até a 2.1.234, "sonnet" abria o Sonnet 5).')
     projeto = Path(a.projeto).resolve()
     if not projeto.is_dir():
         sys.exit(f'--projeto {projeto} não é uma pasta')

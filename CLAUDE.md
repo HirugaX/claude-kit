@@ -5,8 +5,9 @@
   skill `uso-do-claude` (o núcleo) e a peça do momento — `modelo-e-esforco`, `fechar-janela`,
   `orquestrar`. A regra do projeto vence quando as duas conflitarem.
 - O prompt da próxima janela traz **o modelo e o comando `/effort <nível>` na primeira linha**, com o
-  porquê em uma: o `/effort` confirmado fica gravado para as janelas seguintes, e o Sonnet 5.5 se
-  escolhe na lista do `/model` (o atalho `sonnet` abriu o Sonnet 5).
+  porquê em uma: o `/effort` confirmado fica gravado para as janelas seguintes, e o Sonnet 5.5 vai pelo
+  ID `claude-sonnet-5-5` (o atalho `sonnet` abre o 5.5 desde a 2.1.291, mas atalho muda entre versões; o
+  gancho do `nucleo` barra o Sonnet 5).
 - `max`, `xhigh`, Fable e `ultracode` não são padrão: só com motivo escrito.
 - Depois de um `/grill-me` de projeto novo ou de implementação nova, confirmado o entendimento:
   skill `recursos-do-projeto` antes do plano. No fim de todo grill e de todo plano, antes do "sim":

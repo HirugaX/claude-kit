@@ -79,7 +79,7 @@ Resumo curto: o que foi aplicado (números por projeto), a conferência, as suí
 ## 3 · outro PC · enviar a cópia (cedo; não muda nada lá) — só para PC sem git; com git, o kit viaja por `git clone`/`git pull`
 
 ```
-Sonnet 5.5 (escolha-o na lista do /model; o atalho "sonnet" abre o Sonnet 5) · /effort medium — é cópia de arquivos com conferência por hash; o erro aparece na hora.
+Sonnet 5.5 (claude-sonnet-5-5) · /effort medium — é cópia de arquivos com conferência por hash; o erro aparece na hora.
 
 Janela no <outro PC>, aberta em qualquer pasta que não seja de projeto. Não muda nada neste PC.
 

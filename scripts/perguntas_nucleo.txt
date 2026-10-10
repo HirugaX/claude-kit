@@ -3,7 +3,7 @@
 #   python C:\CLAUDE-PROJETOS\claude-kit\scripts\perguntas_controle.py C:\CLAUDE-PROJETOS\claude-kit\scripts\perguntas_nucleo.txt --projeto <pasta neutra> --saida <pasta nova>
 # A resposta esperada de cada uma está no comentário acima dela; comparar é trabalho de quem lê.
 
-# 1. Esperado: a 1ª linha traz o modelo e o COMANDO /effort <nível>, com o porquê em uma linha (e o sinal para subir); Sonnet 5.5 da lista ou claude-sonnet-5-5, nunca "sonnet". (CLAUDE.md; modelo-e-esforco; fechar-janela)
+# 1. Esperado: a 1ª linha traz o modelo e o COMANDO /effort <nível>, com o porquê em uma linha (e o sinal para subir); o Sonnet 5.5 pelo ID claude-sonnet-5-5 (o atalho abre o 5.5 desde a 2.1.291, mas muda entre versões). (CLAUDE.md; modelo-e-esforco; fechar-janela)
 Vou fechar esta janela e preciso do prompt da próxima. O que tem de vir na primeira linha dele, e por quê?
 # 2. Esperado: Workflow só com 4+ itens do mesmo formato, independentes, conferidos por comando, sem decisão do usuário e sem dado de paciente; nunca julgamento clínico nem dado real; teto de 10 agentes sem perguntar, acima disso estimativa + "sim". Menos de 4 tarefas: sessão + subagentes; plano de 4+ tarefas no mesmo código: SDD. (orquestrar §1)
 Tenho 12 regras de um script para auditar, cada uma conferível por teste. Uso um Workflow, subagentes ou o SDD? Há limite de agentes?
@@ -17,7 +17,7 @@ Numa fase que roda sozinha, sem o usuário olhando, surge uma decisão que só e
 Quando devo mandar um aviso para o celular do usuário com PushNotification, e o que pode ir no texto?
 # 7. Esperado: passar model E effort em cada despacho, pela tabela de papéis (explorador haiku/sonnet low-medium; especialista e revisor opus high); a doc não diz se herda o esforço; 1.197 chamadas em max na semana de 29/09. (orquestrar §2)
 Vou delegar uma varredura de logs a um subagente. Que modelo e que esforço uso, e preciso dizer o esforço explicitamente?
-# 8. Esperado: não digitar /model sonnet nem --model sonnet (abre o Sonnet 5); escolher o Sonnet 5.5 na lista do /model ou usar claude-sonnet-5-5; num subagente, model: sonnet roda no 5.5. (uso-do-claude §4)
+# 8. Esperado (mudou em 10/10): pode — desde a 2.1.291 o /model sonnet abre o Sonnet 5.5 (até a 2.1.234 abria o Sonnet 5); a lista do /model e o ID claude-sonnet-5-5 também servem, e em prompt e --model vai o ID (atalho muda entre versões); o gancho do nucleo barra o Sonnet 5; num subagente, model: sonnet roda no 5.5. (uso-do-claude §4)
 Quero trabalhar no Sonnet 5.5 nesta janela. Posso digitar /model sonnet?
 # 9. Esperado: no fim de todo grill e de todo plano, a rodada de contingências: situação → o que fazer → limite, aprovada em lote; vira "Decisões pré-aprovadas" do PROXIMO.md; o resto em "Sempre me pergunte". (uso-do-claude §7)
 Terminei um /grill-me e o plano está pronto para aprovar. Falta algum passo antes do "sim"?

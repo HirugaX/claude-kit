@@ -280,7 +280,7 @@ _c('dataviz', 'interface',
 # --- Janelas, contexto e memória -------------------------------------
 _c('uso-do-claude', 'janelas',
    'O núcleo: a escada de modelo e esforço, os sinais de que o modelo não deu conta, as armadilhas '
-   '(o atalho `sonnet`, o `/effort` que grava), o contexto, uma janela por fase e o planejamento, com a '
+   '(o Sonnet 5 por engano, o `/effort` que grava), o contexto, uma janela por fase e o planejamento, com a '
    'rodada de contingências. Aponta as quatro peças abaixo.',
    'Entra sozinha ao abrir uma janela, ao planejar e quando você pergunta por que o uso está alto. O '
    '`CLAUDE.md` pessoal manda usá-la.',

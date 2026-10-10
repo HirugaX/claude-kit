@@ -1,9 +1,9 @@
 <Modelo> · /effort <nível> — <o porquê, em uma linha: o custo de descobrir tarde o erro desta fase>; suba para <x> se <o sinal>.
 
 <!-- Modelo do docs\PROXIMO.md (skill fechar-janela): o prompt da próxima janela, conferido pela janela que fecha.
-A 1ª linha é sempre modelo + o COMANDO /effort (o /effort digitado grava o padrão; o Sonnet 5.5 vai "da lista do
-/model" ou pelo ID claude-sonnet-5-5, nunca "sonnet"). Nada de nome de paciente nem pseudônimo: este texto pode virar
-linha de comando do claude --bg. Apague este comentário. -->
+A 1ª linha é sempre modelo + o COMANDO /effort (o /effort digitado grava o padrão; o Sonnet 5.5 vai pelo ID
+claude-sonnet-5-5: o atalho "sonnet" abre o 5.5 desde a 2.1.291, mas muda entre versões). Nada de nome de paciente
+nem pseudônimo: este texto pode virar linha de comando do claude --bg. Apague este comentário. -->
 
 Janela aberta em <pasta>. Antes: <pré-condições conferíveis: git pull --ff-only, git status limpo, o que deve existir>.
 

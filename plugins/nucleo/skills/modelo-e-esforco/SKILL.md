@@ -5,7 +5,7 @@ description: "Recomendar modelo e /effort por tarefa ou fase, e a 1ª linha do p
 
 # Modelo e esforço
 
-O princípio, a escada, os sinais de insuficiência e as armadilhas (o atalho `sonnet`, o `/effort` que grava, o
+O princípio, a escada, os sinais de insuficiência e as armadilhas (o Sonnet 5 por engano, o `/effort` que grava, o
 rebaixamento para o Opus 5) estão no núcleo, a skill `uso-do-claude`; as fontes, no `reference.md` dela. A regra do
 projeto vence esta quando as duas conflitarem.
 
@@ -13,8 +13,8 @@ projeto vence esta quando as duas conflitarem.
 
 Diga **modelo + esforço + o porquê em uma linha** (o custo de descobrir tarde o erro daquela fase) **+ o sinal** que
 mandaria subir ou descer. O esforço vai como **comando** (`/effort high`): o `/effort` digitado grava o padrão, e a
-1ª linha do prompt é o que chega ao momento de escolher. O Sonnet vai como "Sonnet 5.5 (escolha-o na lista do
-`/model`)" ou pelo ID `claude-sonnet-5-5`, nunca `sonnet`.
+1ª linha do prompt é o que chega ao momento de escolher. O Sonnet vai pelo ID: "Sonnet 5.5 (`claude-sonnet-5-5`)"
+— o atalho `sonnet` abre o 5.5 desde a 2.1.291, mas o que um atalho abre muda entre versões.
 
 A 1ª linha de todo prompt de janela:
 

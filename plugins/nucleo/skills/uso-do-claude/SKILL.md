@@ -55,10 +55,12 @@ tipo de tarefa, citando os sinais; o Fable também falhou → o gargalo é espec
 
 ## 4. As armadilhas
 
-- **O atalho `sonnet` abre o Sonnet 5**, não o 5.5, em `/model sonnet` e `--model sonnet` (medido em 03/10: a FF-P3c do
-  app rodou 188 chamadas no Sonnet 5 com o prompt dizendo 5.5). O Sonnet 5.5 se escolhe **na lista** do `/model` ou
-  pelo ID `claude-sonnet-5-5`. **Subagente com `model: sonnet` roda no 5.5** (conferido em 06/10): ali o atalho resolve
-  pela tabela da documentação — a não ser que a janela já esteja num Sonnet, cujo modelo exato o subagente herda.
+- **O Sonnet 5 por engano.** Até a 2.1.234, o atalho `sonnet` (`/model sonnet`, `--model sonnet`) abria o Sonnet 5 (03/10:
+  a FF-P3c do app rodou 188 chamadas nele com o prompt dizendo 5.5); desde a 2.1.291 abre o 5.5 (medido em 09/10).
+  Atalho muda entre versões: em prompt e em `--model`, o ID `claude-sonnet-5-5`. O gancho do `nucleo` barra a troca
+  para o Sonnet 5 e a abertura avisa se a sessão abriu nele. **Subagente com `model: sonnet` roda no 5.5** (conferido
+  em 06/10): ali o atalho resolve pela tabela da documentação — a não ser que a janela já esteja num Sonnet, cujo
+  modelo exato o subagente herda.
 - **O `/effort` grava**: confirmado com `Enter`, ou digitado (`/effort xhigh`), vira o padrão daquele modelo para todas
   as janelas seguintes, de todos os projetos. `s` no seletor vale só para a sessão; `max` nunca grava. Por isso todo
   prompt traz o **comando** `/effort <nível>` na 1ª linha.

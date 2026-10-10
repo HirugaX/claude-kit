@@ -112,6 +112,8 @@ Pesquisa original: `fontes/claude-uso-modelos.md` (nesta pasta). Medido com `med
 - Visto nos registros (03/10, Claude Code 2.1.234): `--model sonnet` rodou como `claude-sonnet-5`,
   e não como `claude-sonnet-5-5`. A janela de 01/10, com o modelo escolhido na lista, rodou como
   `claude-sonnet-5-5`.
+- **Mudou na 2.1.291 (medido em 09/10, `claude -p`, linha `init` do `stream-json`):** `/model sonnet` e
+  `--model sonnet` já abrem o `claude-sonnet-5-5`. O gancho `PreModelSwitch` do `nucleo` barra o `claude-sonnet-5`.
 - Conclusão: o maior custo é o contexto acumulado; depois, o esforço; por último, o modelo.
 
 **Medido de novo em 04/10** (`medir_uso.py --desde 2026-09-30 --sessoes`, só números):
