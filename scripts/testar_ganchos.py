@@ -227,6 +227,9 @@ def testar_abertura(m: Mundo) -> None:
     caso('abertura: Opus 5 (rebaixamento) → aviso', 'Opus 5' in (s or {}).get('systemMessage', ''), str(s))
     s = m.rodar('abertura', {**ab, 'model': 'claude-opus-5-5'}, CLAUDE_PROJECT_DIR=m.sem, CLAUDE_EFFORT='max')
     caso('abertura: esforço max na sessão → aviso', 'max' in (s or {}).get('systemMessage', ''), str(s))
+    s = m.rodar('abertura', {**ab, 'model': 'claude-opus-5-5'}, CLAUDE_PROJECT_DIR=m.sem, CLAUDE_EFFORT='max',
+                CLAUDE_CODE_SESSION_ATTENDED='0')
+    caso('abertura: sessão filha sem gente ignora o CLAUDE_EFFORT herdado da mãe', s is None, str(s))
     (m.casa / 'settings.json').write_text(json.dumps({'modelSettings': {'claude-opus-5-5': {'effortLevel': 'xhigh'}}}),
                                           encoding='utf-8')
     s = m.rodar('abertura', {**ab, 'model': 'claude-opus-5-5'}, CLAUDE_PROJECT_DIR=m.sem)

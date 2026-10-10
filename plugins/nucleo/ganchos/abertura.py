@@ -63,7 +63,10 @@ def aviso_modelo(modelo: str | None) -> str | None:
 
 
 def aviso_esforco(modelo: str | None, amb: Amb) -> str | None:
-    nivel = amb.env.get('CLAUDE_EFFORT') or None
+    # Numa sessão sem gente (-p, --bg) lançada de dentro de outra, o CLAUDE_EFFORT é o herdado da mãe (visto em
+    # 10/10: as perguntas de controle avisaram o max desta janela): ali vale só o gravado.
+    sem_gente = amb.env.get('CLAUDE_CODE_SESSION_ATTENDED') == '0'
+    nivel = None if sem_gente else (amb.env.get('CLAUDE_EFFORT') or None)
     origem = 'desta sessão'
     if not nivel:
         por_modelo = (ler_json(amb.casa / 'settings.json').get('modelSettings') or {})
