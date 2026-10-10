@@ -30,10 +30,11 @@ abaixo que a entrevista ainda não cobriu.
    MCPs ligados, tamanho do estado e dos documentos lidos ao abrir, e o custo de abrir a janela
    (`python C:\CLAUDE-PROJETOS\claude-kit\scripts\medir_uso.py --sessoes`, coluna `ctx0`). Repositório grande:
    subagente explorador (skill `orquestrar`).
-3. **Descoberta (opcional; a forma final sai do F3b).** Para uma segunda opinião sobre o que o código pede, o
-   `claude-code-setup` oficial **sem instalar**: `claude --plugin-dir <clone do claude-plugins-official>\plugins\claude-code-setup`,
-   só leitura. Ele pende para web/JS e sugere Context7, Playwright MCP e GitHub MCP, recusados com motivo em 04/10:
-   o que ele sugerir passa pelos passos 5 a 7 como qualquer outro candidato.
+3. **Descoberta (opcional).** Para uma segunda opinião sobre o que o código pede, o `claude-code-setup` oficial
+   **sem instalar**: `claude --plugin-dir <clone do claude-plugins-official>\plugins\claude-code-setup`, só leitura.
+   No F3b (10/10) custou US$ 0,12 e não mexeu em arquivo. Ele pende para web/JS e pode sugerir Context7, Playwright
+   MCP e GitHub MCP, recusados com motivo em 04/10: o que ele sugerir passa pelos passos 5 a 7 como qualquer outro
+   candidato.
 4. **As perguntas que faltam:** só as da tabela que mudam a escolha e que nem a entrevista nem o inventário
    responderam, numa rodada só, no formato do `grilling` (numeradas, com a resposta recomendada).
 5. **O núcleo** (catálogo §1): vale para todo projeto; em projeto existente, marque o que já existe e o que falta.

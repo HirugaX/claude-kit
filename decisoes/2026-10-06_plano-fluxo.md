@@ -92,7 +92,7 @@ Q1-Q15 continuam como no registro (§5). A rodada 3:
 | Q16 | Isolamento: domínios com prefixo (`desosp-`, `pesquisa-`, `estudo-`, `pessoal-`; os do desktop no F8); informação só cruza pelos canais (caixas `docs\para_*` entre `desosp-`, `caixa\` do kit entre os PCs, `pesquisas\`); dado em `<projeto>-dados\`, pasta irmã fora do git, com `deny` + safety-net + `.ignore`; o dado do censo e do HC só muda na fase deles; uma janela = um projeto; a mãe e o kit não fazem trabalho de projeto. |
 | Q17 | O kit vira marketplace local; skills em plugins por grupo (o nosso e o de terceiros separados; agrupados por onde se usam); cada projeto liga os seus por `enabledPlugins`; teste com um plugin antes de migrar. |
 | Q18 | `orquestrar` nossa, fina, + SDD (4 skills avulsas). Menos de 4 tarefas → sessão + subagentes; plano no mesmo código → SDD; 4+ itens do mesmo formato, conferidos por comando, sem decisão no meio e sem dado de paciente → Workflow, teto 10 (acima: estimativa + "sim", Q13). Disputa SDD × OMC × sem orquestrador no F3b. |
-| Q19 | F3a (o laço) ∥ F3b (as ferramentas), em pastas de teste separadas. claude-mem, se passar, primeiro no estudo. Cartographer no F6. |
+| Q19 | F3a (o laço) ∥ F3b (as ferramentas), em pastas de teste separadas. Cartographer no F6. claude-mem: fora (Ettore, 10/10; não testado no F3b, a rede derruba o npm, e "possivelmente vai atrapalhar mais do que ajudar nossos fluxos"). |
 | Q20 | A `recursos-do-projeto` decide (enxugada); o `claude-code-setup` é descoberta opcional; forma final depois do F3b. |
 | Q21 | Escrita em dado real aprovada por fase (`PROXIMO.md`: comando, pasta, limite) e por rotina (a rodada do kernel); um gancho barra Write/Edit fora da lista. |
 | Q22 | Comunicação com marcadores (`{{nome}}`, `{{matricula}}`, `{{telefone}}`) + script local; o ADR de privacidade pode rever. |
@@ -123,7 +123,7 @@ O registro completo, com o porquê e as nuances do Ettore: `decisoes\2026-10-06_
 | Q42 | Planilha `metricas\uso.xlsx` e balanço automático a cada 15 dias, com as propostas na fila do kit. |
 | Q43 · Q48 | Aviso só pelo Remote Control (ligado sozinho em todo projeto, inclusive nos `desosp-`) + `PushNotification`; onde ele não ligar, nenhum aviso (ADR-0001 D8). |
 | Q44 | `/goal` "portão ou fila" em toda fase de execução. |
-| Q45 | Sonda por arquivo + aviso de "pronto" ao vivo no mesmo domínio, só se o F3a mostrar ganho de tempo ou de tokens. |
+| Q45 | Sonda por arquivo + aviso de "pronto" ao vivo no mesmo domínio, só se o F3a mostrar ganho de tempo ou de tokens. **F3a (10/10): não mostrou** com 2 consumidores (tokens empatados, +14% de custo, +23% de tempo); a sonda fica só para 3+ (QUANDO), o aviso ao vivo vai para o NÃO. |
 | Q46 | F1b e F2 como neste plano, com as paradas; o modelo novo só vale com os controles (F2, F3). |
 | Q47 | Frente 2 sem mudança. |
 
@@ -151,10 +151,8 @@ Base: a entrevista de 05-06/10 e a rodada 3; o inventário das pesquisas de 05-0
 
 | recurso | o gatilho |
 |---|---|
-| `claude-code-setup` | passou no F3b → passo opcional de descoberta da `recursos-do-projeto`, por `--plugin-dir` (sem instalar); no app, roda no F5a |
-| OMC | só se vencer a disputa do F3b; contido por projeto; nunca `/omc-setup` |
+| `claude-code-setup` | passou no F3b (10/10: US$ 0,12, só leitura) → passo opcional de descoberta da `recursos-do-projeto`, por `--plugin-dir` (sem instalar); no app, roda no F5a |
 | Headroom | cortou ≥ 20% dos tokens no F3b sem quebrar nada → só em sessões de terminal |
-| claude-mem | passou no F3b → primeiro no `estudo-residencia`; nunca nos `desosp-` enquanto o banco for global (ADR-0001 D3) |
 | Cartographer | F6, comparado com a `improve-codebase-architecture`, sem os passos 7 e 8 (os que editam o CLAUDE.md) |
 | `chief-of-staff` (Matt) | só como lente, numa sessão supervisionada (já instalada, só `/`) |
 | `implement-spec` (Matt) | só tickets independentes, até 3 implementadores, 1 ticket de teste antes, sem push (já instalada, só `/`) |
@@ -167,8 +165,7 @@ Base: a entrevista de 05-06/10 e a rodada 3; o inventário das pesquisas de 05-0
 | Plugin do Notion e conectores do claude.ai | ADR-0001 D4: nos `pessoal-*`, ligados; nos `desosp-`, todos negados pelo nome menos o Google Drive; em `pesquisa-` e `estudo-`, `disableClaudeAiConnectors: true` (+ `.mcp.json`) — no `.claude\settings.json` versionado |
 | Conector PubMed (escopo de projeto), `paper-lookup`, `scientific-critical-thinking`, `pergunta-clinica` | `pesquisa-clinica` (N5) |
 | `subagentPromptCacheTtl: "1h"` | se a medição semanal mostrar cache gravado alto nos subagentes |
-| andrej-karpathy-skills | passou no critério do F3b (Q38) → `config\plugins.json` no F3c |
-| Mensagens entre sessões (`SendMessage`, aviso de "pronto") | o F3a mostrou ganho de tempo ou de tokens (Q45); só dentro do mesmo domínio |
+| Sonda que grava em arquivo | 3 ou mais janelas precisando da mesma pesquisa (Q45; com 2, o F3a mediu empate de tokens e mais custo e tempo) |
 | `askUserQuestionTimeout` | sessão interativa que o Ettore larga (não vale em `--bg` nem no Remote Control) |
 | OpenTelemetry só com métricas (nunca `OTEL_LOG_USER_PROMPTS` nem o corpo da API) | se a medição pelas transcrições não bastar |
 | herdr | mais de 3 sessões de terminal ao mesmo tempo |
@@ -178,7 +175,10 @@ Base: a entrevista de 05-06/10 e a rodada 3; o inventário das pesquisas de 05-0
 
 | recurso | por quê |
 |---|---|
-| `/omc-setup` | sobrescreve o `~\.claude\CLAUDE.md` e a statusline |
+| OMC (e o `/omc-setup`) | perdeu a disputa do F3b (10/10): o `ralplan` foi ignorado e custou 1,4× sem ganho; o `/omc-setup` sobrescreve o `~\.claude\CLAUDE.md` e a statusline |
+| claude-mem | fora (Ettore, 10/10): não testado no F3b (a rede derruba o registro do npm) e "possivelmente vai atrapalhar mais do que ajudar nossos fluxos" |
+| andrej-karpathy-skills | não passou no critério da Q38 no F3b (10/10): +24% de tokens, as mesmas 0 mudanças fora do pedido; nunca instalada (só `--plugin-dir`) |
+| Aviso de "pronto" por `SendMessage` entre sessões | Q45: o F3a não mostrou ganho (não testável em `-p`); o arquivo basta |
 | GSD, planning-with-files, claude-remember | segundo dono do estado |
 | `research` (Matt) | substituída pela nossa `pesquisa` (biblioteca → subagente → salvar) |
 | Times de agentes | ~7× o custo; os painéis não funcionam no VS Code nem no Windows Terminal |
@@ -434,7 +434,7 @@ prefixo e pasta de dado pelo ADR-0002. Até o grill, o material extraído do cha
 `C:\CLAUDE-PROJETOS\pessoal-produtividade\fontes\`, sem janela.
 - **N1 `estudo-residencia`:** acervo do cursinho; `/ingerir`, `/resumo`, `/quiz`, `/explica-de-novo`, `/flashcards`,
   `/simular`; Anki por TSV; simulações interativas (Artifacts); diagramas e mapas mentais para ele; skills e estilos
-  `learning`/`explanatory` para o vibe coder aprender código; claude-mem se passou no F3b.
+  `learning`/`explanatory` para o vibe coder aprender código (o claude-mem saiu em 10/10: Q19).
 - **N2 `desosp-comunicacao`:** `desosp-comunicacao-dados\` com `deny` + safety-net antes de os e-mails chegarem; um
   script que faz cópias do acervo com marcadores no lugar dos identificadores e outro que preenche o texto final;
   `/email` e `/whatsapp`; porta de leitura do F5c; `stop-slop`, `internal-comms`; o Ettore confere a política do

@@ -14,8 +14,14 @@ entrada sem ganhar tempo (teste reproduzível). Se B depende da decisão de A, �
 | o trabalho | como |
 |---|---|
 | menos de 4 tarefas; ler, buscar, varrer, pesquisar | a própria sessão + subagentes comuns (§2) |
-| um plano de 4 ou mais tarefas no mesmo código | SDD (§6), onde o plugin `sdd` está ligado |
+| um plano de 4 ou mais tarefas no mesmo código que importa (produção, regra que não pode quebrar) | SDD (§6), onde o plugin `sdd` está ligado |
 | 4+ itens do mesmo formato, independentes, cada um conferido por comando, sem decisão do usuário no meio e sem dado de paciente | Workflow (§7) |
+
+A disputa do F3b (10/10; plano sintético de 5 tarefas, Sonnet 5.5 · medium, `pesquisas\2026-10-10_ferramentas-testadas.md`):
+os quatro executores entregaram o mesmo (24/24 de aceitação, 9/9 ocultos, as duas armadilhas paradas). **Sem
+orquestrador é o padrão**: 396 mil tokens, US$ 0,19, 54 s. O SDD custou ~13× os tokens (5,1 milhões, US$ 1,96, 6 min)
+e foi o único a achar um defeito real, na revisão final; por isso só onde a revisão paga o custo. O OMC saiu: o
+`ralplan` foi ignorado e custou 1,4× sem ganho.
 
 Nunca por Workflow: julgamento clínico, dado real, decisão do usuário. **Teto: 10 agentes** sem perguntar; acima
 disso, mostre a estimativa (agentes, tokens, tempo, o pedaço-piloto) e espere o "sim". `ultracode` só com motivo
@@ -80,13 +86,18 @@ ganchos — projeto ainda não migrado, ou fase supervisionada —, a dúvida va
 
 - **Tantas janelas quanto houver trabalho independente**, desde que o total de tokens fique igual ou menor que em série
   e a qualidade a mesma. Um escritor por projeto, ou por worktree (até 3 no mesmo projeto). Uma janela = um projeto.
+  F3a (10/10): 3 fases em paralelo levaram 15 s contra 45 s em série, com tokens dentro do ruído (359 mil × 496 mil;
+  a mesma tarefa varia de 90 mil a 227 mil) e os mesmos 12 testes verdes. O ganho é o relógio.
 - Antes de abrir outra janela, olhe o **% do limite de 5 h** (statusline ou `/usage`): a cota é o tanque; o paralelo só
   o esvazia antes. No limite, só uma janela retoma sozinha, e a `--bg` nem espera.
 - Commit por caminho explícito; antes do push, `git log origin/main..` (o push leva o commit da outra janela).
-- **A sonda**: pesquisa que serve a duas janelas roda uma vez, num subagente ou sessão própria, e **grava em arquivo**
-  (`pesquisas\` ou a pasta do projeto); as janelas leem o arquivo. Mensagem entre sessões chega como turno novo e custa
-  o contexto inteiro de quem recebe: o aviso de "pronto" por `SendMessage` só dentro do mesmo domínio (ADR-0002) e só
-  se o F3a mostrar ganho de tempo ou de tokens; até lá, o arquivo basta.
+- **A sonda** (Q45): com **duas** janelas, cada uma pesquisa sozinha. No F3a (10/10), uma sonda servindo às 2
+  empatou nos tokens (625 mil × 626 mil) e saiu mais cara e mais lenta (US$ 0,42 × 0,37; 65 s × 53 s). Cada
+  consumidor caiu de ~300 mil para 136 mil, então com **3 ou mais** janelas precisando da mesma pesquisa a sonda deve
+  ganhar [inferência, não medido]: ela roda uma vez, num subagente ou sessão própria, e **grava em arquivo**
+  (`pesquisas\` ou a pasta do projeto); as janelas leem o arquivo.
+- **Aviso de "pronto" por `SendMessage` entre sessões: não.** Não foi testado (em `-p` não há sessão viva que o
+  receba), e cada mensagem chega como turno novo, com o contexto inteiro de quem recebe. O arquivo basta.
 - Acima de 3 ou 4 janelas ao mesmo tempo: uma janela coordenadora pequena, que só lança e repassa.
 
 ## 6. SDD — plano de várias tarefas no mesmo código
@@ -95,6 +106,8 @@ As 4 skills do Superpowers no plugin `sdd` (terceiros; `subagent-driven-developm
 `using-git-worktrees`, `finishing-a-development-branch`): um implementador novo por tarefa, em série, com revisão de
 especificação e de qualidade por tarefa e uma revisão final do ramo. Ao usar:
 
+- antes, diga ao usuário o custo (~10-13× uma sessão simples) e que a revisão final roda em **Opus** mesmo com o
+  implementador fixado em Sonnet (F3b);
 - o plano tem um cabeçalho por tarefa, `## Task 1`, `## Task 2`… (o `task-brief` procura `Task N`);
 - **modelo e esforço fixados em cada despacho**, pela tabela da §2 (sem eles, herda os da sessão);
 - onde o texto dela diz `superpowers:<skill>`, aqui é `sdd:<skill>`;

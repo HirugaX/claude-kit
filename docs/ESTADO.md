@@ -1,4 +1,4 @@
-# Estado do claude-kit — 10/10/2026, F3b fechado, F3a à espera da fase 1 no painel
+# Estado do claude-kit — 10/10/2026, F3b fechado, F3c pela metade, F3a à espera da fase 1 no painel
 
 ## Objetivo
 
@@ -14,7 +14,14 @@ responde de uma vez; entre as sentadas o Claude trabalha sozinho, com a mesma qu
 - **F3a em andamento (10/10):** j (série × paralelo) e k (sonda: não fica com 2 consumidores) medidos; o parcial num
   rascunho fora do projeto. **Pendente do Ettore:** a fase 1 do laço no painel (aba em `teste-fluxo`, Sonnet 5.5,
   `/effort medium`, modo plano, "Leia docs/PROXIMO.md e siga") e a cor da `teste-fluxo-dados` (recomendação: sem-cor);
-  depois, "fase 1 fechou" na janela do F3a. O F3c só abre com o `…_teste-do-laco.md` em `pesquisas\`; depois, o F5a.
+  depois, "fase 1 fechou" na janela do F3a.
+- **F3c, 1ª metade (10/10, na janela do kit):** o que dependia só do F3b e da sonda está feito: a linha do F3b no
+  INDICE; a `orquestrar` com o vencedor (sem orquestrador; SDD só em 4+ tarefas de código que importa, com o custo; OMC
+  fora), série × paralelo e a sonda (só 3+; o "pronto" por `SendMessage` fora); a descoberta da `recursos-do-projeto`
+  em forma final; no plano, claude-mem, OMC e andrej-karpathy-skills no NÃO, com o motivo (Ficha, Q19, Q45, N1);
+  perguntas 11 de 11. **Falta:** o Headroom (pergunta ao Ettore: passou na letra, custo e tempo subiram) e, com o
+  `…_teste-do-laco.md` em `pesquisas\`, os passos 5 a 7 (o que falhou no laço, o lançamento, o balanço, o COMO_OPERAR,
+  o guia, a 2ª linha do INDICE). Depois, o F5a.
 - **Critério de pronto do F3a e do F3b:** o `RESULTADO.md` de cada um, com prova por critério (F3a) e números com
   veredito por ferramenta (F3b), copiado para `pesquisas\`.
 - **Em paralelo, quando o Ettore quiser:** a R0 (front do app); o desktop instala pela `caixa\NB-004` (soma-se à NB-003).
@@ -70,4 +77,7 @@ responde de uma vez; entre as sentadas o Claude trabalha sozinho, com a mesma qu
 ## Como retomar
 
 1. `git pull --ff-only`; `python scripts\instalar_kit.py --verificar` (0 achados); `python scripts\testar_ganchos.py`.
-2. Fechado o F3a, abrir o F3c no kit com o prompt do plano. Antes de commit: `python scripts\checa_kit.py --tudo`.
+2. Fechado o F3a, seguir o F3c pelos passos 5 a 7 do prompt do plano (1 a 4 feitos, menos o Headroom). Antes de
+   commit: `python scripts\checa_kit.py --tudo`.
+3. `perguntas_controle.py` rodado com `--projeto` no kit pega o portão `Stop` (o kit tem `ESTADO.md`) e estraga as
+   respostas 1 e 8: rode-o com `--projeto` numa pasta de rascunho sem `ESTADO.md`.
