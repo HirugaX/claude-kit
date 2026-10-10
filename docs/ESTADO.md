@@ -1,4 +1,4 @@
-# Estado do claude-kit — 10/10/2026, fim do F2b (com os ajustes de 10/10)
+# Estado do claude-kit — 10/10/2026, F3b fechado, F3a à espera da fase 1 no painel
 
 ## Objetivo
 
@@ -9,12 +9,12 @@ responde de uma vez; entre as sentadas o Claude trabalha sozinho, com a mesma qu
 ## Onde estamos
 
 - **Feito:** F1a; R1; F1b (marketplace); F2a (skills, 07/10); **F2b (ganchos, statusline, medição, pastas de teste), 09/10.**
-- **Em andamento (10/10):** F3a (`teste-fluxo`, no terminal) e F3b (`teste-ferramentas`, quase fechado: o RESULTADO
-  está commitado lá; falta copiá-lo para `pesquisas\` e o push). Depois, o F3c (prompt do plano, conferido em 10/10) e
-  o F5a.
-- **Pendente do Ettore:** apagar as 7 sobras dos testes no perfil (o safety-net barra o `rm -rf` fora da pasta da
-  sessão): `~\.claude-mem`, `~\.headroom`, `~\.bun`, `~\.claude\.omc`, `~\.claude\plugins\cache\omc` e `\thedotmack`,
-  `~\.claude\plugins\data\sonda-inline`. Nada rodando nem apontando para elas (conferido em 10/10).
+- **F3b fechado (10/10):** `pesquisas\2026-10-10_ferramentas-testadas.md` (5e3bad7); as 7 sobras no perfil apagadas
+  (`Test-Path` False nas 7).
+- **F3a em andamento (10/10):** j (série × paralelo) e k (sonda: não fica com 2 consumidores) medidos; o parcial num
+  rascunho fora do projeto. **Pendente do Ettore:** a fase 1 do laço no painel (aba em `teste-fluxo`, Sonnet 5.5,
+  `/effort medium`, modo plano, "Leia docs/PROXIMO.md e siga") e a cor da `teste-fluxo-dados` (recomendação: sem-cor);
+  depois, "fase 1 fechou" na janela do F3a. O F3c só abre com o `…_teste-do-laco.md` em `pesquisas\`; depois, o F5a.
 - **Critério de pronto do F3a e do F3b:** o `RESULTADO.md` de cada um, com prova por critério (F3a) e números com
   veredito por ferramenta (F3b), copiado para `pesquisas\`.
 - **Em paralelo, quando o Ettore quiser:** a R0 (front do app); o desktop instala pela `caixa\NB-004` (soma-se à NB-003).
@@ -70,4 +70,4 @@ responde de uma vez; entre as sentadas o Claude trabalha sozinho, com a mesma qu
 ## Como retomar
 
 1. `git pull --ff-only`; `python scripts\instalar_kit.py --verificar` (0 achados); `python scripts\testar_ganchos.py`.
-2. Abrir o F3a e o F3b com os prompts do plano, cada um na sua pasta. Antes de commit: `python scripts\checa_kit.py --tudo`.
+2. Fechado o F3a, abrir o F3c no kit com o prompt do plano. Antes de commit: `python scripts\checa_kit.py --tudo`.
