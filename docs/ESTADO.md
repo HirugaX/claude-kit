@@ -42,6 +42,8 @@ responde de uma vez; entre as sentadas o Claude trabalha sozinho, com a mesma qu
 - **O safety-net mede o `rm -rf` pela pasta da sessão**, não pelo `cd` do comando: apagar fora do projeto é do Ettore.
 - **O fechamento do F2b entregou só a 1ª linha dos prompts** e a janela do F3a teve de buscar o resto no plano (fora da
   pasta de trabalho: pedido de leitura). Daqui em diante, o prompt vai inteiro no chat.
+- **Sinais de insuficiência do F2b: 2** (§3, item 3; o resumo de 09/10 dizia "nenhum", corrigido em 10/10): o heredoc
+  usado contra a instrução do prompt e a entrega só da 1ª linha. O prompt do F3c sobe o esforço nesses dois tipos.
 - **O SessionStart em `-p` não traz o `model`**: a abertura lê o `--model` da linha de comando do processo (~1,5 s).
 - **`CLAUDE_CODE_SESSION_ATTENDED`** vale 1 na sessão com gente e 0 em `-p` (não documentado): é o sinal da execução
   largada. O `PermissionRequest` não dispara em `-p` nem em `--bg` (documentação).

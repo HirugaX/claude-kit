@@ -711,7 +711,7 @@ Portão: RESULTADO.md com números e veredito por ferramenta; desinstalação co
 ### F3c — ajustes no kit (conferido em 10/10, no fechamento do F2b, com o que o F3b já disse; o F3a ainda rodava)
 
 ```
-Opus 5.5 · /effort medium — aplicar resultados medidos; suba para high se um ajuste quebrar um critério que já passava.
+Opus 5.5 · /effort medium — aplicar resultados medidos; suba para high se um ajuste quebrar um critério que já passava, e digite /effort high ao fechar (sinal do F2b: o fechamento entregou só a 1ª linha dos prompts).
 
 Janela no painel aberta em C:\CLAUDE-PROJETOS\claude-kit. Antes: F3a e F3b fechados, com os dois resultados em pesquisas\ (2026-10-XX_teste-do-laco.md e 2026-10-XX_ferramentas-testadas.md); git pull --ff-only; python scripts\instalar_kit.py --verificar com 0 achados; python scripts\testar_ganchos.py verde; leia docs\ESTADO.md e o caixa\INDICE.md. Nenhuma outra janela no kit.
 
@@ -729,6 +729,7 @@ Plano: decisoes\2026-10-06_plano-fluxo.md (blocos F3a, F3b, F3c; "Como você ope
 
 ## Limites
 - Nada em projeto (desosp-*, pesquisa-*, estudo-*, pessoal-*).
+- Texto com barra invertida (caminhos do Windows): pela ferramenta Edit ou por um arquivo .py, nunca por heredoc no Git Bash (sinal do F2b: o heredoc comeu as barras de um patch).
 
 ## Ao fechar
 Portão: os critérios que falharam passam; INDICE com as duas linhas; testar_ganchos.py verde; se texto de skill ou o CLAUDE.md mudou, scripts\perguntas_nucleo.txt com 11 de 11 (perguntas_controle.py); instalar_kit.py --verificar com 0 achados; checa_kit.py --tudo sem achado; guia regenerado. ESTADO.md do kit; push. Resumo com "Sinais de insuficiência do modelo". Confira o prompt do F5a (deste plano) e entregue-o INTEIRO no chat, num bloco só, pronto para colar.
